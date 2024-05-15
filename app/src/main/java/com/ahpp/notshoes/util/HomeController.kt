@@ -36,6 +36,7 @@ import com.ahpp.notshoes.view.PerfilScreen
 lateinit var textoBusca: String
 lateinit var categoriaSelecionada: String
 lateinit var produtoSelecionado: Produto
+var idUsuarioLogado : String = "-1"
 
 @Composable
 fun HomeController(modifier: Modifier = Modifier) {

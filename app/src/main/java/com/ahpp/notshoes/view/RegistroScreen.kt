@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.RegistroCliente
+import com.ahpp.notshoes.util.ValidarCampos
 import java.io.IOException
 
 @Composable
@@ -119,7 +120,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             value = nome,
             onValueChange = {
                 nome = it
-                nomeValido = validarNome(nome)
+                nomeValido = ValidarCampos.validarNome(nome)
             },
             isError = !nomeValido,
             supportingText = {
@@ -154,7 +155,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             value = email,
             onValueChange = {
                 email = it
-                emailValido = validarEmail(email)
+                emailValido = ValidarCampos.validarEmail(email)
                 codigoStatusRegistro = "201"
             },
             isError = !emailValido || codigoStatusRegistro == "500",
@@ -198,7 +199,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             },
             onValueChange = {
                 senha = it
-                senhaValida = validarSenha(senha)
+                senhaValida = ValidarCampos.validarSenha(senha)
             },
             placeholder = { Text(text = "Crie uma nova senha", color = Color(0xFF4A5255)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -240,9 +241,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         ) {
             ElevatedButton(
                 onClick = {
-                    nomeValido = validarNome(nome)
-                    emailValido = validarEmail(email)
-                    senhaValida = validarSenha(senha)
+                    nomeValido = ValidarCampos.validarNome(nome)
+                    emailValido = ValidarCampos.validarEmail(email)
+                    senhaValida = ValidarCampos.validarSenha(senha)
 
                     if (nomeValido && emailValido && senhaValida) {
                         val registroCliente = RegistroCliente(nome, email, senha)
@@ -335,18 +336,4 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         }
 
     }
-}
-
-private fun validarNome(nome: String): Boolean {
-    return nome.isNotEmpty()
-}
-
-private fun validarEmail(email: String): Boolean {
-    return if (email.isNotEmpty()) {
-        android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    } else false
-}
-
-private fun validarSenha(senha: String): Boolean {
-    return senha.isNotEmpty()
 }
