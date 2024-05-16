@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,12 +15,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,9 +30,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,21 +50,60 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.LoginCliente
+import com.ahpp.notshoes.dataStore
+
 import com.ahpp.notshoes.util.ValidarCampos
-import com.ahpp.notshoes.util.idUsuarioLogado
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-    //agora faça esse id usuario logado persistir mesmo quando fechar o app
-    if (idUsuarioLogado != "-1") {
-        navController.navigate("homeController") { launchSingleTop = true }
-    } else {
+    var showLoginScreen by remember { mutableStateOf(false) }
+    var dadosIncorretos by remember { mutableStateOf(false) }
 
+    // o datastore é usado para ver se ja tem usuario logado, se nao define idUsuario como -1
+    val context = LocalContext.current
+    val dataStore: DataStore<Preferences> = context.dataStore
+    val usuarioLogadoPreferences = stringPreferencesKey("user_id")
+    val idUsuarioFlow = remember {
+        dataStore.data
+            .map { preferences ->
+                preferences[usuarioLogadoPreferences] ?: "-1"
+            }
+    }
+    val idUsuario by idUsuarioFlow.collectAsState(initial = "-1")
+
+    //essa gambiarra aqui serve pra nao piscar a tela de login caso o usuario ja esteja logado
+    //mas percebi que se o aparelho for mt ruim, esses 800ms não são suficientes kkkk
+    //se descobrir outro jeito, coloca ai
+    LaunchedEffect(idUsuario) {
+        if (idUsuario == "-1") {
+            delay(800)
+            showLoginScreen = true
+        } else {
+            navController.navigate("homeController") { launchSingleTop = true }
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize(), Arrangement.Center) {
+        CircularProgressIndicator(
+            modifier
+                .size(100.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+    }
+
+    if (showLoginScreen) {
         var email by remember { mutableStateOf("") }
         var senha by remember { mutableStateOf("") }
 
@@ -74,6 +119,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             painterResource(id = R.drawable.baseline_visibility_24)
         else
             painterResource(id = R.drawable.baseline_visibility_off_24)
+
+        val scope = rememberCoroutineScope()
 
         Column(
             modifier
@@ -113,11 +160,14 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 onValueChange = {
                     email = it
                     emailValido = ValidarCampos.validarEmail(email)
+                    dadosIncorretos = false
                 },
-                isError = !emailValido,
+                isError = !emailValido || (dadosIncorretos),
                 supportingText = {
                     if (!emailValido) {
                         Text(text = "Digite um e-mail válido.")
+                    } else if (dadosIncorretos) {
+                        Text(text = "Dados incorretos.")
                     }
                 },
                 placeholder = { Text(text = "email@exemplo.com", color = Color(0xFF4A5255)) },
@@ -145,15 +195,18 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
             OutlinedTextField(
                 value = senha,
-                isError = !senhaValida,
+                isError = !senhaValida || (dadosIncorretos),
                 supportingText = {
                     if (!senhaValida) {
                         Text(text = "Digite uma senha válida.")
+                    } else if (dadosIncorretos) {
+                        Text(text = "Dados incorretos.")
                     }
                 },
                 onValueChange = {
                     senha = it
                     senhaValida = ValidarCampos.validarSenha(senha)
+                    dadosIncorretos = false
                 },
                 placeholder = { Text(text = "Digite sua senha", color = Color(0xFF4A5255)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -196,7 +249,13 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 Text(
                     modifier = Modifier.clickable(
                         enabled = true,
-                        onClick = { }),
+                        onClick = {
+                            Toast.makeText(
+                                ctx,
+                                "Implementar isso aqui vai ser doidera",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }),
                     text = "Esqueceu a senha?",
                     fontSize = 16.sp,
                     style = TextStyle(
@@ -220,26 +279,22 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                             val loginCliente = LoginCliente(email, senha)
 
                             loginCliente.sendLoginData(object : LoginCliente.Callback {
-                                override fun onSuccess(idUsuario: String) {
+                                override fun onSuccess(idUsuarioRecebido: String) {
                                     // -1 usuario não existe
-                                    Log.i("ID USUARIO RECEBIDO: ", idUsuario)
+                                    Log.i("ID USUARIO RECEBIDO: ", idUsuarioRecebido)
 
-                                    if (idUsuario != "-1") {
+                                    if (idUsuarioRecebido != "-1") {
                                         Handler(Looper.getMainLooper()).post {
-                                            //salvar o id do usuário logado
-                                            idUsuarioLogado = idUsuario
-                                            navController.navigate("homeController") {
-                                                launchSingleTop = true
+                                            // salvar o id do usuário logado
+                                            scope.launch {
+                                                dataStore.edit { preferences ->
+                                                    preferences[usuarioLogadoPreferences] =
+                                                        idUsuarioRecebido
+                                                }
                                             }
                                         }
                                     } else {
-                                        Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Usuário não encontrado.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
+                                        dadosIncorretos = true
                                     }
                                 }
 

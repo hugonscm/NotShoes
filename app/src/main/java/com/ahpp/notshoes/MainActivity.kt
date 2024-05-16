@@ -1,9 +1,13 @@
 package com.ahpp.notshoes
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.Modifier
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,6 +15,9 @@ import com.ahpp.notshoes.util.HomeController
 import com.ahpp.notshoes.view.LoginScreen
 import com.ahpp.notshoes.view.RegistroScreen
 
+//usado para salvar o id do usuario logado, precisa ser definido no level mais alto do projeto
+// foi usado la no LoginScreen.kt
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_id_logado")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +31,10 @@ class MainActivity : ComponentActivity() {
                     RegistroScreen(modifier = Modifier, navController)
                 }
                 composable(route = "homeController") {
-                    HomeController(modifier = Modifier)
+                    HomeController(modifier = Modifier, navController)
                 }
             }
+
         }
     }
 }
-
