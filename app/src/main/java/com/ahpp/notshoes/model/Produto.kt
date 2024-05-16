@@ -1,9 +1,9 @@
 package com.ahpp.notshoes.model
 
 data class Produto(
-    val idProduto: String,
+    val idProduto: Int,
     val nomeProduto: String,
-    val estoqueProduto: String,
+    val estoqueProduto: Int,
     val descricao: String,
     val preco: String,
     val desconto: String,

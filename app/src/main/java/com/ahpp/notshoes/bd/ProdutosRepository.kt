@@ -39,9 +39,9 @@ class ProdutosRepository {
                         produtosList = jsonArray.map { produtoJson ->
                             val produtoArray = produtoJson.asJsonArray
                             Produto(
-                                produtoArray[0].asString,
+                                produtoArray[0].asInt,
                                 produtoArray[1].asString,
-                                produtoArray[2].asString,
+                                produtoArray[2].asInt,
                                 produtoArray[3].asString,
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
@@ -62,7 +62,7 @@ class ProdutosRepository {
         }
         try {
             //espera 5 segundos se nao da timeout
-            // a minha ideia aqui é, se der timeout, fechar essa tela e mostrar uma tela de erro
+            // a minha ideia aqui é, se der timeout, fechar essa tela e mostrar uma tela de erro de rede
             executor.awaitTermination(5, TimeUnit.SECONDS)
         } catch (e: InterruptedException) {
             e.printStackTrace()
@@ -90,9 +90,9 @@ class ProdutosRepository {
                         produtosList = jsonArray.map { produtoJson ->
                             val produtoArray = produtoJson.asJsonArray
                             Produto(
-                                produtoArray[0].asString,
+                                produtoArray[0].asInt,
                                 produtoArray[1].asString,
-                                produtoArray[2].asString,
+                                produtoArray[2].asInt,
                                 produtoArray[3].asString,
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
@@ -140,9 +140,9 @@ class ProdutosRepository {
                         produtosList = jsonArray.map { produtoJson ->
                             val produtoArray = produtoJson.asJsonArray
                             Produto(
-                                produtoArray[0].asString,
+                                produtoArray[0].asInt,
                                 produtoArray[1].asString,
-                                produtoArray[2].asString,
+                                produtoArray[2].asInt,
                                 produtoArray[3].asString,
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
