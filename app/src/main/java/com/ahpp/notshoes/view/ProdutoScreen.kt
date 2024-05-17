@@ -97,7 +97,6 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
             }
         }
 
-
         //a coluna abaixo tem o resto
         Column(
             modifier = Modifier
@@ -224,7 +223,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             )
                         }
 
-                        if (produtoSelecionado.estoqueProduto.toInt() > 0) {
+                        if (produtoSelecionado.estoqueProduto > 0) {
                             Text(
                                 text = "Em estoque. Envio imediato!",
                                 fontWeight = FontWeight.Bold,
