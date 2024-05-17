@@ -1,11 +1,5 @@
 package com.ahpp.notshoes.util
 
-import android.app.Activity
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -21,13 +15,10 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -51,32 +42,6 @@ lateinit var produtoSelecionado: Produto
 fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavController) {
 
     val navController = rememberNavController()
-
-    //funcionalidade "toque novamente pra sair"
-    var backPressedOnce = false
-    val ctx = LocalContext.current
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current
-    val backCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // Fecha o aplicativo ao clicar em voltar em menos de 2s
-                if (backPressedOnce) {
-                    (ctx as? Activity)?.finish()
-                } else {
-                    backPressedOnce = true
-                    Toast.makeText(ctx, "Toque em voltar mais uma vez para sair.", Toast.LENGTH_SHORT).show()
-                    Handler(Looper.getMainLooper()).postDelayed({ backPressedOnce = false }, 2000)
-                }
-            }
-        }
-    }
-    // callback para interceptar o evento de voltar
-    DisposableEffect(onBackPressedDispatcher) {
-        onBackPressedDispatcher?.onBackPressedDispatcher?.addCallback(backCallback)
-        onDispose {
-            backCallback.remove()
-        }
-    }
 
     val items = listOf(
         BottomNavItem.Inicio,

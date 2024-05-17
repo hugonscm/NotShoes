@@ -1,5 +1,11 @@
 package com.ahpp.notshoes.view
 
+import android.app.Activity
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -44,6 +50,7 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -100,6 +107,34 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
             onBackPressed = { clickedProduto = false },
         )
     } else {
+
+        //funcionalidade "toque novamente pra sair"
+        //dessa forma só atinte a tela inicio
+        var backPressedOnce = false
+        val ctx = LocalContext.current
+        val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current
+        val backCallback = remember {
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Fecha o aplicativo ao clicar em voltar em menos de 2s
+                    if (backPressedOnce) {
+                        (ctx as? Activity)?.finish()
+                    } else {
+                        backPressedOnce = true
+                        Toast.makeText(ctx, "Toque em voltar mais uma vez para sair.", Toast.LENGTH_SHORT).show()
+                        Handler(Looper.getMainLooper()).postDelayed({ backPressedOnce = false }, 2000)
+                    }
+                }
+            }
+        }
+        // callback para interceptar o evento de voltar
+        DisposableEffect(onBackPressedDispatcher) {
+            onBackPressedDispatcher?.onBackPressedDispatcher?.addCallback(backCallback)
+            onDispose {
+                backCallback.remove()
+            }
+        }
+
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -534,7 +569,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 13.sp
                             )
-                            if (produtoEmPromocao.estoqueProduto.toInt() > 0) {
+                            if (produtoEmPromocao.estoqueProduto > 0) {
                                 Text(
                                     text = "Restam ${produtoEmPromocao.estoqueProduto} unidades!",
                                     fontSize = 10.sp
