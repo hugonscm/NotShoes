@@ -15,8 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.ProdutosRepository
+import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.view.ProdutoScreen
+import kotlinx.coroutines.delay
 
 //esse ResultadosBuscaNome é usado quando o usuário busca por nome do produto
 @Composable
@@ -210,6 +214,103 @@ fun ResultadosBuscaCategoria(onBackPressed: () -> Unit, categoriaSelecionada: St
 
             }
 
+        }
+    }
+}
+
+@Composable
+fun ResultadosListaDesejos(idListaDesejos: Int) {
+
+    //clickedProduto é usado para monitorar a tela de produto selecionado
+    //ela se torna true quando um produto é clicado lá em CardResultados()
+    //e false quando clica em voltar na tela de produto selecionado
+
+    var clickedProduto by remember { mutableStateOf(false) }
+
+    if (clickedProduto) {
+        ProdutoScreen(
+            onBackPressed = { clickedProduto = false },
+        )
+    } else {
+
+        var produtosList by remember { mutableStateOf(emptyList<Produto>()) }
+        var isLoading by remember { mutableStateOf(true) }
+
+        LaunchedEffect(Unit) {
+            delay(500) // Aguarde 500 ms
+            val repository = ProdutosRepository()
+            produtosList = repository.getProdutosListaDesejos(idListaDesejos)
+            isLoading = false
+        }
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFFFFFFF),
+                                Color(0xFF86D0E2),
+                                Color(0xFF86D0E2),
+                                Color(0xFFFFFFFF)
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFFFFFFF),
+                                Color(0xFF86D0E2),
+                                Color(0xFF86D0E2),
+                                Color(0xFFFFFFFF)
+                            )
+                        )
+                    )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp)
+                ) {
+
+                    if (produtosList.isNotEmpty()) {
+                        LazyColumn {
+                            items(items = produtosList) { produto ->
+                                CardListaDesejos(onClickProduto = { clickedProduto = true },
+                                    produto,
+                                    //atualizar a lista de desejos na tela após remover um produto
+                                    onRemoveProduct = { removedProduto ->
+                                        produtosList =
+                                            produtosList.filter { it.idProduto != removedProduto.idProduto }
+                                    })
+                            }
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 45.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Sua lista de desejos está vazia.",
+                                fontSize = 25.sp,
+                            )
+                        }
+                    }
+
+                }
+
+            }
         }
     }
 }

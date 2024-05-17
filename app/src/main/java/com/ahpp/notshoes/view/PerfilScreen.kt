@@ -17,65 +17,29 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ClienteRepository
-import com.ahpp.notshoes.dataStore
-import com.ahpp.notshoes.model.Cliente
-import kotlinx.coroutines.flow.map
+import com.ahpp.notshoes.util.cliente
+import com.ahpp.notshoes.util.dataStore
+import com.ahpp.notshoes.util.usuarioLogadoPreferences
 import kotlinx.coroutines.launch
 
 @Composable
 fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavController) {
 
-    val context = LocalContext.current
-    val dataStore: DataStore<Preferences> = context.dataStore
-    val usuarioLogadoPreferences = stringPreferencesKey("user_id")
-    val idUsuarioFlow = remember {
-        dataStore.data
-            .map { preferences ->
-                preferences[usuarioLogadoPreferences] ?: "-1"
-            }
-    }
-    val idUsuarioLogado by idUsuarioFlow.collectAsState(initial = "-1")
     val scope = rememberCoroutineScope()
-
-    val cliente: Cliente
-    if (idUsuarioLogado != "-1") {
-        val repository = ClienteRepository()
-        cliente = repository.getCliente(idUsuarioLogado.toInt())
-    } else {
-        cliente = Cliente(
-            idCliente = -1,
-            genero = "",
-            nome = "Usuário",
-            email = "",
-            senha = "",
-            cpf = "",
-            idEndereco = -1,
-            idListaDesejos = -1,
-            idCarrinho = -1
-        )
-    }
 
     Column(modifier = modifier.fillMaxSize()) {
         Spacer(

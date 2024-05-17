@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -68,8 +66,7 @@ import java.io.IOException
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-    var showLoginScreen by remember { mutableStateOf(false) }
-    var dadosIncorretos by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
 
     // o datastore é usado para ver se ja tem usuario logado, se nao define idUsuario como -1
     val context = LocalContext.current
@@ -84,26 +81,37 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     val idUsuario by idUsuarioFlow.collectAsState(initial = "-1")
 
     //essa gambiarra aqui serve pra nao piscar a tela de login caso o usuario ja esteja logado
-    //mas percebi que se o aparelho for mt ruim, esses 800ms não são suficientes kkkk
-    //se descobrir outro jeito, coloca ai
     LaunchedEffect(idUsuario) {
+        delay(500)
         if (idUsuario == "-1") {
-            delay(800)
-            showLoginScreen = true
+            isLoading = false
         } else {
             navController.navigate("homeController") { launchSingleTop = true }
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize(), Arrangement.Center) {
-        CircularProgressIndicator(
-            modifier
-                .size(100.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-    }
+    if (isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFFFFFFFF),
+                            Color(0xFF86D0E2),
+                            Color(0xFF86D0E2),
+                            Color(0xFFFFFFFF)
+                        )
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
 
-    if (showLoginScreen) {
+        var dadosIncorretos by remember { mutableStateOf(false) }
+
         var email by remember { mutableStateOf("") }
         var senha by remember { mutableStateOf("") }
 

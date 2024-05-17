@@ -13,13 +13,18 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -27,34 +32,70 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.ahpp.notshoes.bd.ClienteRepository
+import com.ahpp.notshoes.dataStore
+import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.view.CarrinhoScreen
 import com.ahpp.notshoes.view.CategoriaScreen
 import com.ahpp.notshoes.view.FavoritoScreen
 import com.ahpp.notshoes.view.InicioScreen
 import com.ahpp.notshoes.view.PerfilScreen
+import kotlinx.coroutines.flow.map
 
 lateinit var textoBusca: String
 lateinit var categoriaSelecionada: String
 lateinit var produtoSelecionado: Produto
 
+lateinit var cliente: Cliente
+lateinit var dataStore: DataStore<Preferences>
+val usuarioLogadoPreferences = stringPreferencesKey("user_id")
+
 @Composable
 fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavController) {
 
-    val navController = rememberNavController()
+    // recuperar o id do usuario logado, e armazenar o objeto na variavel cliente
+    //que vai ficar disponivel para todas as telas definidas na HomeController
+    val context = LocalContext.current
+    dataStore = context.dataStore
+    val idUsuarioFlow = remember {
+        dataStore.data
+            .map { preferences ->
+                preferences[usuarioLogadoPreferences] ?: "-1"
+            }
+    }
+    val idUsuarioLogado by idUsuarioFlow.collectAsState(initial = "-1")
 
+    if (idUsuarioLogado != "-1") {
+        val repository = ClienteRepository()
+        cliente = repository.getCliente(idUsuarioLogado.toInt())
+    } else {
+        cliente = Cliente(
+            idCliente = -1,
+            genero = "",
+            nome = "Usuário",
+            email = "",
+            senha = "",
+            cpf = "",
+            idEndereco = -1,
+            idListaDesejos = -1,
+            idCarrinho = -1
+        )
+    }
+
+    val navController = rememberNavController()
     val items = listOf(
         BottomNavItem.Inicio,
         BottomNavItem.Categorias,
         BottomNavItem.Carrinho,
-        BottomNavItem.Favoritos,
+        BottomNavItem.ListaDesejos,
         BottomNavItem.Perfil
     )
 
     Scaffold(
         bottomBar = {
             NavigationBar(
-                modifier = Modifier.height(70.dp),
+                modifier = Modifier.height(50.dp),
                 containerColor = Color(0xFFD1E9F0),
                 tonalElevation = 3.dp,
             ) {
@@ -67,7 +108,7 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
                             Color.Black,
                             Color(0xFF82D7F0)
                         ),
-                        label = { Text(screen.label) },
+                        //label = { Text(screen.label) },
                         icon = { Icon(screen.icon, contentDescription = screen.label) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
@@ -94,7 +135,7 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
             composable(BottomNavItem.Inicio.route) { InicioScreen(modifier, navController) }
             composable(BottomNavItem.Categorias.route) { CategoriaScreen() }
             composable(BottomNavItem.Carrinho.route) { CarrinhoScreen(modifier) }
-            composable(BottomNavItem.Favoritos.route) { FavoritoScreen(modifier) }
+            composable(BottomNavItem.ListaDesejos.route) { FavoritoScreen() }
             composable(BottomNavItem.Perfil.route) { PerfilScreen(modifier, navControllerInicio) }
         }
     }
@@ -106,6 +147,6 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: 
         BottomNavItem("categorias", Icons.AutoMirrored.Filled.List, "Categorias")
 
     data object Carrinho : BottomNavItem("carrinho", Icons.Default.ShoppingCart, "Carrinho")
-    data object Favoritos : BottomNavItem("favoritos", Icons.Default.Favorite, "Favoritos")
+    data object ListaDesejos : BottomNavItem("lista_desejos", Icons.Default.Favorite, "Lista de desejos")
     data object Perfil : BottomNavItem("perfil", Icons.Default.Person, "Perfil")
 }

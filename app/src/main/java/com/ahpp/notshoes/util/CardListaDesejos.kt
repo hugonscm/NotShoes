@@ -40,10 +40,15 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.bd.ProdutosRepository
 import com.ahpp.notshoes.model.Produto
 
 @Composable
-fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
+fun CardListaDesejos(
+    onClickProduto: () -> Unit,
+    produto: Produto,
+    onRemoveProduct: (Produto) -> Unit
+) {
 
     //imagem do produto
     val painter = rememberAsyncImagePainter(
@@ -149,20 +154,27 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
             Row(
                 Modifier
                     .fillMaxSize()
-                    .padding(bottom = 15.dp, end = 15.dp),
+                    .padding(top = 10.dp, end = 10.dp),
                 horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.Top,
 
                 ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
-                    onClick = { },
+                    onClick = {
+                        val repository = ProdutosRepository()
+                        repository.removerProdutoListaDesejos(
+                            produto.idProduto,
+                            cliente.idListaDesejos
+                        )
+                        onRemoveProduct(produto)
+                    },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.baseline_favorite_border_24),
-                        contentDescription = "Adicionar à lista de desejos.",
+                        painter = painterResource(id = R.drawable.baseline_close_24),
+                        contentDescription = "Remover da lista de desejos.",
                         modifier = Modifier.size(20.dp)
                     )
                 }
