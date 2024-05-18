@@ -77,17 +77,18 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
                                 dataStore.edit { preferences ->
                                     preferences[usuarioLogadoPreferences] = "-1"
                                 }
-                            }
-                            navControllerInicio.navigate("login") {
-                                popUpTo(navControllerInicio.graph.findStartDestination().id) {
-                                    saveState = false
+                                navControllerInicio.navigate("login") {
+                                    popUpTo(navControllerInicio.graph.findStartDestination().id) {
+                                        saveState = false
+                                    }
+                                    // // evitar abrir novamente a mesma tela ao reselecionar mesmo item
+                                    launchSingleTop = true
+                                    // restaura o estado ao voltar para a tela anterior
+                                    restoreState = false
                                 }
-                                // // evitar abrir novamente a mesma tela ao reselecionar mesmo item
-                                launchSingleTop = true
-                                // restaura o estado ao voltar para a tela anterior
-                                restoreState = false
                             }
-                        }),
+                        }
+                    ),
                 text = "Sair",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

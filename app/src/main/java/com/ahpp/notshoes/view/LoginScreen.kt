@@ -86,9 +86,14 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
         if (idUsuario == "-1") {
             isLoading = false
         } else {
-            navController.navigate("homeController") { launchSingleTop = true }
+            if (idUsuario.isNotEmpty()) {
+                navController.navigate("homeController") { launchSingleTop = true }
+            } else {
+                isLoading = false
+            }
         }
     }
+
 
     if (isLoading) {
         Box(
@@ -292,15 +297,14 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                     Log.i("ID USUARIO RECEBIDO: ", idUsuarioRecebido)
 
                                     if (idUsuarioRecebido != "-1") {
-                                        Handler(Looper.getMainLooper()).post {
-                                            // salvar o id do usuário logado
-                                            scope.launch {
-                                                dataStore.edit { preferences ->
-                                                    preferences[usuarioLogadoPreferences] =
-                                                        idUsuarioRecebido
-                                                }
+                                        // salvar o id do usuário logado
+                                        scope.launch {
+                                            dataStore.edit { preferences ->
+                                                preferences[usuarioLogadoPreferences] =
+                                                    idUsuarioRecebido
                                             }
                                         }
+
                                     } else {
                                         dadosIncorretos = true
                                     }

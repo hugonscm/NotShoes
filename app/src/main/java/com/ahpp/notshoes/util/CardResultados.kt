@@ -24,6 +24,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,10 +45,19 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.bd.ProdutosRepository
 import com.ahpp.notshoes.model.Produto
 
 @Composable
 fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
+
+    var favoritado by remember { mutableStateOf<String?>(null) }
+    val repository = ProdutosRepository()
+    LaunchedEffect(Unit) {
+        repository.verificarProdutoListaDesejos(produto.idProduto, cliente.idListaDesejos) {
+            favoritado = it
+        }
+    }
 
     //imagem do produto
     val painter = rememberAsyncImagePainter(
@@ -161,7 +175,7 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.baseline_favorite_border_24),
+                        painter = painterResource(if (favoritado != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
                         contentDescription = "Adicionar à lista de desejos.",
                         modifier = Modifier.size(20.dp)
                     )

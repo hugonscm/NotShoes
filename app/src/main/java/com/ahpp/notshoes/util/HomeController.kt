@@ -14,6 +14,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -66,21 +67,23 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
     }
     val idUsuarioLogado by idUsuarioFlow.collectAsState(initial = "-1")
 
-    if (idUsuarioLogado != "-1") {
-        val repository = ClienteRepository()
-        cliente = repository.getCliente(idUsuarioLogado.toInt())
-    } else {
-        cliente = Cliente(
-            idCliente = -1,
-            genero = "",
-            nome = "Usuário",
-            email = "",
-            senha = "",
-            cpf = "",
-            idEndereco = -1,
-            idListaDesejos = -1,
-            idCarrinho = -1
-        )
+    LaunchedEffect(idUsuarioLogado) {
+        if (idUsuarioLogado != "-1") {
+            val repository = ClienteRepository()
+            cliente = repository.getCliente(idUsuarioLogado.toInt())
+        } else {
+            cliente = Cliente(
+                idCliente = -1,
+                genero = "",
+                nome = "Usuário",
+                email = "",
+                senha = "",
+                cpf = "",
+                idEndereco = -1,
+                idListaDesejos = -1,
+                idCarrinho = -1
+            )
+        }
     }
 
     val navController = rememberNavController()

@@ -258,5 +258,33 @@ class ProdutosRepository {
             }
         }
     }
-}
 
+    fun verificarProdutoListaDesejos(idProduto: Int, idListaDesejos: Int, callback: (String) -> Unit) {
+        val client = OkHttpClient()
+        val url = "http://10.0.2.2:5000/verificar_produto_lista_desejos"
+
+        val jsonMessage = JsonObject().apply {
+            addProperty("idProduto", idProduto)
+            addProperty("idListaDesejos", idListaDesejos)
+        }
+
+        val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            try {
+                val response = client.newCall(request).execute()
+                val resultado = response.body?.string().toString()
+                callback(resultado)
+            } catch (e: IOException) {
+                Log.e("Erro", "Erro de rede.", e)
+            } finally {
+                executor.shutdown()
+            }
+        }
+    }
+}
