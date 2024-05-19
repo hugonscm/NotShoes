@@ -46,11 +46,12 @@ class ClienteRepository {
                         cliente = Cliente(
                             //os que tem a verificaçao isJsonNull é porque podem ser nulos
                             idCliente = /*if (clienteJson.has("idCliente"))*/ clienteJson.get("idCliente").asInt /*else ""*/,
-                            genero = if (clienteJson.get("genero").isJsonNull) "Não informado" else clienteJson.get("genero").asString,
+                            genero = if (clienteJson.get("genero").isJsonNull) "0" else clienteJson.get("genero").asString,
                             nome = /*if (clienteJson.has("nome"))*/ clienteJson.get("nome").asString /*else ""*/,
                             email = /*if (clienteJson.has("email"))*/ clienteJson.get("email").asString /*else ""*/,
                             senha = /*if (clienteJson.has("senha"))*/ clienteJson.get("senha").asString /*else ""*/,
-                            cpf = if (clienteJson.get("cpf").isJsonNull) "Não informado" else clienteJson.get("cpf").asString,
+                            cpf = if (clienteJson.get("cpf").isJsonNull) "" else clienteJson.get("cpf").asString,
+                            telefoneContato = if (clienteJson.get("telefoneContato").isJsonNull) "" else clienteJson.get("telefoneContato").asString,
                             idEndereco = if (clienteJson.get("idEndereco").isJsonNull) -1 else clienteJson.get("idEndereco").asInt,
                             idListaDesejos = /*if (clienteJson.has("idListaDesejos"))*/ clienteJson.get("idListaDesejos").asInt /*else ""*/,
                             idCarrinho = /*if (clienteJson.has("idCarrinho"))*/ clienteJson.get("idCarrinho").asInt /*else ""*/

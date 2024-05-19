@@ -28,8 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.ProdutosRepository
-import com.ahpp.notshoes.view.ProdutoScreen
+import com.ahpp.notshoes.bd.ProdutoRepository
 
 //esse ResultadosBuscaNome é usado quando o usuário busca por nome do produto
 @Composable
@@ -47,7 +46,7 @@ fun ResultadosBuscaNome(onBackPressed: () -> Unit, nome: String) {
         )
     } else {
 
-        val repository = ProdutosRepository()
+        val repository = ProdutoRepository()
         val produtosList = repository.buscarProdutoNome(nome)
 
         Column(
@@ -138,7 +137,7 @@ fun ResultadosBuscaCategoria(onBackPressed: () -> Unit, categoriaSelecionada: St
             onBackPressed = { clickedProduto = false },
         )
     } else {
-        val repository = ProdutosRepository()
+        val repository = ProdutoRepository()
         val produtosList = repository.filtrarProdutoCategoria(categoriaSelecionada)
 
         Column(

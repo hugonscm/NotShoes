@@ -39,9 +39,9 @@ import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.view.CarrinhoScreen
 import com.ahpp.notshoes.view.CategoriaScreen
-import com.ahpp.notshoes.view.FavoritoScreen
 import com.ahpp.notshoes.view.InicioScreen
-import com.ahpp.notshoes.view.PerfilScreen
+import com.ahpp.notshoes.view.ListaDeDesejoscreen
+import com.ahpp.notshoes.view.viewsPerfil.PerfilScreen
 import kotlinx.coroutines.flow.map
 
 lateinit var textoBusca: String
@@ -79,6 +79,7 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
                 email = "",
                 senha = "",
                 cpf = "",
+                telefoneContato = "",
                 idEndereco = -1,
                 idListaDesejos = -1,
                 idCarrinho = -1
@@ -138,7 +139,7 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
             composable(BottomNavItem.Inicio.route) { InicioScreen(modifier, navController) }
             composable(BottomNavItem.Categorias.route) { CategoriaScreen() }
             composable(BottomNavItem.Carrinho.route) { CarrinhoScreen(modifier) }
-            composable(BottomNavItem.ListaDesejos.route) { FavoritoScreen() }
+            composable(BottomNavItem.ListaDesejos.route) { ListaDeDesejoscreen() }
             composable(BottomNavItem.Perfil.route) { PerfilScreen(modifier, navControllerInicio) }
         }
     }

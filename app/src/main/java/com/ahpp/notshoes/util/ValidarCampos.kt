@@ -15,4 +15,12 @@ object ValidarCampos {
     fun validarSenha(senha: String): Boolean {
         return senha.isNotEmpty()
     }
+
+    fun validarCpf(cpf: String): Boolean {
+        return cpf.isNotEmpty()
+    }
+
+    fun validarTelefone(telefone: String): Boolean {
+        return telefone.isNotEmpty()
+    }
 }

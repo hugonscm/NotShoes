@@ -40,7 +40,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ProdutosRepository
+import com.ahpp.notshoes.bd.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 
 @Composable
@@ -162,7 +162,7 @@ fun CardListaDesejos(
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        val repository = ProdutosRepository()
+                        val repository = ProdutoRepository()
                         repository.removerProdutoListaDesejos(
                             produto.idProduto,
                             cliente.idCliente

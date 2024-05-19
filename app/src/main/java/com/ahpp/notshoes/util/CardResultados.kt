@@ -45,14 +45,14 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ProdutosRepository
+import com.ahpp.notshoes.bd.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 
 @Composable
 fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
 
     var favoritado by remember { mutableStateOf<String?>(null) }
-    val repository = ProdutosRepository()
+    val repository = ProdutoRepository()
     LaunchedEffect(Unit) {
         repository.verificarProdutoListaDesejos(produto.idProduto, cliente.idListaDesejos) {
             favoritado = it
@@ -170,7 +170,20 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
                 ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
-                    onClick = { },
+                    onClick = {
+                        if (favoritado == "0") {
+                            repository.adicionarProdutoListaDesejos(
+                                produto.idProduto, cliente.idCliente
+                            )
+                            favoritado = "1"
+                        } else if (favoritado == "1") {
+                            repository.removerProdutoListaDesejos(
+                                produto.idProduto,
+                                cliente.idCliente
+                            )
+                            favoritado = "0"
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {

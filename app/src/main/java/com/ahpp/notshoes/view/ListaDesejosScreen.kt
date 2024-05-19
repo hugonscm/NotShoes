@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,17 +26,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.ProdutosRepository
+import com.ahpp.notshoes.bd.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.CardListaDesejos
+import com.ahpp.notshoes.util.ProdutoScreen
 import com.ahpp.notshoes.util.cliente
 import kotlinx.coroutines.delay
 
 @Composable
-fun FavoritoScreen() {
+fun ListaDeDesejoscreen() {
 
     Column(modifier = Modifier.fillMaxSize()) {
         //clickedProduto é usado para monitorar a tela de produto selecionado
@@ -57,7 +56,7 @@ fun FavoritoScreen() {
 
             LaunchedEffect(Unit) {
                 delay(500) // Aguarde 500 ms
-                val repository = ProdutosRepository()
+                val repository = ProdutoRepository()
                 produtosList = repository.getProdutosListaDesejos(cliente.idListaDesejos)
                 isLoading = false
             }
@@ -81,12 +80,12 @@ fun FavoritoScreen() {
                     CircularProgressIndicator()
                 }
             } else {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color.White)
-                )
+//                Spacer(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(1.dp)
+//                        .background(Color.White)
+//                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -101,7 +100,6 @@ fun FavoritoScreen() {
                             .width(270.dp),
                         text = "Lista de desejos", fontSize = 20.sp, maxLines = 1,
                         fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis,
                         style = TextStyle(
                             Color(0xFFFFFFFF)
                         )

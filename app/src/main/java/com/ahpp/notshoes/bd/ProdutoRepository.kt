@@ -14,7 +14,7 @@ import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class ProdutosRepository {
+class ProdutoRepository {
 
     private val client = OkHttpClient()
     private var produtosList: List<Produto> = emptyList()
@@ -233,6 +233,36 @@ class ProdutosRepository {
 
         val client = OkHttpClient()
         val url = "http://10.0.2.2:5000/remover_lista_desejos"
+
+        val jsonMessage = JsonObject().apply {
+            addProperty("idProduto", idProduto)
+            addProperty("idCliente", idCliente)
+        }
+
+        val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            try {
+                val response = client.newCall(request).execute()
+                val code = response.body?.string().toString()
+                Log.e("Codigo recebido: ", code)
+            } catch (e: IOException) {
+                Log.e("Erro", "Erro de rede.", e)
+            } finally {
+                executor.shutdown()
+            }
+        }
+    }
+
+    fun adicionarProdutoListaDesejos(idProduto: Int, idCliente: Int) {
+
+        val client = OkHttpClient()
+        val url = "http://10.0.2.2:5000/adicionar_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)

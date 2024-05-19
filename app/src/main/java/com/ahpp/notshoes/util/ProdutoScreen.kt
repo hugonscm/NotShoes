@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view
+package com.ahpp.notshoes.util
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -49,18 +49,19 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ProdutosRepository
-import com.ahpp.notshoes.util.cliente
-import com.ahpp.notshoes.util.produtoSelecionado
+import com.ahpp.notshoes.bd.ProdutoRepository
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun ProdutoScreen(onBackPressed: () -> Unit) {
 
     var favoritado by remember { mutableStateOf<String?>(null) }
-    val repository = ProdutosRepository()
+    val repository = ProdutoRepository()
     LaunchedEffect(Unit) {
-        repository.verificarProdutoListaDesejos(produtoSelecionado.idProduto, cliente.idListaDesejos) {
+        repository.verificarProdutoListaDesejos(
+            produtoSelecionado.idProduto,
+            cliente.idListaDesejos
+        ) {
             favoritado = it
         }
     }
@@ -100,7 +101,20 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp)
                     .align(Alignment.Bottom), contentPadding = PaddingValues(0.dp),
-                onClick = { },
+                onClick = {
+                    if (favoritado == "0") {
+                        repository.adicionarProdutoListaDesejos(
+                            produtoSelecionado.idProduto, cliente.idCliente
+                        )
+                        favoritado = "1"
+                    } else if (favoritado == "1") {
+                        repository.removerProdutoListaDesejos(
+                            produtoSelecionado.idProduto,
+                            cliente.idCliente
+                        )
+                        favoritado = "0"
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -214,7 +228,8 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             val percentualDesconto = 100 * produtoSelecionado.desconto.toDouble()
-                            val percentualDescontoFormated = String.format("%.0f", percentualDesconto)
+                            val percentualDescontoFormated =
+                                String.format("%.0f", percentualDesconto)
                             Text(
                                 text = "-$percentualDescontoFormated%",
                                 style = TextStyle(Color(0xFF00E20A)),

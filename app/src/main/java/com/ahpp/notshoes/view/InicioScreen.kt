@@ -71,11 +71,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ProdutosRepository
+import com.ahpp.notshoes.bd.ProdutoRepository
 import kotlinx.coroutines.delay
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.ahpp.notshoes.util.ProdutoScreen
 import com.ahpp.notshoes.util.ResultadosBuscaCategoria
 import com.ahpp.notshoes.util.ResultadosBuscaNome
 import com.ahpp.notshoes.util.categoriaSelecionada
@@ -440,7 +441,7 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
 @Composable
 fun Promocoes(onPromocaoClicked: () -> Unit) {
 
-    val repository = ProdutosRepository()
+    val repository = ProdutoRepository()
     val ofertas = repository.getPromocoes()
 
     Column {

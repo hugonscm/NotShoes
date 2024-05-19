@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,512 +66,542 @@ fun CategoriaScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(corBackground)
-                .padding(start = 10.dp, end = 10.dp)
-                .verticalScroll(rememberScrollState())
         ) {
-            Card(
+//            Spacer(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(1.dp)
+//                    .background(Color.White)
+//            )
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(top = 10.dp, bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Regatas"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
+                    .height(50.dp)
+                    .background(Color(0xFF029CCA)),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
+                Text(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_regata),
-                            contentDescription = "Categoria Regatas"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Regatas",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
-                        )
-                    }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Regatas"
+                        .padding(start = 10.dp)
+                        .width(270.dp),
+                    text = "Categorias", fontSize = 20.sp, maxLines = 1,
+                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(
+                        Color(0xFFFFFFFF)
                     )
-                }
+                )
             }
-            Card(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Camisa Básica"
-                            clicked = true
+                    .fillMaxSize()
+                    .padding(start = 10.dp, end = 10.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(top = 10.dp, bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Regatas"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_regata),
+                                contentDescription = "Categoria Regatas"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Regatas",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
                         }
-                    ),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_camisa_basica),
-                            contentDescription = "Categoria Camisas Básicas"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Camisas Básicas",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Regatas"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Camisas Básicas"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Calça"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Camisa Básica"
+                                clicked = true
+                            }
+                        ),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_camisa_basica),
+                                contentDescription = "Categoria Camisas Básicas"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Camisas Básicas",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_calca),
-                            contentDescription = "Categoria Calças"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Calças",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Camisas Básicas"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Calças"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Cueca"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Calça"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_calca),
+                                contentDescription = "Categoria Calças"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Calças",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_cueca),
-                            contentDescription = "Categoria Cuecas"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Cuecas",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Calças"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Cuecas"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Short"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Cueca"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_cueca),
+                                contentDescription = "Categoria Cuecas"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Cuecas",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_short),
-                            contentDescription = "Categoria Shorts"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Shorts",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Cuecas"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Shorts"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Tênis"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Short"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_short),
+                                contentDescription = "Categoria Shorts"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Shorts",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_tenis),
-                            contentDescription = "Categoria Tênis"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Tênis",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Shorts"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Tênis"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Adidas"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Tênis"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_tenis),
+                                contentDescription = "Categoria Tênis"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Tênis",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_adidas),
-                            contentDescription = "Categoria Produtos Adidas"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Produtos Adidas",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Tênis"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Adidas"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Fila"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Adidas"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_adidas),
+                                contentDescription = "Categoria Produtos Adidas"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Produtos Adidas",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_fila),
-                            contentDescription = "Categoria Produtos Fila"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Produtos Fila",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Produtos Adidas"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Fila"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Mizuno"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Fila"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_fila),
+                                contentDescription = "Categoria Produtos Fila"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Produtos Fila",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_mizuno),
-                            contentDescription = "Categoria Produtos Mizuno"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Produtos Mizuno",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Produtos Fila"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Produtos Mizuno"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Nike"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Mizuno"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_mizuno),
+                                contentDescription = "Categoria Produtos Mizuno"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Produtos Mizuno",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_nike),
-                            contentDescription = "Categoria produtos Nike"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Produtos Nike",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Produtos Mizuno"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Nike"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Olympikus"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Nike"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_nike),
+                                contentDescription = "Categoria produtos Nike"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Produtos Nike",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_olympikus),
-                            contentDescription = "Categoria Produtos Olympikus"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Produtos Olympikus",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Produtos Nike"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Olympikus"
-                    )
                 }
-            }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .padding(bottom = tamanhoPaddingBotton)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            categoriaSelecionada = "Puma"
-                            clicked = true
-                        }),
-                elevation = CardDefaults.cardElevation(elevationCards)
-            ) {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(corCards)
-                        .padding(tamanhoPaddingLinha),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Olympikus"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_olympikus),
+                                contentDescription = "Categoria Produtos Olympikus"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Produtos Olympikus",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
                         Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            painter = painterResource(id = R.drawable.img_categoria_puma),
-                            contentDescription = "Categoria Produtos Puma"
-                        )
-                        Spacer(modifier = Modifier.width(tamanhoSpacer))
-                        Text(
-                            text = "Produtos Puma",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = tamanhoFonte
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Produtos Olympikus"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Puma"
-                    )
+                }
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(bottom = tamanhoPaddingBotton)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                categoriaSelecionada = "Puma"
+                                clicked = true
+                            }),
+                    elevation = CardDefaults.cardElevation(elevationCards)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(corCards)
+                            .padding(tamanhoPaddingLinha),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                painter = painterResource(id = R.drawable.img_categoria_puma),
+                                contentDescription = "Categoria Produtos Puma"
+                            )
+                            Spacer(modifier = Modifier.width(tamanhoSpacer))
+                            Text(
+                                text = "Produtos Puma",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = tamanhoFonte
+                            )
+                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                            contentDescription = "Acessar categoria Produtos Puma"
+                        )
+                    }
                 }
             }
         }
