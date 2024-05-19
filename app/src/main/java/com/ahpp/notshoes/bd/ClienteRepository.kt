@@ -52,7 +52,6 @@ class ClienteRepository {
                             senha = /*if (clienteJson.has("senha"))*/ clienteJson.get("senha").asString /*else ""*/,
                             cpf = if (clienteJson.get("cpf").isJsonNull) "" else clienteJson.get("cpf").asString,
                             telefoneContato = if (clienteJson.get("telefoneContato").isJsonNull) "" else clienteJson.get("telefoneContato").asString,
-                            idEndereco = if (clienteJson.get("idEndereco").isJsonNull) -1 else clienteJson.get("idEndereco").asInt,
                             idListaDesejos = /*if (clienteJson.has("idListaDesejos"))*/ clienteJson.get("idListaDesejos").asInt /*else ""*/,
                             idCarrinho = /*if (clienteJson.has("idCarrinho"))*/ clienteJson.get("idCarrinho").asInt /*else ""*/
                         )

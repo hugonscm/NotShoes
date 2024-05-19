@@ -1,6 +1,6 @@
 package com.ahpp.notshoes.bd
 
-import com.ahpp.notshoes.util.cliente
+import com.ahpp.notshoes.util.clienteLogado
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -9,11 +9,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.util.concurrent.Executors
 
-class AtualizarDadosCliente(
-    private var nomeNovo: String,
-    private val cpfNovo: String,
-    private val telefoneContatoNovo: String,
-    private val generoNovo: String
+class AtualizarEmailCliente(
+    private var emailNovo: String,
 ) {
 
     interface Callback {
@@ -24,14 +21,11 @@ class AtualizarDadosCliente(
     fun sendAtualizarData(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/atualizar_dados_cliente"
+        val url = "http://10.0.2.2:5000/atualizar_email_cliente"
 
         val json = JsonObject().apply {
-            addProperty("nome", nomeNovo)
-            addProperty("cpf", cpfNovo)
-            addProperty("telefoneContato", telefoneContatoNovo)
-            addProperty("genero", generoNovo)
-            addProperty("idCliente", cliente.idCliente)
+            addProperty("emailNovo", emailNovo)
+            addProperty("idCliente", clienteLogado.idCliente)
         }
 
         val requestBody = json.toString().toRequestBody("application/json".toMediaType())
@@ -47,11 +41,7 @@ class AtualizarDadosCliente(
         executor.execute {
             try {
                 val response = client.newCall(request).execute()
-                val code = response.body?.string()
-
-                if (code != null) {
-                    callback.onSuccess(code)
-                }
+                callback.onSuccess(response.code.toString())
             } catch (e: IOException) {
                 callback.onFailure(e)
             } finally {

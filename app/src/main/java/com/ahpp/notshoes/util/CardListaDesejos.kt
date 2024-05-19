@@ -165,7 +165,7 @@ fun CardListaDesejos(
                         val repository = ProdutoRepository()
                         repository.removerProdutoListaDesejos(
                             produto.idProduto,
-                            cliente.idCliente
+                            clienteLogado.idCliente
                         )
                         onRemoveProduct(produto)
                     },

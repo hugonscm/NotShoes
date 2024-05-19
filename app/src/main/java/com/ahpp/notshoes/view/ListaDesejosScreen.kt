@@ -32,7 +32,7 @@ import com.ahpp.notshoes.bd.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.CardListaDesejos
 import com.ahpp.notshoes.util.ProdutoScreen
-import com.ahpp.notshoes.util.cliente
+import com.ahpp.notshoes.util.clienteLogado
 import kotlinx.coroutines.delay
 
 @Composable
@@ -57,7 +57,7 @@ fun ListaDeDesejoscreen() {
             LaunchedEffect(Unit) {
                 delay(500) // Aguarde 500 ms
                 val repository = ProdutoRepository()
-                produtosList = repository.getProdutosListaDesejos(cliente.idListaDesejos)
+                produtosList = repository.getProdutosListaDesejos(clienteLogado.idListaDesejos)
                 isLoading = false
             }
 

@@ -54,7 +54,7 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
     var favoritado by remember { mutableStateOf<String?>(null) }
     val repository = ProdutoRepository()
     LaunchedEffect(Unit) {
-        repository.verificarProdutoListaDesejos(produto.idProduto, cliente.idListaDesejos) {
+        repository.verificarProdutoListaDesejos(produto.idProduto, clienteLogado.idListaDesejos) {
             favoritado = it
         }
     }
@@ -173,13 +173,13 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
                     onClick = {
                         if (favoritado == "0") {
                             repository.adicionarProdutoListaDesejos(
-                                produto.idProduto, cliente.idCliente
+                                produto.idProduto, clienteLogado.idCliente
                             )
                             favoritado = "1"
                         } else if (favoritado == "1") {
                             repository.removerProdutoListaDesejos(
                                 produto.idProduto,
-                                cliente.idCliente
+                                clienteLogado.idCliente
                             )
                             favoritado = "0"
                         }

@@ -47,7 +47,9 @@ class ProdutoRepository {
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
                                 produtoArray[6].asString,
-                                produtoArray[7].asBoolean
+                                produtoArray[7].asString,
+                                produtoArray[8].asString,
+                                produtoArray[9].asBoolean
                             )
                         }
                     }
@@ -97,7 +99,9 @@ class ProdutoRepository {
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
                                 produtoArray[6].asString,
-                                produtoArray[7].asBoolean
+                                produtoArray[7].asString,
+                                produtoArray[8].asString,
+                                produtoArray[9].asBoolean
                             )
                         }
                     }
@@ -146,7 +150,9 @@ class ProdutoRepository {
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
                                 produtoArray[6].asString,
-                                produtoArray[7].asBoolean
+                                produtoArray[7].asString,
+                                produtoArray[8].asString,
+                                produtoArray[9].asBoolean
                             )
                         }
                     }
@@ -206,7 +212,9 @@ class ProdutoRepository {
                                 produtoArray[4].asString,
                                 produtoArray[5].asString,
                                 produtoArray[6].asString,
-                                produtoArray[7].asBoolean
+                                produtoArray[7].asString,
+                                produtoArray[8].asString,
+                                produtoArray[9].asBoolean
                             )
                         }
                     }

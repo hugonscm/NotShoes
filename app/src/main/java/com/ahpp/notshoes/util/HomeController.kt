@@ -48,7 +48,7 @@ lateinit var textoBusca: String
 lateinit var categoriaSelecionada: String
 lateinit var produtoSelecionado: Produto
 
-lateinit var cliente: Cliente
+lateinit var clienteLogado: Cliente
 lateinit var dataStore: DataStore<Preferences>
 val usuarioLogadoPreferences = stringPreferencesKey("user_id")
 
@@ -70,9 +70,9 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
     LaunchedEffect(idUsuarioLogado) {
         if (idUsuarioLogado != "-1") {
             val repository = ClienteRepository()
-            cliente = repository.getCliente(idUsuarioLogado.toInt())
+            clienteLogado = repository.getCliente(idUsuarioLogado.toInt())
         } else {
-            cliente = Cliente(
+            clienteLogado = Cliente(
                 idCliente = -1,
                 genero = "",
                 nome = "Usuário",
@@ -80,7 +80,6 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
                 senha = "",
                 cpf = "",
                 telefoneContato = "",
-                idEndereco = -1,
                 idListaDesejos = -1,
                 idCarrinho = -1
             )

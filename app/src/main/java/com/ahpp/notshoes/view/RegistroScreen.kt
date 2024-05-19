@@ -253,7 +253,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                                 //500 = usuario ja existe
                                 //201 = usuario criado com sucesso
                                 codigoStatusRegistro = code
-                                Log.i("CÓDIGO RECEBIDO: ", code)
+                                Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
 
                                 if (code == "201") {
                                     Handler(Looper.getMainLooper()).post {

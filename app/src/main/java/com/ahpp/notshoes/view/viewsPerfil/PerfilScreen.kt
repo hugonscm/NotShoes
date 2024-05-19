@@ -35,7 +35,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.util.cliente
+import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.dataStore
 import com.ahpp.notshoes.util.usuarioLogadoPreferences
 import kotlinx.coroutines.launch
@@ -75,7 +75,7 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .width(270.dp),
-                    text = "Olá ${cliente.nome} :)", fontSize = 20.sp, maxLines = 1,
+                    text = "Olá ${clienteLogado.nome} :)", fontSize = 20.sp, maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(

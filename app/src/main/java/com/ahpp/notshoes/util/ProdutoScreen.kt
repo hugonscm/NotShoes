@@ -60,7 +60,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
     LaunchedEffect(Unit) {
         repository.verificarProdutoListaDesejos(
             produtoSelecionado.idProduto,
-            cliente.idListaDesejos
+            clienteLogado.idListaDesejos
         ) {
             favoritado = it
         }
@@ -104,13 +104,13 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                 onClick = {
                     if (favoritado == "0") {
                         repository.adicionarProdutoListaDesejos(
-                            produtoSelecionado.idProduto, cliente.idCliente
+                            produtoSelecionado.idProduto, clienteLogado.idCliente
                         )
                         favoritado = "1"
                     } else if (favoritado == "1") {
                         repository.removerProdutoListaDesejos(
                             produtoSelecionado.idProduto,
-                            cliente.idCliente
+                            clienteLogado.idCliente
                         )
                         favoritado = "0"
                     }
