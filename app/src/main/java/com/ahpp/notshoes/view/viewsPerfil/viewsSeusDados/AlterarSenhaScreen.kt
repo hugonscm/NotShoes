@@ -124,7 +124,9 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = senhaAtual,
                 onValueChange = {
-                    senhaAtual = it
+                    if (it.length <= 255) {
+                        senhaAtual = it
+                    }
                     senhaAtualValida = ValidarCampos.validarSenha(senhaAtual)
                     senhaAtualCorreta = true
                 },
@@ -158,6 +160,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 },
                 visualTransformation = if (senhaAtualVisibility) VisualTransformation.None
                 else PasswordVisualTransformation(),
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
@@ -177,7 +180,9 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = senhaNova,
                 onValueChange = {
-                    senhaNova = it
+                    if (it.length <= 255) {
+                        senhaNova = it
+                    }
                     senhaNovaValida = ValidarCampos.validarSenha(senhaNova)
                 },
                 isError = !senhaNovaValida,
@@ -204,6 +209,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 },
                 visualTransformation = if (senhaNovoVisibility) VisualTransformation.None
                 else PasswordVisualTransformation(),
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 10.dp),

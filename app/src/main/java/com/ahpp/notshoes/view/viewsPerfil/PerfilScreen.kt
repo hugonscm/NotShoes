@@ -38,6 +38,7 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.dataStore
 import com.ahpp.notshoes.util.usuarioLogadoPreferences
+import com.ahpp.notshoes.view.viewsPerfil.viewsEnderecos.EnderecosScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -45,13 +46,15 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
 
 //    var clickedPedidos by remember { mutableStateOf(false) }
     var clickedSeusDados by remember { mutableStateOf(false) }
-//    var clickedEnderecos by remember { mutableStateOf(false) }
+    var clickedEnderecos by remember { mutableStateOf(false) }
     var clickedSobre by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
     if (clickedSeusDados) {
         SeusDadosScreen(onBackPressed = { clickedSeusDados = false })
+    } else if (clickedEnderecos) {
+        EnderecosScreen(onBackPressed = { clickedEnderecos = false })
     } else if (clickedSobre) {
         SobreScreen(onBackPressed = { clickedSobre = false })
     } else {
@@ -189,7 +192,7 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .clickable(true, onClick = {}),
+                        .clickable(true, onClick = { clickedEnderecos = true }),
                     shape = RoundedCornerShape(0.dp),
                 ) {
                     Row(

@@ -119,7 +119,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         OutlinedTextField(
             value = nome,
             onValueChange = {
-                nome = it
+                if (it.length <= 255) {
+                    nome = it
+                }
                 nomeValido = ValidarCampos.validarNome(nome)
             },
             isError = !nomeValido,
@@ -135,6 +137,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp),
+            maxLines = 1,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Color(0xFFEEF3F5),
                 focusedContainerColor = Color(0xFFEEF3F5),
@@ -154,7 +157,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         OutlinedTextField(
             value = email,
             onValueChange = {
-                email = it
+                if (it.length <= 255) {
+                    email = it
+                }
                 emailValido = ValidarCampos.validarEmail(email)
                 codigoStatusRegistro = "201"
             },
@@ -173,6 +178,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp),
+            maxLines = 1,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Color(0xFFEEF3F5),
                 focusedContainerColor = Color(0xFFEEF3F5),
@@ -198,7 +204,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 }
             },
             onValueChange = {
-                senha = it
+                if (it.length <= 255) {
+                    senha = it
+                }
                 senhaValida = ValidarCampos.validarSenha(senha)
             },
             placeholder = { Text(text = "Crie uma nova senha", color = Color(0xFF4A5255)) },
@@ -222,6 +230,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp),
+            maxLines = 1,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Color(0xFFEEF3F5),
                 focusedContainerColor = Color(0xFFEEF3F5),

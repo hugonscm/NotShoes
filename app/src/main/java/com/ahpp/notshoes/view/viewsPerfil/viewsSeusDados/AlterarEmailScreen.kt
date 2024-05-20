@@ -99,23 +99,25 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                 )
             )
             OutlinedTextField(
-                value = clienteLogado.email,
+                value = "",
                 onValueChange = {},
                 enabled = false,
+                placeholder = { Text(clienteLogado.email, color = Color(0xFF4A5255)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     disabledBorderColor = Color.Transparent,
                     disabledContainerColor = Color(0xFFEEF3F5),
-                    disabledTextColor = Color.Gray
                 )
             )
             Spacer(Modifier.padding(top = 15.dp))
             OutlinedTextField(
                 value = emailNovo,
                 onValueChange = {
-                    emailNovo = it
+                    if (it.length <= 255) {
+                        emailNovo = it
+                    }
                     emailValido = ValidarCampos.validarEmail(emailNovo)
                     codigoStatusAlteracao = "201"
                 },
@@ -132,6 +134,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                     }
                 },
                 placeholder = { Text(text = "Digite um novo e-mail", color = Color(0xFF4A5255)) },
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 10.dp),

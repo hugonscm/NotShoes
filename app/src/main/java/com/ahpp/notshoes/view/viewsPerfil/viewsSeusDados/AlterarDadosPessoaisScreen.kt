@@ -105,7 +105,9 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = nomeNovo,
                 onValueChange = {
-                    nomeNovo = it
+                    if (it.length <= 255) {
+                        nomeNovo = it
+                    }
                     nomeValido = true
                 },
                 isError = !nomeValido,
@@ -118,6 +120,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
+                maxLines = 1,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFEEF3F5),
                     focusedContainerColor = Color(0xFFEEF3F5),
@@ -137,7 +140,9 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = if (cpfNovo == "") "" else cpfNovo,
                 onValueChange = {
-                    cpfNovo = it
+                    if (it.length <= 14) {
+                        cpfNovo = it
+                    }
                     cpfValido = true
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -151,6 +156,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
+                maxLines = 1,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFEEF3F5),
                     focusedContainerColor = Color(0xFFEEF3F5),
@@ -170,7 +176,9 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = if (telefoneNovo == "") "" else telefoneNovo,
                 onValueChange = {
-                    telefoneNovo = it
+                    if (it.length <= 15) {
+                        telefoneNovo = it
+                    }
                     telefoneValido = true
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -189,6 +197,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
+                maxLines = 1,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFEEF3F5),
                     focusedContainerColor = Color(0xFFEEF3F5),

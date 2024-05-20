@@ -171,7 +171,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             OutlinedTextField(
                 value = email,
                 onValueChange = {
-                    email = it
+                    if (it.length <= 255) {
+                        email = it
+                    }
                     emailValido = ValidarCampos.validarEmail(email)
                     dadosIncorretos = false
                 },
@@ -187,6 +189,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 leadingIcon = {
                     Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
                 },
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 5.dp),
@@ -217,7 +220,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     }
                 },
                 onValueChange = {
-                    senha = it
+                    if (it.length <= 255) {
+                        senha = it
+                    }
                     senhaValida = ValidarCampos.validarSenha(senha)
                     dadosIncorretos = false
                 },
@@ -238,7 +243,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 },
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation(),
-
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 5.dp),
