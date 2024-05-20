@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.view.viewsPerfil
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -7,6 +8,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,6 +46,9 @@ import com.ahpp.notshoes.R
 
 @Composable
 fun SobreScreen(onBackPressed: () -> Unit) {
+    BackHandler {
+        onBackPressed()
+    }
     Column {
         Row(
             modifier = Modifier
@@ -67,7 +72,17 @@ fun SobreScreen(onBackPressed: () -> Unit) {
             }
         }
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFFFFFFFF),
+                            Color(0xFF86D0E2),
+                            Color(0xFFFFFFFF)
+                        )
+                    )
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.padding(top = 50.dp))

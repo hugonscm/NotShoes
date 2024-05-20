@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.view.viewsPerfil.viewsEnderecos
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,9 @@ import androidx.compose.ui.unit.sp
 fun EnderecosScreen(
     onBackPressed: () -> Unit,
 ) {
+    BackHandler {
+        onBackPressed()
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier

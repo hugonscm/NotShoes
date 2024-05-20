@@ -50,7 +50,6 @@ fun CategoriaScreen() {
                 listOf(
                     Color(0xFFFFFFFF),
                     Color(0xFF86D0E2),
-                    Color(0xFF86D0E2),
                     Color(0xFFFFFFFF)
                 )
             ))

@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsPerfil
+package com.ahpp.notshoes.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +38,8 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.dataStore
 import com.ahpp.notshoes.util.usuarioLogadoPreferences
+import com.ahpp.notshoes.view.viewsPerfil.SeusDadosScreen
+import com.ahpp.notshoes.view.viewsPerfil.SobreScreen
 import com.ahpp.notshoes.view.viewsPerfil.viewsEnderecos.EnderecosScreen
 import kotlinx.coroutines.launch
 

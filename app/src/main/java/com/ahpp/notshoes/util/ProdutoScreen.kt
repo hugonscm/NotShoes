@@ -1,6 +1,7 @@
 package com.ahpp.notshoes.util
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,6 +55,12 @@ import com.ahpp.notshoes.bd.ProdutoRepository
 @SuppressLint("DefaultLocale")
 @Composable
 fun ProdutoScreen(onBackPressed: () -> Unit) {
+
+    // backhandler eh ativado quando o usuario aperta em voltar no aparelho
+    // para evitar que volte direto pra tela inicio
+    BackHandler {
+        onBackPressed()
+    }
 
     var favoritado by remember { mutableStateOf<String?>(null) }
     val repository = ProdutoRepository()

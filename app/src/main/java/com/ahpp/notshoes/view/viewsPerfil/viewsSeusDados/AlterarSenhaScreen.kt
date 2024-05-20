@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,6 +55,10 @@ import java.security.MessageDigest
 
 @Composable
 fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
+
+    BackHandler {
+        onBackPressed()
+    }
 
     val ctx = LocalContext.current
 

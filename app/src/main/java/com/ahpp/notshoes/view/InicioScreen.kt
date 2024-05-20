@@ -108,7 +108,6 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
             onBackPressed = { clickedProduto = false },
         )
     } else {
-
         //funcionalidade "toque novamente pra sair"
         //dessa forma só atinte a tela inicio
         var backPressedOnce = false
@@ -122,8 +121,15 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
                         (ctx as? Activity)?.finish()
                     } else {
                         backPressedOnce = true
-                        Toast.makeText(ctx, "Toque em voltar mais uma vez para sair.", Toast.LENGTH_SHORT).show()
-                        Handler(Looper.getMainLooper()).postDelayed({ backPressedOnce = false }, 2000)
+                        Toast.makeText(
+                            ctx,
+                            "Toque em voltar mais uma vez para sair.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            { backPressedOnce = false },
+                            2000
+                        )
                     }
                 }
             }
@@ -448,7 +454,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(top = 15.dp, bottom = 10.dp, start = 10.dp, end = 10.dp)
                 .height(50.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(Color(0xFF00C4FF))
@@ -482,105 +488,129 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
             }
         }
 
-        //faça uma verificaçao se a lista de ofertas esta vazia e um tratamento caso esteja
-        //semelhante ao que fez em CategoriaScreen na funcao Resultados
+        if (ofertas.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp),
+                Arrangement.Center,
+                Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Que pena!",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(color = Color.Black)
+                )
+                Text(
+                    text = "Nenhuma promoção ativa.",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(color = Color.Black)
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp)
+            ) {
+                LazyRow {
+                    items(items = ofertas) { produtoEmPromocao ->
+                        //imagem do produto
+                        val painter = rememberAsyncImagePainter(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(produtoEmPromocao.fotoProduto)
+                                .crossfade(true)
+                                .size(coil.size.Size.ORIGINAL)
+                                .build()
+                        )
+                        //estado para monitorar se deu erro ou nao
+                        val state = painter.state
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp)
-        ) {
-            LazyRow {
-                items(items = ofertas) { produtoEmPromocao ->
-                    //imagem do produto
-                    val painter = rememberAsyncImagePainter(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(produtoEmPromocao.fotoProduto)
-                            .crossfade(true)
-                            .size(coil.size.Size.ORIGINAL)
-                            .build()
-                    )
-                    //estado para monitorar se deu erro ou nao
-                    val state = painter.state
-
-                    Card(
-                        shape = RoundedCornerShape(3.dp),
-                        colors = CardColors(
-                            containerColor = Color.White,
-                            Color.Black,
-                            Color.Black,
-                            Color.Black
-                        ),
-                        modifier = Modifier
-                            .height(165.dp)
-                            .padding(horizontal = 3.dp)
-                            .clickable(enabled = true, onClick = {
-                                produtoSelecionado = produtoEmPromocao
-                                onPromocaoClicked()
-                            }),
-                        elevation = CardDefaults.cardElevation(4.dp)
-                    ) {
-                        Column(
-                            Modifier
-                                .width(130.dp)
-                                .padding(5.dp)
+                        Card(
+                            shape = RoundedCornerShape(3.dp),
+                            colors = CardColors(
+                                containerColor = Color.White,
+                                Color.Black,
+                                Color.Black,
+                                Color.Black
+                            ),
+                            modifier = Modifier
+                                .height(165.dp)
+                                .padding(horizontal = 3.dp)
+                                .clickable(enabled = true, onClick = {
+                                    produtoSelecionado = produtoEmPromocao
+                                    onPromocaoClicked()
+                                }),
+                            elevation = CardDefaults.cardElevation(4.dp)
                         ) {
-                            when (state) {
-                                is AsyncImagePainter.State.Loading -> {
-                                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                                }
+                            Column(
+                                Modifier
+                                    .width(130.dp)
+                                    .padding(5.dp)
+                            ) {
+                                when (state) {
+                                    is AsyncImagePainter.State.Loading -> {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.align(
+                                                Alignment.CenterHorizontally
+                                            )
+                                        )
+                                    }
 
-                                is AsyncImagePainter.State.Error -> {
-                                    Image(
-                                        Icons.Default.Close,
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .height(100.dp)
-                                            .clip(RoundedCornerShape(3.dp))
-                                            .align(Alignment.CenterHorizontally)
-                                    )
-                                }
+                                    is AsyncImagePainter.State.Error -> {
+                                        Image(
+                                            Icons.Default.Close,
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .height(100.dp)
+                                                .clip(RoundedCornerShape(3.dp))
+                                                .align(Alignment.CenterHorizontally)
+                                        )
+                                    }
 
-                                else -> {
-                                    Image(
-                                        painter = painter,
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .height(100.dp)
-                                            .clip(RoundedCornerShape(3.dp))
-                                            .align(Alignment.CenterHorizontally)
-                                    )
+                                    else -> {
+                                        Image(
+                                            painter = painter,
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .height(100.dp)
+                                                .clip(RoundedCornerShape(3.dp))
+                                                .align(Alignment.CenterHorizontally)
+                                        )
+                                    }
                                 }
-                            }
-                            Text(
-                                text = produtoEmPromocao.nomeProduto,
-                                fontSize = 14.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Text(
-                                text = "De: R$ ${produtoEmPromocao.preco}",
-                                textDecoration = TextDecoration.LineThrough,
-                                fontSize = 10.sp
-                            )
-                            val valorComDesconto =
-                                produtoEmPromocao.preco.toDouble() - ((produtoEmPromocao.preco.toDouble() * produtoEmPromocao.desconto.toDouble()))
-                            Text(
-                                text = "Por: R$ $valorComDesconto",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp
-                            )
-                            if (produtoEmPromocao.estoqueProduto > 0) {
                                 Text(
-                                    text = "Restam ${produtoEmPromocao.estoqueProduto} unidades!",
+                                    text = produtoEmPromocao.nomeProduto,
+                                    fontSize = 14.sp,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = "De: R$ ${produtoEmPromocao.preco}",
+                                    textDecoration = TextDecoration.LineThrough,
                                     fontSize = 10.sp
                                 )
-                            } else {
+                                val valorComDesconto =
+                                    produtoEmPromocao.preco.toDouble() - ((produtoEmPromocao.preco.toDouble() * produtoEmPromocao.desconto.toDouble()))
                                 Text(
-                                    text = "Estoque esgotado :(",
-                                    fontSize = 10.sp,
-                                    color = Color.Red
+                                    text = "Por: R$ $valorComDesconto",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
                                 )
+                                if (produtoEmPromocao.estoqueProduto > 0) {
+                                    Text(
+                                        text = "Restam ${produtoEmPromocao.estoqueProduto} unidades!",
+                                        fontSize = 10.sp
+                                    )
+                                } else {
+                                    Text(
+                                        text = "Estoque esgotado :(",
+                                        fontSize = 10.sp,
+                                        color = Color.Red
+                                    )
+                                }
                             }
                         }
                     }

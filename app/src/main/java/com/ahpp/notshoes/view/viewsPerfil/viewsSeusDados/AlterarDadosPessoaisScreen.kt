@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,10 @@ import java.io.IOException
 
 @Composable
 fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
+
+    BackHandler {
+        onBackPressed()
+    }
 
     val ctx = LocalContext.current
 

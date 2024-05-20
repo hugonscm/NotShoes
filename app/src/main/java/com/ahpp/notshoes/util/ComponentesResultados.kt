@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.util
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,10 @@ fun ResultadosBuscaNome(onBackPressed: () -> Unit, nome: String) {
     //ela se torna true quando um produto é clicado lá em CardResultados()
     //e false quando clica em voltar na tela de produto selecionado
 
+    BackHandler {
+        onBackPressed()
+    }
+
     var clickedProduto by remember { mutableStateOf(false) }
 
     if (clickedProduto) {
@@ -56,7 +61,6 @@ fun ResultadosBuscaNome(onBackPressed: () -> Unit, nome: String) {
                     Brush.verticalGradient(
                         listOf(
                             Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
                             Color(0xFF86D0E2),
                             Color(0xFFFFFFFF)
                         )
@@ -126,6 +130,10 @@ fun ResultadosBuscaNome(onBackPressed: () -> Unit, nome: String) {
 @Composable
 fun ResultadosBuscaCategoria(onBackPressed: () -> Unit, categoriaSelecionada: String) {
 
+    BackHandler {
+        onBackPressed()
+    }
+
     //clickedProduto é usado para monitorar a tela de produto selecionado
     //ela se torna true quando um produto é clicado lá em CardResultados()
     //e false quando clica em voltar na tela de produto selecionado
@@ -147,7 +155,6 @@ fun ResultadosBuscaCategoria(onBackPressed: () -> Unit, categoriaSelecionada: St
                     Brush.verticalGradient(
                         listOf(
                             Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
                             Color(0xFF86D0E2),
                             Color(0xFFFFFFFF)
                         )

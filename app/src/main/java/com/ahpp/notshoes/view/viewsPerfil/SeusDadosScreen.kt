@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.view.viewsPerfil
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,6 +69,9 @@ fun MenuSeusDados(
     onClickAlterarEmail: () -> Unit,
     onclickAlterarSenha: () -> Unit
 ) {
+    BackHandler {
+        onBackPressed()
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier

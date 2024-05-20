@@ -41,7 +41,7 @@ import com.ahpp.notshoes.view.CarrinhoScreen
 import com.ahpp.notshoes.view.CategoriaScreen
 import com.ahpp.notshoes.view.InicioScreen
 import com.ahpp.notshoes.view.ListaDeDesejoscreen
-import com.ahpp.notshoes.view.viewsPerfil.PerfilScreen
+import com.ahpp.notshoes.view.PerfilScreen
 import kotlinx.coroutines.flow.map
 
 lateinit var textoBusca: String
