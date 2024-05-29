@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.bd
+package com.ahpp.notshoes.bd.endereco
 
 import com.ahpp.notshoes.util.clienteLogado
 import com.google.gson.JsonObject
@@ -9,11 +9,14 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.util.concurrent.Executors
 
-class AtualizarDadosPessoaisCliente(
-    private val nomeNovo: String,
-    private val cpfNovo: String,
-    private val telefoneContatoNovo: String,
-    private val generoNovo: String
+class AdicionarEnderecoCliente(
+    private val estado: String,
+    private val cidade: String,
+    private val cep: String,
+    private val endereco: String,
+    private val bairro: String,
+    private val numero: String,
+    private val complemento: String,
 ) {
 
     interface Callback {
@@ -21,16 +24,19 @@ class AtualizarDadosPessoaisCliente(
         fun onFailure(e: IOException)
     }
 
-    fun sendAtualizarData(callback: Callback) {
+    fun sendAdicionarEnderecoCliente(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/atualizar_dados_cliente"
+        val url = "http://10.0.2.2:5000/adicionar_endereco_cliente"
 
         val json = JsonObject().apply {
-            addProperty("nome", nomeNovo)
-            addProperty("cpf", cpfNovo)
-            addProperty("telefoneContato", telefoneContatoNovo)
-            addProperty("genero", generoNovo)
+            addProperty("estado", estado)
+            addProperty("cidade", cidade)
+            addProperty("cep", cep)
+            addProperty("endereco", endereco)
+            addProperty("bairro", bairro)
+            addProperty("numero", numero)
+            addProperty("complemento", complemento)
             addProperty("idCliente", clienteLogado.idCliente)
         }
 

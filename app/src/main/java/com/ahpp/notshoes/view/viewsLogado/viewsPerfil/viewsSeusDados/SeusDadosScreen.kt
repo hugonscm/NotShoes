@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsPerfil
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -36,9 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.view.viewsPerfil.viewsSeusDados.AlterarDadosPessoaisScreen
-import com.ahpp.notshoes.view.viewsPerfil.viewsSeusDados.AlterarEmailScreen
-import com.ahpp.notshoes.view.viewsPerfil.viewsSeusDados.AlterarSenhaScreen
 
 @Composable
 fun SeusDadosScreen(onBackPressed: () -> Unit) {

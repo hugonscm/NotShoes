@@ -9,7 +9,7 @@ import java.io.IOException
 import java.util.concurrent.Executors
 
 class RegistroCliente(
-    private var nome: String,
+    private val nome: String,
     private val email: String,
     private val senha: String
 ) {

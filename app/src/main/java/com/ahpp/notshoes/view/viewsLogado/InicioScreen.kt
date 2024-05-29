@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view
+package com.ahpp.notshoes.view.viewsLogado
 
 import android.app.Activity
 import android.os.Handler

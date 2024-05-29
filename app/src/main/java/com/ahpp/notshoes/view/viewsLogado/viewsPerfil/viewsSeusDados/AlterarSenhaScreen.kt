@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsPerfil.viewsSeusDados
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
 import android.os.Handler
 import android.os.Looper
@@ -19,9 +19,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -37,17 +40,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.AtualizarEmailCliente
+import com.ahpp.notshoes.bd.AtualizarSenhaCliente
 import com.ahpp.notshoes.bd.ClienteRepository
-import com.ahpp.notshoes.util.ValidarCampos
+import com.ahpp.notshoes.util.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
 import java.io.IOException
+import java.security.MessageDigest
 
 @Composable
-fun AlterarEmailScreen(onBackPressed: () -> Unit) {
+fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
@@ -55,11 +62,27 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
 
     val ctx = LocalContext.current
 
-    var emailNovo by remember { mutableStateOf("") }
+    var senhaAtual by remember { mutableStateOf("") }
+    var senhaNova by remember { mutableStateOf("") }
 
-    var emailValido by remember { mutableStateOf(true) }
+    var senhaAtualCorreta by remember { mutableStateOf(true) }
+    var senhaAtualValida by remember { mutableStateOf(true) }
+    var senhaNovaValida by remember { mutableStateOf(true) }
 
     var codigoStatusAlteracao by remember { mutableStateOf("201") }
+
+    var senhaAtualVisibility by remember { mutableStateOf(false) }
+    var senhaNovoVisibility by remember { mutableStateOf(false) }
+
+    val iconVisibility1 = if (senhaAtualVisibility)
+        painterResource(id = R.drawable.baseline_visibility_24)
+    else
+        painterResource(id = R.drawable.baseline_visibility_off_24)
+
+    val iconVisibility2 = if (senhaNovoVisibility)
+        painterResource(id = R.drawable.baseline_visibility_24)
+    else
+        painterResource(id = R.drawable.baseline_visibility_off_24)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -92,53 +115,105 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
         ) {
             Spacer(Modifier.padding(top = 70.dp))
             Image(
-                painter = painterResource(id = R.drawable.baseline_contact_mail_24),
+                painter = painterResource(id = R.drawable.baseline_key_24),
                 contentDescription = "Toque para voltar",
                 modifier = Modifier.size(100.dp)
             )
             Text(
-                text = "Alterar e-mail", fontSize = 28.sp, maxLines = 1,
+                text = "Alterar senha", fontSize = 28.sp, maxLines = 1,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(
                     Color(0xFFFFFFFF)
                 )
             )
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                enabled = false,
-                placeholder = { Text(clienteLogado.email, color = Color(0xFF4A5255)) },
+                value = senhaAtual,
+                onValueChange = {
+                    if (it.length <= 255) {
+                        senhaAtual = it
+                    }
+                    senhaAtualValida = ValidarCamposDados.validarSenha(senhaAtual)
+                    senhaAtualCorreta = true
+                },
+                isError = !senhaAtualValida || !senhaAtualCorreta,
+                supportingText = {
+                    if (!senhaAtualValida) {
+                        Text(
+                            text = "Digite uma senha válida.",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    } else if (!senhaAtualCorreta) {
+                        Text(
+                            text = "Senha atual incorreta.",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    }
+                },
+                placeholder = { Text(text = "Senha atual", color = Color(0xFF4A5255)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        senhaAtualVisibility = !senhaAtualVisibility
+                    }) {
+                        Icon(
+                            painter = iconVisibility1,
+                            contentDescription = "Visibility Icon", tint = Color.Black
+                        )
+                    }
+                },
+                visualTransformation = if (senhaAtualVisibility) VisualTransformation.None
+                else PasswordVisualTransformation(),
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    disabledBorderColor = Color.Transparent,
-                    disabledContainerColor = Color(0xFFEEF3F5),
+                    unfocusedContainerColor = Color(0xFFEEF3F5),
+                    focusedContainerColor = Color(0xFFEEF3F5),
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = Color.Black,
+                    focusedLabelColor = Color(0xFF000000),
+                    cursorColor = Color(0xFF029CCA),
+                    errorContainerColor = Color(0xFFEEF3F5),
+                    errorSupportingTextColor = Color(0xFFC00404)
                 )
             )
-            Spacer(Modifier.padding(top = 15.dp))
             OutlinedTextField(
-                value = emailNovo,
+                value = senhaNova,
                 onValueChange = {
                     if (it.length <= 255) {
-                        emailNovo = it
+                        senhaNova = it
                     }
-                    emailValido = ValidarCampos.validarEmail(emailNovo)
-                    codigoStatusAlteracao = "201"
+                    senhaNovaValida = ValidarCamposDados.validarSenha(senhaNova)
                 },
-                isError = !emailValido || codigoStatusAlteracao == "500",
+                isError = !senhaNovaValida,
                 supportingText = {
-                    if (!emailValido) {
+                    if (!senhaNovaValida) {
                         Text(
-                            text = "Digite um e-mail válido.",
+                            text = "Digite uma senha válida.",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
-                    } else if (codigoStatusAlteracao == "500") {
-                        Text(text = "E-mail já cadastrado.")
                     }
                 },
-                placeholder = { Text(text = "Digite um novo e-mail", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Nova senha", color = Color(0xFF4A5255)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        senhaNovoVisibility = !senhaNovoVisibility
+                    }) {
+                        Icon(
+                            painter = iconVisibility2,
+                            contentDescription = "Visibility Icon", tint = Color.Black
+                        )
+                    }
+                },
+                visualTransformation = if (senhaNovoVisibility) VisualTransformation.None
+                else PasswordVisualTransformation(),
                 maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,19 +237,23 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
             ElevatedButton(
                 onClick = {
 
-                    emailValido = ValidarCampos.validarEmail(emailNovo)
+                    val senhaAtualCriptografada: String = md5Hash(senhaAtual)
 
-                    if (emailValido) {
-                        val atualizarEmailCliente =
-                            AtualizarEmailCliente(emailNovo)
+                    senhaAtualCorreta = senhaAtualCriptografada == clienteLogado.senha
 
-                        atualizarEmailCliente.sendAtualizarData(object :
-                            AtualizarEmailCliente.Callback {
+                    senhaAtualValida = ValidarCamposDados.validarSenha(senhaAtual)
+                    senhaNovaValida = ValidarCamposDados.validarSenha(senhaNova)
+
+                    if (senhaAtualCorreta && senhaAtualValida && senhaNovaValida) {
+                        val atualizarSenhaCliente = AtualizarSenhaCliente(senhaNova)
+
+                        atualizarSenhaCliente.sendAtualizarData(object :
+                            AtualizarSenhaCliente.Callback {
                             override fun onSuccess(code: String) {
-                                //500 = email ja existe
-                                //201 = email alterado com sucesso
+                                //500 = erro
+                                //201 = senha alterada com sucesso
                                 codigoStatusAlteracao = code
-                                Log.i("CODIGO RECEBIDO {ALTERAR EMAIL}: ", code)
+                                Log.i("CODIGO RECEBIDO {ALTERAR SENHA}: ", code)
 
                                 if (code == "201") {
                                     Handler(Looper.getMainLooper()).post {
@@ -183,7 +262,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                                             repository.getCliente(clienteLogado.idCliente)
                                         Toast.makeText(
                                             ctx,
-                                            "E-mail alterado com sucesso.",
+                                            "Senha alterada com sucesso.",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         onBackPressed()
@@ -210,7 +289,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
-                    text = "ALTERAR E-MAIL",
+                    text = "ALTERAR SENHA",
                     fontSize = 15.sp,
                     //fontWeight = FontWeight.Bold,
                     style = TextStyle(
@@ -230,4 +309,10 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
             )
         }
     }
+}
+
+fun md5Hash(input: String): String {
+    val md = MessageDigest.getInstance("MD5")
+    val bytes = md.digest(input.toByteArray())
+    return bytes.joinToString("") { "%02x".format(it) }
 }

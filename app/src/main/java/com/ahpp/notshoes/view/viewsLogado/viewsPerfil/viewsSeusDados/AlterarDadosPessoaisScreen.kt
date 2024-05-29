@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsPerfil.viewsSeusDados
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
 import android.os.Handler
 import android.os.Looper
@@ -23,8 +23,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,7 +42,8 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.AtualizarDadosPessoaisCliente
 import com.ahpp.notshoes.bd.ClienteRepository
-import com.ahpp.notshoes.util.ValidarCampos
+import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
+import com.ahpp.notshoes.util.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
 import java.io.IOException
 
@@ -224,17 +223,17 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.Start
             ) {
-                GeneroButton(
+                RadioButtonButtonPersonalizado(
                     text = "Masculino",
                     isSelected = generoNovo == "M",
                     onClick = { generoNovo = "M" }
                 )
-                GeneroButton(
+                RadioButtonButtonPersonalizado(
                     text = "Feminino",
                     isSelected = generoNovo == "F",
                     onClick = { generoNovo = "F" }
                 )
-                GeneroButton(
+                RadioButtonButtonPersonalizado(
                     text = "Prefiro não informar",
                     isSelected = generoNovo == "0",
                     onClick = { generoNovo = "0" }
@@ -249,9 +248,9 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 ElevatedButton(
                     onClick = {
 
-                        nomeValido = ValidarCampos.validarNome(nomeNovo)
-                        cpfValido = ValidarCampos.validarCpf(cpfNovo)
-                        telefoneValido = ValidarCampos.validarTelefone(telefoneNovo)
+                        nomeValido = ValidarCamposDados.validarNome(nomeNovo)
+                        cpfValido = ValidarCamposDados.validarCpf(cpfNovo)
+                        telefoneValido = ValidarCamposDados.validarTelefone(telefoneNovo)
 
                         if (nomeValido && cpfValido && telefoneValido) {
                             val atualizarDadosCliente =
@@ -309,23 +308,5 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun GeneroButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
-    val backgroundColor = if (isSelected) Color(0xFF029CCA) else Color.White
-    val contentColor = if (isSelected) Color.White else Color.Black
-
-    Row(
-        //modifier = Modifier.background(Color.Black),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        RadioButton(
-            selected = isSelected,
-            onClick = onClick,
-            colors = RadioButtonColors(backgroundColor, contentColor, contentColor, contentColor)
-        )
-        Text(text = text)
     }
 }

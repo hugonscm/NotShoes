@@ -12,8 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ahpp.notshoes.util.HomeController
-import com.ahpp.notshoes.view.LoginScreen
-import com.ahpp.notshoes.view.RegistroScreen
+import com.ahpp.notshoes.view.viewsDeslogado.LoginScreen
+import com.ahpp.notshoes.view.viewsDeslogado.RegistroScreen
 
 //usado para salvar o id do usuario logado, precisa ser definido no level mais alto do projeto
 // foi usado la no LoginScreen.kt

@@ -10,7 +10,7 @@ import java.io.IOException
 import java.util.concurrent.Executors
 
 class AtualizarEmailCliente(
-    private var emailNovo: String,
+    private val emailNovo: String,
 ) {
 
     interface Callback {

@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view
+package com.ahpp.notshoes.view.viewsLogado
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

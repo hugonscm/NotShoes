@@ -1,6 +1,6 @@
 package com.ahpp.notshoes.util
 
-object ValidarCampos {
+object ValidarCamposDados {
 
     fun validarNome(nome: String): Boolean {
         return nome.isNotEmpty()

@@ -45,15 +45,16 @@ class ClienteRepository {
                         val clienteJson = jsonElement.asJsonObject
                         cliente = Cliente(
                             //os que tem a verificaçao isJsonNull é porque podem ser nulos
-                            idCliente = /*if (clienteJson.has("idCliente"))*/ clienteJson.get("idCliente").asInt /*else ""*/,
+                            idCliente = clienteJson.get("idCliente").asInt,
                             genero = if (clienteJson.get("genero").isJsonNull) "0" else clienteJson.get("genero").asString,
-                            nome = /*if (clienteJson.has("nome"))*/ clienteJson.get("nome").asString /*else ""*/,
-                            email = /*if (clienteJson.has("email"))*/ clienteJson.get("email").asString /*else ""*/,
-                            senha = /*if (clienteJson.has("senha"))*/ clienteJson.get("senha").asString /*else ""*/,
+                            nome = clienteJson.get("nome").asString,
+                            email = clienteJson.get("email").asString,
+                            senha = clienteJson.get("senha").asString,
                             cpf = if (clienteJson.get("cpf").isJsonNull) "" else clienteJson.get("cpf").asString,
                             telefoneContato = if (clienteJson.get("telefoneContato").isJsonNull) "" else clienteJson.get("telefoneContato").asString,
-                            idListaDesejos = /*if (clienteJson.has("idListaDesejos"))*/ clienteJson.get("idListaDesejos").asInt /*else ""*/,
-                            idCarrinho = /*if (clienteJson.has("idCarrinho"))*/ clienteJson.get("idCarrinho").asInt /*else ""*/
+                            idListaDesejos = clienteJson.get("idListaDesejos").asInt,
+                            idCarrinho = clienteJson.get("idCarrinho").asInt,
+                            idEnderecoPrincipal = if (clienteJson.get("idEnderecoPrincipal").isJsonNull) -1 else clienteJson.get("idEnderecoPrincipal").asInt
                         )
                     }
 

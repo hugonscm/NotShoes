@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsPerfil
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearEasing
@@ -104,7 +104,7 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                     .padding(top = 30.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(size = 10.dp),
                 gradient = Brush.linearGradient(listOf(Color(0xFF1866DD), Color.Cyan)),
-                borderWidth = 5.dp
+                borderWidth = 7.dp
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(

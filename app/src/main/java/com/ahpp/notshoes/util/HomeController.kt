@@ -37,11 +37,11 @@ import com.ahpp.notshoes.bd.ClienteRepository
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.view.CarrinhoScreen
-import com.ahpp.notshoes.view.CategoriaScreen
-import com.ahpp.notshoes.view.InicioScreen
-import com.ahpp.notshoes.view.ListaDeDesejoscreen
-import com.ahpp.notshoes.view.PerfilScreen
+import com.ahpp.notshoes.view.viewsLogado.CarrinhoScreen
+import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
+import com.ahpp.notshoes.view.viewsLogado.InicioScreen
+import com.ahpp.notshoes.view.viewsLogado.ListaDeDesejoscreen
+import com.ahpp.notshoes.view.viewsLogado.PerfilScreen
 import kotlinx.coroutines.flow.map
 
 lateinit var textoBusca: String
@@ -81,7 +81,8 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
                 cpf = "",
                 telefoneContato = "",
                 idListaDesejos = -1,
-                idCarrinho = -1
+                idCarrinho = -1,
+                idEnderecoPrincipal = -1
             )
         }
     }

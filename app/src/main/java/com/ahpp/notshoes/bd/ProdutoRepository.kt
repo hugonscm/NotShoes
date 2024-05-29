@@ -177,7 +177,6 @@ class ProdutoRepository {
 
     fun getProdutosListaDesejos(idListaDesejos: Int): List<Produto> {
 
-        val client = OkHttpClient()
         val url = "http://10.0.2.2:5000/get_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
@@ -239,7 +238,6 @@ class ProdutoRepository {
 
     fun removerProdutoListaDesejos(idProduto: Int, idCliente: Int) {
 
-        val client = OkHttpClient()
         val url = "http://10.0.2.2:5000/remover_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
@@ -269,7 +267,6 @@ class ProdutoRepository {
 
     fun adicionarProdutoListaDesejos(idProduto: Int, idCliente: Int) {
 
-        val client = OkHttpClient()
         val url = "http://10.0.2.2:5000/adicionar_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
@@ -298,7 +295,7 @@ class ProdutoRepository {
     }
 
     fun verificarProdutoListaDesejos(idProduto: Int, idListaDesejos: Int, callback: (String) -> Unit) {
-        val client = OkHttpClient()
+
         val url = "http://10.0.2.2:5000/verificar_produto_lista_desejos"
 
         val jsonMessage = JsonObject().apply {

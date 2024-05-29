@@ -9,5 +9,6 @@ data class Cliente(
     val cpf: String,
     val telefoneContato: String,
     val idListaDesejos: Int,
-    val idCarrinho: Int
+    val idCarrinho: Int,
+    val idEnderecoPrincipal: Int
 )

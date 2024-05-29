@@ -10,7 +10,7 @@ import java.io.IOException
 import java.util.concurrent.Executors
 
 class AtualizarSenhaCliente(
-    private var senhaNova: String,
+    private val senhaNova: String,
 ) {
 
     interface Callback {

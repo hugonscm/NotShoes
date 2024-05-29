@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view
+package com.ahpp.notshoes.view.viewsDeslogado
 
 import android.os.Handler
 import android.os.Looper
@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.RegistroCliente
-import com.ahpp.notshoes.util.ValidarCampos
+import com.ahpp.notshoes.util.ValidarCamposDados
 import java.io.IOException
 
 @Composable
@@ -122,7 +122,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 if (it.length <= 255) {
                     nome = it
                 }
-                nomeValido = ValidarCampos.validarNome(nome)
+                nomeValido = ValidarCamposDados.validarNome(nome)
             },
             isError = !nomeValido,
             supportingText = {
@@ -160,7 +160,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 if (it.length <= 255) {
                     email = it
                 }
-                emailValido = ValidarCampos.validarEmail(email)
+                emailValido = ValidarCamposDados.validarEmail(email)
                 codigoStatusRegistro = "201"
             },
             isError = !emailValido || codigoStatusRegistro == "500",
@@ -207,7 +207,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 if (it.length <= 255) {
                     senha = it
                 }
-                senhaValida = ValidarCampos.validarSenha(senha)
+                senhaValida = ValidarCamposDados.validarSenha(senha)
             },
             placeholder = { Text(text = "Crie uma nova senha", color = Color(0xFF4A5255)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -250,9 +250,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         ) {
             ElevatedButton(
                 onClick = {
-                    nomeValido = ValidarCampos.validarNome(nome)
-                    emailValido = ValidarCampos.validarEmail(email)
-                    senhaValida = ValidarCampos.validarSenha(senha)
+                    nomeValido = ValidarCamposDados.validarNome(nome)
+                    emailValido = ValidarCamposDados.validarEmail(email)
+                    senhaValida = ValidarCamposDados.validarSenha(senha)
 
                     if (nomeValido && emailValido && senhaValida) {
                         val registroCliente = RegistroCliente(nome, email, senha)

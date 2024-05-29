@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view
+package com.ahpp.notshoes.view.viewsDeslogado
 
 import android.os.Handler
 import android.os.Looper
@@ -57,7 +57,7 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.LoginCliente
 import com.ahpp.notshoes.dataStore
 
-import com.ahpp.notshoes.util.ValidarCampos
+import com.ahpp.notshoes.util.ValidarCamposDados
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -174,7 +174,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     if (it.length <= 255) {
                         email = it
                     }
-                    emailValido = ValidarCampos.validarEmail(email)
+                    emailValido = ValidarCamposDados.validarEmail(email)
                     dadosIncorretos = false
                 },
                 isError = !emailValido || (dadosIncorretos),
@@ -223,7 +223,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     if (it.length <= 255) {
                         senha = it
                     }
-                    senhaValida = ValidarCampos.validarSenha(senha)
+                    senhaValida = ValidarCamposDados.validarSenha(senha)
                     dadosIncorretos = false
                 },
                 placeholder = { Text(text = "Digite sua senha", color = Color(0xFF4A5255)) },
@@ -290,8 +290,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 ElevatedButton(
                     onClick = {
 
-                        emailValido = ValidarCampos.validarEmail(email)
-                        senhaValida = ValidarCampos.validarSenha(senha)
+                        emailValido = ValidarCamposDados.validarEmail(email)
+                        senhaValida = ValidarCamposDados.validarSenha(senha)
 
                         if (emailValido && senhaValida) {
                             val loginCliente = LoginCliente(email, senha)

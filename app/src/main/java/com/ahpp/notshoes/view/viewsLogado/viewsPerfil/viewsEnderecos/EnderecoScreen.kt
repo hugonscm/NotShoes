@@ -1,0 +1,244 @@
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos
+
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.ahpp.notshoes.bd.endereco.EnderecoRepository
+import com.ahpp.notshoes.model.Endereco
+import com.ahpp.notshoes.util.CardEndereco
+import com.ahpp.notshoes.util.clienteLogado
+import kotlinx.coroutines.delay
+
+lateinit var enderecoSelecionado: Endereco
+
+@Composable
+fun EnderecosScreen(
+    onBackPressed: () -> Unit,
+) {
+    BackHandler {
+        onBackPressed()
+    }
+    Column(modifier = Modifier.fillMaxSize()) {
+
+        var clickedEditarEndereco by remember { mutableStateOf(false) }
+        var clickedAdicionarEndereco by remember { mutableStateOf(false) }
+
+        if (clickedEditarEndereco) {
+            EditarEnderecoScreen(
+                onBackPressed = { clickedEditarEndereco = false }, enderecoSelecionado
+            )
+        } else if (clickedAdicionarEndereco) {
+            CadastrarEnderecoScreen(onBackPressed = { clickedAdicionarEndereco = false })
+        } else {
+            var enderecosList by remember { mutableStateOf(emptyList<Endereco>()) }
+            var isLoading by remember { mutableStateOf(true) }
+
+            LaunchedEffect(Unit) {
+                delay(500) // Aguarde 500 ms
+                val repository = EnderecoRepository()
+                enderecosList = repository.getEnderecos(clienteLogado.idCliente)
+                isLoading = false
+            }
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Color.White
+//                            Brush.verticalGradient(
+//                                listOf(
+//                                    Color(0xFFFFFFFF),
+//                                    Color(0xFF86D0E2),
+//                                    Color(0xFFFFFFFF)
+//                                )
+//                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Color.White
+//                            Brush.verticalGradient(
+//                                listOf(
+//                                    Color(0xFFFFFFFF),
+//                                    Color(0xFF86D0E2),
+//                                    Color(0xFFFFFFFF)
+//                                )
+//                            )
+                        )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF029CCA))
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .size(45.dp)
+                                .align(Alignment.Bottom), contentPadding = PaddingValues(0.dp),
+                            onClick = { onBackPressed() },
+                            colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                            elevation = ButtonDefaults.buttonElevation(10.dp)
+                        ) {
+                            Image(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Toque para voltar",
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 10.dp)
+                                .width(270.dp),
+                            text = "Seus endereços", fontSize = 20.sp, maxLines = 1,
+                            fontWeight = FontWeight.Bold,
+                            style = TextStyle(
+                                Color(0xFFFFFFFF)
+                            )
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+
+                    ) {
+
+                        if (enderecosList.isNotEmpty()) {
+
+                            // Separar o endereço principal dos outros endereços e colocar no topo da lista
+                            val enderecoPrincipal =
+                                enderecosList.find { it.idEndereco == clienteLogado.idEnderecoPrincipal }
+                            val outrosEnderecos =
+                                enderecosList.filter { it.idEndereco != clienteLogado.idEnderecoPrincipal }
+                            val listaEnderecosOrganizada =
+                                listOfNotNull(enderecoPrincipal) + outrosEnderecos
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(start = 10.dp, end = 10.dp)
+                            ) {
+                                LazyColumn {
+                                    items(items = listaEnderecosOrganizada) { endereco ->
+                                        CardEndereco(onClickEditarEndereco = {
+                                            clickedEditarEndereco = true
+                                            enderecoSelecionado = endereco
+                                        },
+                                            endereco,
+                                            //atualizar a lista de endereços na tela após remover algum endereço
+                                            onRemoveEndereco = { removedEndereco ->
+                                                enderecosList =
+                                                    enderecosList.filter { it.idEndereco != removedEndereco.idEndereco }
+                                            })
+                                    }
+                                    item {
+                                        Spacer(modifier = Modifier.height(70.dp))
+                                    }
+                                }
+                                FloatingActionButton(
+                                    onClick = { clickedAdicionarEndereco = true },
+                                    modifier = Modifier
+                                        .padding(bottom = 10.dp)
+                                        .align(Alignment.BottomEnd),
+                                    containerColor = Color(0xFF029CCA),
+                                    contentColor = Color.White
+                                ) {
+                                    Icon(Icons.Filled.Add, "Localized description")
+                                }
+                            }
+                        } else {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 45.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Nenhum endereço cadastrado.",
+                                    fontSize = 25.sp,
+                                    style = TextStyle(
+                                        Color(0xFF029CCA)
+                                    )
+                                )
+
+                                Spacer(modifier = Modifier.height(30.dp))
+
+                                ElevatedButton(
+                                    onClick = {
+                                        clickedAdicionarEndereco = true
+                                    },
+                                    modifier = Modifier
+                                        .width(230.dp)
+                                        .height(50.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(
+                                            0xFF029CCA
+                                        )
+                                    )
+                                ) {
+                                    Text(
+                                        text = "ADICIONAR ENDEREÇO",
+                                        fontSize = 15.sp,
+                                        style = TextStyle(
+                                            Color.White
+                                        )
+                                    )
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+        }
+    }
+}
