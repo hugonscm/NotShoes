@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.RegistroCliente
-import com.ahpp.notshoes.util.ValidarCamposDados
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import java.io.IOException
 
 @Composable

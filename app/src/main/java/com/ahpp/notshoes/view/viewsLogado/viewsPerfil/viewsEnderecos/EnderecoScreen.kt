@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.endereco.EnderecoRepository
 import com.ahpp.notshoes.model.Endereco
-import com.ahpp.notshoes.util.CardEndereco
+import com.ahpp.notshoes.util.cards.CardEndereco
 import com.ahpp.notshoes.util.clienteLogado
 import kotlinx.coroutines.delay
 

@@ -33,7 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.ahpp.notshoes.bd.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.ClienteRepository
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
@@ -41,7 +41,7 @@ import com.ahpp.notshoes.view.viewsLogado.CarrinhoScreen
 import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
 import com.ahpp.notshoes.view.viewsLogado.InicioScreen
 import com.ahpp.notshoes.view.viewsLogado.ListaDeDesejoscreen
-import com.ahpp.notshoes.view.viewsLogado.PerfilScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreen
 import kotlinx.coroutines.flow.map
 
 lateinit var textoBusca: String

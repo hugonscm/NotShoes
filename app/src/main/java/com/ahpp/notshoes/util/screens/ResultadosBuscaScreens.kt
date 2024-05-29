@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.util.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -29,7 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.ProdutoRepository
+import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.util.cards.CardResultados
 
 //esse ResultadosBuscaNome é usado quando o usuário busca por nome do produto
 @Composable

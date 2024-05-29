@@ -28,10 +28,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.ProdutoRepository
+import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.util.CardListaDesejos
-import com.ahpp.notshoes.util.ProdutoScreen
+import com.ahpp.notshoes.util.cards.CardListaDesejos
+import com.ahpp.notshoes.util.screens.ProdutoScreen
 import com.ahpp.notshoes.util.clienteLogado
 import kotlinx.coroutines.delay
 

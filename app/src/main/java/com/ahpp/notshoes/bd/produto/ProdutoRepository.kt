@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.bd
+package com.ahpp.notshoes.bd.produto
 
 import android.util.Log
 import com.ahpp.notshoes.model.Produto

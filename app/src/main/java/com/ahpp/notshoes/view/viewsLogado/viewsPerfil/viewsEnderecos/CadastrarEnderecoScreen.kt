@@ -48,9 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.endereco.AdicionarEnderecoCliente
-import com.ahpp.notshoes.bd.ClienteRepository
-import com.ahpp.notshoes.util.ValidarCamposEndereco
+import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import java.io.IOException
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -154,7 +155,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = cep,
                 onValueChange = {
-                    if (it.length <= 10) {
+                    if (it.length <= 8) {
                         cep = it
                     }
                     cepValido = true
@@ -180,7 +181,8 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                     focusedBorderColor = Color(0xFF029CCA),
                     focusedLabelColor = Color(0xFF000000),
                     cursorColor = Color(0xFF029CCA),
-                )
+                ),
+                visualTransformation = CepVisualTransformation()
             )
 
             Spacer(modifier = Modifier.height(10.dp))

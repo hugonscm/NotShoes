@@ -46,9 +46,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.AtualizarSenhaCliente
-import com.ahpp.notshoes.bd.ClienteRepository
-import com.ahpp.notshoes.util.ValidarCamposDados
+import com.ahpp.notshoes.bd.cliente.AtualizarSenhaCliente
+import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
 import java.io.IOException
 import java.security.MessageDigest

@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.util.screens
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
@@ -50,7 +50,9 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ProdutoRepository
+import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.produtoSelecionado
 
 @SuppressLint("DefaultLocale")
 @Composable

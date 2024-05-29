@@ -40,9 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.AtualizarEmailCliente
-import com.ahpp.notshoes.bd.ClienteRepository
-import com.ahpp.notshoes.util.ValidarCamposDados
+import com.ahpp.notshoes.bd.cliente.AtualizarEmailCliente
+import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
 import java.io.IOException
 

@@ -57,7 +57,7 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.LoginCliente
 import com.ahpp.notshoes.dataStore
 
-import com.ahpp.notshoes.util.ValidarCamposDados
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

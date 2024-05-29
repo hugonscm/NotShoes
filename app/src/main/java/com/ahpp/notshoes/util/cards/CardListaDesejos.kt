@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.util.cards
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,11 +24,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,19 +40,17 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ProdutoRepository
+import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.produtoSelecionado
 
 @Composable
-fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
-
-    var favoritado by remember { mutableStateOf<String?>(null) }
-    val repository = ProdutoRepository()
-    LaunchedEffect(Unit) {
-        repository.verificarProdutoListaDesejos(produto.idProduto, clienteLogado.idListaDesejos) {
-            favoritado = it
-        }
-    }
+fun CardListaDesejos(
+    onClickProduto: () -> Unit,
+    produto: Produto,
+    onRemoveProduct: (Produto) -> Unit
+) {
 
     //imagem do produto
     val painter = rememberAsyncImagePainter(
@@ -163,33 +156,27 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
             Row(
                 Modifier
                     .fillMaxSize()
-                    .padding(bottom = 15.dp, end = 15.dp),
+                    .padding(top = 10.dp, end = 10.dp),
                 horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.Top,
 
                 ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        if (favoritado == "0") {
-                            repository.adicionarProdutoListaDesejos(
-                                produto.idProduto, clienteLogado.idCliente
-                            )
-                            favoritado = "1"
-                        } else if (favoritado == "1") {
-                            repository.removerProdutoListaDesejos(
-                                produto.idProduto,
-                                clienteLogado.idCliente
-                            )
-                            favoritado = "0"
-                        }
+                        val repository = ProdutoRepository()
+                        repository.removerProdutoListaDesejos(
+                            produto.idProduto,
+                            clienteLogado.idCliente
+                        )
+                        onRemoveProduct(produto)
                     },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {
                     Image(
-                        painter = painterResource(if (favoritado != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
-                        contentDescription = "Adicionar à lista de desejos.",
+                        painter = painterResource(id = R.drawable.baseline_close_24),
+                        contentDescription = "Remover da lista de desejos.",
                         modifier = Modifier.size(20.dp)
                     )
                 }

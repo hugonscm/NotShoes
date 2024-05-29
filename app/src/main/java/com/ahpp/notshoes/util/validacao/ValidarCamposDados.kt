@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.util.validacao
 
 object ValidarCamposDados {
 
@@ -17,10 +17,10 @@ object ValidarCamposDados {
     }
 
     fun validarCpf(cpf: String): Boolean {
-        return cpf.isNotEmpty()
+        return cpf.length == 11
     }
 
     fun validarTelefone(telefone: String): Boolean {
-        return telefone.isNotEmpty()
+        return telefone.length == 11
     }
 }

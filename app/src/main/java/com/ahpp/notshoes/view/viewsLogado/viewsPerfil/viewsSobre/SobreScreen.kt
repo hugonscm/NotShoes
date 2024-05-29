@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsLogado.viewsPerfil
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSobre
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearEasing

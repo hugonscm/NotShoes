@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.util.cards
 
 import android.os.Handler
 import android.os.Looper
@@ -28,14 +28,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.ClienteRepository
 import com.ahpp.notshoes.bd.endereco.RemoverEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
+import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import java.io.IOException
 
 @Composable
@@ -95,8 +98,12 @@ fun CardEndereco(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+
+                val visualTransformation = CepVisualTransformation()
+                val transformedText = visualTransformation.filter(AnnotatedString(enderecoCliente.cep)).text
+
                 Text(
-                    text = "CEP: ${enderecoCliente.cep}",
+                    text = "CEP: $transformedText",
                     fontSize = 15.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

@@ -1,8 +1,8 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.util.validacao
 
 object ValidarCamposEndereco {
     fun validarCep(cep: String): Boolean {
-        return cep.isNotEmpty()
+        return cep.length == 8
     }
 
     fun validarEndereco(endereco: String): Boolean {

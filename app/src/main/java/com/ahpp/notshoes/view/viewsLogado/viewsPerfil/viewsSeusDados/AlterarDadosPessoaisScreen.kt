@@ -40,11 +40,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.AtualizarDadosPessoaisCliente
-import com.ahpp.notshoes.bd.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.AtualizarDadosPessoaisCliente
+import com.ahpp.notshoes.bd.cliente.ClienteRepository
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
-import com.ahpp.notshoes.util.ValidarCamposDados
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.visualTransformation.CpfVisualTransformation
+import com.ahpp.notshoes.util.visualTransformation.PhoneVisualTransformation
 import java.io.IOException
 
 @Composable
@@ -144,7 +146,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = if (cpfNovo == "") "" else cpfNovo,
                 onValueChange = {
-                    if (it.length <= 14) {
+                    if (it.length <= 11) {
                         cpfNovo = it
                     }
                     cpfValido = true
@@ -170,7 +172,8 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     focusedBorderColor = Color(0xFF029CCA),
                     focusedLabelColor = Color(0xFF000000),
                     cursorColor = Color(0xFF029CCA),
-                )
+                ),
+                visualTransformation = CpfVisualTransformation()
             )
 
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
@@ -180,7 +183,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             OutlinedTextField(
                 value = if (telefoneNovo == "") "" else telefoneNovo,
                 onValueChange = {
-                    if (it.length <= 15) {
+                    if (it.length < 12) {
                         telefoneNovo = it
                     }
                     telefoneValido = true
@@ -211,7 +214,8 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     focusedBorderColor = Color(0xFF029CCA),
                     focusedLabelColor = Color(0xFF000000),
                     cursorColor = Color(0xFF029CCA),
-                )
+                ),
+                visualTransformation = PhoneVisualTransformation()
             )
 
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
@@ -264,7 +268,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                             atualizarDadosCliente.sendAtualizarData(object :
                                 AtualizarDadosPessoaisCliente.Callback {
                                 override fun onSuccess(code: String) {
-                                    Log.i("CODIGO RECEBIDO: ", code)
+                                    Log.i("CODIGO RECEBIDO{ALTERAR DADOS CLIENTE}: ", code)
                                     Handler(Looper.getMainLooper()).post {
                                         val repository = ClienteRepository()
                                         clienteLogado =

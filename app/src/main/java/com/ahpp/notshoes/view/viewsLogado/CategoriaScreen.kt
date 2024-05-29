@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.util.ResultadosBuscaCategoria
+import com.ahpp.notshoes.util.screens.ResultadosBuscaCategoria
 import com.ahpp.notshoes.util.categoriaSelecionada
 
 @Composable
