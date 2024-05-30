@@ -9,7 +9,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,6 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,27 +52,46 @@ fun SobreScreen(onBackPressed: () -> Unit) {
         onBackPressed()
     }
     Column {
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .background(Color(0xFF029CCA)),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier
-                    .size(45.dp)
-                    .align(Alignment.Bottom), contentPadding = PaddingValues(0.dp),
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    painterResource(id = R.drawable.baseline_close_24),
+                    Icons.Default.Close,
                     contentDescription = "Toque para voltar",
                     modifier = Modifier.size(30.dp)
                 )
             }
+
+            Text(
+                modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                text = "Sobre o aplicativo",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.White
+            )
         }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

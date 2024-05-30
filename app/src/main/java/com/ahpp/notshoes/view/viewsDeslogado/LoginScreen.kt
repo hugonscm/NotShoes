@@ -94,7 +94,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
         }
     }
 
-
     if (isLoading) {
         Box(
             modifier = Modifier

@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util.screens
+package com.ahpp.notshoes.util.screensReutilizaveis
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
@@ -20,7 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -86,30 +85,40 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
     val state = painter.state
 
     Column {
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White)
+        )
         //essa row tem os 2 botoes que ficam no topo da tela
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .background(Color(0xFF029CCA)),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
                 modifier = Modifier
-                    .size(55.dp), contentPadding = PaddingValues(0.dp),
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    Icons.AutoMirrored.Filled.ArrowBack,
+                    Icons.Default.Close,
                     contentDescription = "Toque para voltar",
                     modifier = Modifier.size(30.dp)
                 )
             }
             Button(
                 modifier = Modifier
-                    .size(45.dp)
-                    .align(Alignment.Bottom), contentPadding = PaddingValues(0.dp),
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
                 onClick = {
                     if (favoritado == "0") {
                         repository.adicionarProdutoListaDesejos(

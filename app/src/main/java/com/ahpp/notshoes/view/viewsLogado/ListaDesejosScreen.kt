@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardListaDesejos
-import com.ahpp.notshoes.util.screens.ProdutoScreen
+import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.clienteLogado
 import kotlinx.coroutines.delay
 
@@ -79,12 +80,12 @@ fun ListaDeDesejoscreen() {
                     CircularProgressIndicator()
                 }
             } else {
-//                Spacer(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(1.dp)
-//                        .background(Color.White)
-//                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color.White)
+                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

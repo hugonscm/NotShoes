@@ -8,7 +8,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -40,13 +41,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.endereco.AdicionarEnderecoCliente
 import com.ahpp.notshoes.bd.cliente.ClienteRepository
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
@@ -112,36 +112,42 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
     var estado by remember { mutableStateOf(estadosList[0]) }
 
     Column(modifier = Modifier.fillMaxSize()) {
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA))
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+                .background(Color(0xFF029CCA)),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier
-                    .size(45.dp), contentPadding = PaddingValues(0.dp),
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.baseline_close_24),
+                    Icons.Default.Close,
                     contentDescription = "Toque para voltar",
                     modifier = Modifier.size(30.dp)
                 )
             }
+
             Text(
-                modifier = Modifier
-                    .padding(start = 10.dp)
-                    .width(270.dp),
-                text = "Cadastrar endereço", fontSize = 20.sp, maxLines = 1,
+                modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                text = "Cadastrar enredeço",
                 fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    Color(0xFFFFFFFF)
-                )
+                fontSize = 20.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.White
             )
         }
         Column(

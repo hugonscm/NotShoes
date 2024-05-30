@@ -62,12 +62,12 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
     } else {
 
         Column(modifier = modifier.fillMaxSize()) {
-//            Spacer(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(1.dp)
-//                    .background(Color.White)
-//            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color.White)
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

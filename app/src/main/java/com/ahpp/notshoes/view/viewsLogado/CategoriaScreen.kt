@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.util.screens.ResultadosBuscaCategoria
+import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
 import com.ahpp.notshoes.util.categoriaSelecionada
 
 @Composable
@@ -59,19 +59,19 @@ fun CategoriaScreen() {
         //esse onBackPressed() pode ser chamado la no ResultadosBuscaCategoria() para voltar para a tela
         // anterior ele altera o valor de clicked para false, assim caindo no else aqui em baixo
         // e voltando pra tela categoria
-        ResultadosBuscaCategoria(onBackPressed = { clicked = false }, categoriaSelecionada)
+        ResultadosBuscaCategoriaScreen(onBackPressed = { clicked = false }, categoriaSelecionada)
     } else {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(corBackground)
         ) {
-//            Spacer(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(1.dp)
-//                    .background(Color.White)
-//            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color.White)
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

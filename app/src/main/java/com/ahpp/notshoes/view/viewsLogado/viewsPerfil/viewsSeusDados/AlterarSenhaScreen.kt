@@ -85,17 +85,24 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
         painterResource(id = R.drawable.baseline_visibility_off_24)
 
     Column(modifier = Modifier.fillMaxSize()) {
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA))
-                .padding(10.dp),
+                .background(Color(0xFF029CCA)),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
             Button(
                 modifier = Modifier
-                    .size(45.dp), contentPadding = PaddingValues(0.dp),
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)

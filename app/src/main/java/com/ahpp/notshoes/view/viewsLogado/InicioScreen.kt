@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.view.viewsLogado
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
@@ -76,9 +77,9 @@ import kotlinx.coroutines.delay
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.ahpp.notshoes.util.screens.ProdutoScreen
-import com.ahpp.notshoes.util.screens.ResultadosBuscaCategoria
-import com.ahpp.notshoes.util.screens.ResultadosBuscaNome
+import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
+import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
+import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaNomeScreen
 import com.ahpp.notshoes.util.categoriaSelecionada
 import com.ahpp.notshoes.util.produtoSelecionado
 import com.ahpp.notshoes.util.textoBusca
@@ -94,12 +95,12 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
         //esse onBackPressed() é chamado la no ResultadosBuscaNome() para voltar para a tela
         // anterior ele altera o valor de clicked para false, assim caindo no else aqui em baixo
         // e voltando pra tela inicio
-        ResultadosBuscaNome(
+        ResultadosBuscaNomeScreen(
             onBackPressed = { clickedPesquisa = false },
             textoBusca
         )
     } else if (clickedCategoria) {
-        ResultadosBuscaCategoria(
+        ResultadosBuscaCategoriaScreen(
             onBackPressed = { clickedCategoria = false },
             categoriaSelecionada
         )
@@ -444,6 +445,7 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun Promocoes(onPromocaoClicked: () -> Unit) {
 
@@ -592,10 +594,13 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                     textDecoration = TextDecoration.LineThrough,
                                     fontSize = 10.sp
                                 )
+
                                 val valorComDesconto =
                                     produtoEmPromocao.preco.toDouble() - ((produtoEmPromocao.preco.toDouble() * produtoEmPromocao.desconto.toDouble()))
+                                val valorComDescontoFormated = String.format("%.2f", valorComDesconto)
+
                                 Text(
-                                    text = "Por: R$ $valorComDesconto",
+                                    text = "Por: R$ $valorComDescontoFormated",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 13.sp
                                 )

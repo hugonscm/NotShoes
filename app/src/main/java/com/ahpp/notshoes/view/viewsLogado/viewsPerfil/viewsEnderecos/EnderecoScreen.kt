@@ -4,7 +4,6 @@ package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.endereco.EnderecoRepository
@@ -111,18 +111,23 @@ fun EnderecosScreen(
 //                            )
                         )
                 ) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(Color.White)
+                    )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFF029CCA))
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                            .background(Color(0xFF029CCA)),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Button(
                             modifier = Modifier
-                                .size(45.dp)
-                                .align(Alignment.Bottom), contentPadding = PaddingValues(0.dp),
+                                .size(65.dp)
+                                .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                            contentPadding = PaddingValues(0.dp),
                             onClick = { onBackPressed() },
                             colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                             elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -133,15 +138,15 @@ fun EnderecosScreen(
                                 modifier = Modifier.size(30.dp)
                             )
                         }
+
                         Text(
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                                .width(270.dp),
-                            text = "Seus endereços", fontSize = 20.sp, maxLines = 1,
+                            modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                            text = "Seus endereços",
                             fontWeight = FontWeight.Bold,
-                            style = TextStyle(
-                                Color(0xFFFFFFFF)
-                            )
+                            fontSize = 20.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.White
                         )
                     }
                     Box(
