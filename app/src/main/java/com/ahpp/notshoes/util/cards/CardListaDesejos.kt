@@ -44,6 +44,7 @@ import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.produtoSelecionado
+import java.text.NumberFormat
 
 @Composable
 fun CardListaDesejos(
@@ -51,6 +52,9 @@ fun CardListaDesejos(
     produto: Produto,
     onRemoveProduct: (Produto) -> Unit
 ) {
+
+    val localeBR = java.util.Locale("pt", "BR")
+    val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
     //imagem do produto
     val painter = rememberAsyncImagePainter(
@@ -127,14 +131,14 @@ fun CardListaDesejos(
                 )
                 Text(
                     modifier = Modifier.padding(top = 5.dp),
-                    text = "De: R$ ${produto.preco}",
+                    text = "De: ${numberFormat.format(produto.preco.toDouble())}",
                     textDecoration = TextDecoration.LineThrough,
                     fontSize = 13.sp
                 )
                 val valorComDesconto =
                     produto.preco.toDouble() - ((produto.preco.toDouble() * produto.desconto.toDouble()))
                 Text(
-                    text = "Por: R$ $valorComDesconto",
+                    text = "Por: ${numberFormat.format(valorComDesconto)}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )

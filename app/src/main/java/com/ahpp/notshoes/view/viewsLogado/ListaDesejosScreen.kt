@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,47 +40,62 @@ import kotlinx.coroutines.delay
 @Composable
 fun ListaDeDesejoscreen() {
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        //clickedProduto é usado para monitorar a tela de produto selecionado
-        //ela se torna true quando um produto é clicado lá em CardResultados()
-        //e false quando clica em voltar na tela de produto selecionado
+    // manter a posicao do scroll ao voltar pra tela
+    val listState = rememberLazyListState()
 
-        var clickedProduto by remember { mutableStateOf(false) }
+    //clickedProduto é usado para monitorar a tela de produto selecionado
+    //ela se torna true quando um produto é clicado lá em CardResultados()
+    //e false quando clica em voltar na tela de produto selecionado
 
-        if (clickedProduto) {
-            ProdutoScreen(
-                onBackPressed = { clickedProduto = false },
-            )
-        } else {
+    var clickedProduto by remember { mutableStateOf(false) }
 
-            var produtosList by remember { mutableStateOf(emptyList<Produto>()) }
-            var isLoading by remember { mutableStateOf(true) }
+    if (clickedProduto) {
+        ProdutoScreen(
+            onBackPressed = { clickedProduto = false },
+        )
+    } else {
 
-            LaunchedEffect(Unit) {
-                delay(500) // Aguarde 500 ms
-                val repository = ProdutoRepository()
-                produtosList = repository.getProdutosListaDesejos(clienteLogado.idListaDesejos)
-                isLoading = false
-            }
+        var produtosList by remember { mutableStateOf(emptyList<Produto>()) }
+        var isLoading by remember { mutableStateOf(true) }
 
-            if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color(0xFFFFFFFF),
-                                    Color(0xFF86D0E2),
-                                    Color(0xFFFFFFFF)
-                                )
+        LaunchedEffect(Unit) {
+            delay(500) // Aguarde 500 ms
+            val repository = ProdutoRepository()
+            produtosList = repository.getProdutosListaDesejos(clienteLogado.idListaDesejos)
+            isLoading = false
+        }
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFFFFFFF),
+                                Color(0xFF86D0E2),
+                                Color(0xFFFFFFFF)
                             )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else {
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFFFFFFF),
+                                Color(0xFF86D0E2),
+                                Color(0xFFFFFFFF)
+                            )
+                        )
+                    )
+            ) {
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -105,55 +121,42 @@ fun ListaDeDesejoscreen() {
                         )
                     )
                 }
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color(0xFFFFFFFF),
-                                    Color(0xFF86D0E2),
-                                    Color(0xFFFFFFFF)
-                                )
-                            )
-                        )
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 10.dp)
-                    ) {
 
-                        if (produtosList.isNotEmpty()) {
-                            LazyColumn {
-                                items(items = produtosList) { produto ->
-                                    CardListaDesejos(onClickProduto = { clickedProduto = true },
-                                        produto,
-                                        //atualizar a lista de desejos na tela após remover um produto
-                                        onRemoveProduct = { removedProduto ->
-                                            produtosList =
-                                                produtosList.filter { it.idProduto != removedProduto.idProduto }
-                                        })
-                                }
-                            }
-                        } else {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 45.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Sua lista de desejos está vazia.",
-                                    fontSize = 25.sp,
-                                )
+                    if (produtosList.isNotEmpty()) {
+                        LazyColumn (state = listState) {
+                            items(items = produtosList) { produto ->
+                                CardListaDesejos(onClickProduto = { clickedProduto = true },
+                                    produto,
+                                    //atualizar a lista de desejos na tela após remover um produto
+                                    onRemoveProduct = { removedProduto ->
+                                        produtosList =
+                                            produtosList.filter { it.idProduto != removedProduto.idProduto }
+                                    })
                             }
                         }
-
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 45.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Sua lista de desejos está vazia.",
+                                fontSize = 25.sp,
+                            )
+                        }
                     }
 
                 }
+
             }
         }
     }
+
 }

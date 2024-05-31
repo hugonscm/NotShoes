@@ -88,6 +88,9 @@ import java.text.NumberFormat
 @Composable
 fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController) {
 
+    // manter a posicao do scroll ao voltar pra tela
+    val scrollState = rememberScrollState()
+
     var clickedPesquisa by remember { mutableStateOf(false) }
     var clickedCategoria by remember { mutableStateOf(false) }
     var clickedProduto by remember { mutableStateOf(false) }
@@ -147,7 +150,7 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             SearchBar(onSearchClicked = { clickedPesquisa = true })
             PagerDescontos()

@@ -39,6 +39,9 @@ import com.ahpp.notshoes.util.categoriaSelecionada
 @Composable
 fun CategoriaScreen() {
 
+    // manter a posicao do scroll ao voltar pra tela
+    val scrollState = rememberScrollState()
+
     val tamanhoSpacer = 15.dp
     val tamanhoPaddingBotton = 10.dp
     val tamanhoFonte = 22.sp
@@ -95,7 +98,7 @@ fun CategoriaScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(start = 10.dp, end = 10.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
             ) {
                 Card(
                     modifier = Modifier
@@ -105,7 +108,7 @@ fun CategoriaScreen() {
                         .clickable(
                             enabled = true,
                             onClick = {
-                                categoriaSelecionada = "Regatas"
+                                categoriaSelecionada = "Regata"
                                 clicked = true
                             }),
                     elevation = CardDefaults.cardElevation(elevationCards)
@@ -124,18 +127,18 @@ fun CategoriaScreen() {
                                     .width(100.dp)
                                     .height(100.dp),
                                 painter = painterResource(id = R.drawable.img_categoria_regata),
-                                contentDescription = "Categoria Regatas"
+                                contentDescription = "Categoria Regata"
                             )
                             Spacer(modifier = Modifier.width(tamanhoSpacer))
                             Text(
-                                text = "Regatas",
+                                text = "Regata",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = tamanhoFonte
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                            contentDescription = "Acessar categoria Regatas"
+                            contentDescription = "Acessar categoria Regata"
                         )
                     }
                 }
@@ -167,18 +170,18 @@ fun CategoriaScreen() {
                                     .width(100.dp)
                                     .height(100.dp),
                                 painter = painterResource(id = R.drawable.img_categoria_camisa_basica),
-                                contentDescription = "Categoria Camisas Básicas"
+                                contentDescription = "Categoria Camisa Básica"
                             )
                             Spacer(modifier = Modifier.width(tamanhoSpacer))
                             Text(
-                                text = "Camisas Básicas",
+                                text = "Camisa Básica",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = tamanhoFonte
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                            contentDescription = "Acessar categoria Camisas Básicas"
+                            contentDescription = "Acessar categoria Camisa Básica"
                         )
                     }
                 }
@@ -209,18 +212,18 @@ fun CategoriaScreen() {
                                     .width(100.dp)
                                     .height(100.dp),
                                 painter = painterResource(id = R.drawable.img_categoria_calca),
-                                contentDescription = "Categoria Calças"
+                                contentDescription = "Categoria Calça"
                             )
                             Spacer(modifier = Modifier.width(tamanhoSpacer))
                             Text(
-                                text = "Calças",
+                                text = "Calça",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = tamanhoFonte
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                            contentDescription = "Acessar categoria Calças"
+                            contentDescription = "Acessar categoria Calça"
                         )
                     }
                 }
@@ -251,18 +254,18 @@ fun CategoriaScreen() {
                                     .width(100.dp)
                                     .height(100.dp),
                                 painter = painterResource(id = R.drawable.img_categoria_cueca),
-                                contentDescription = "Categoria Cuecas"
+                                contentDescription = "Categoria Cueca"
                             )
                             Spacer(modifier = Modifier.width(tamanhoSpacer))
                             Text(
-                                text = "Cuecas",
+                                text = "Cueca",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = tamanhoFonte
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                            contentDescription = "Acessar categoria Cuecas"
+                            contentDescription = "Acessar categoria Cueca"
                         )
                     }
                 }
@@ -293,18 +296,18 @@ fun CategoriaScreen() {
                                     .width(100.dp)
                                     .height(100.dp),
                                 painter = painterResource(id = R.drawable.img_categoria_short),
-                                contentDescription = "Categoria Shorts"
+                                contentDescription = "Categoria Short"
                             )
                             Spacer(modifier = Modifier.width(tamanhoSpacer))
                             Text(
-                                text = "Shorts",
+                                text = "Short",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = tamanhoFonte
                             )
                         }
                         Image(
                             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                            contentDescription = "Acessar categoria Shorts"
+                            contentDescription = "Acessar categoria Short"
                         )
                     }
                 }
