@@ -83,6 +83,7 @@ import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaNomeScreen
 import com.ahpp.notshoes.util.categoriaSelecionada
 import com.ahpp.notshoes.util.produtoSelecionado
 import com.ahpp.notshoes.util.textoBusca
+import java.text.NumberFormat
 
 @Composable
 fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController) {
@@ -351,13 +352,13 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             ) {
                 Image(
                     painter = painterResource(R.drawable.icon_shirt),
-                    contentDescription = "Icone ver produtos da categoria camisas.",
+                    contentDescription = "Icone ver produtos da categoria camisa básica.",
                     modifier = Modifier.size(30.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Camisas",
+                "Camisa básica",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.Black,
@@ -381,7 +382,7 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Calças",
+                "Calça",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.Black,
@@ -451,6 +452,9 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
 
     val repository = ProdutoRepository()
     val ofertas = repository.getPromocoes()
+
+    val localeBR = java.util.Locale("pt", "BR")
+    val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
     Column {
         Box(
@@ -590,17 +594,16 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                     overflow = TextOverflow.Ellipsis
                                 )
                                 Text(
-                                    text = "De: R$ ${produtoEmPromocao.preco}",
+                                    text = "De: ${numberFormat.format(produtoEmPromocao.preco.toDouble())}",
                                     textDecoration = TextDecoration.LineThrough,
                                     fontSize = 10.sp
                                 )
 
                                 val valorComDesconto =
                                     produtoEmPromocao.preco.toDouble() - ((produtoEmPromocao.preco.toDouble() * produtoEmPromocao.desconto.toDouble()))
-                                val valorComDescontoFormated = String.format("%.2f", valorComDesconto)
 
                                 Text(
-                                    text = "Por: R$ $valorComDescontoFormated",
+                                    text = "Por: ${numberFormat.format(valorComDesconto)}",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 13.sp
                                 )

@@ -24,11 +24,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,21 +40,20 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.produtoSelecionado
+import java.text.NumberFormat
 
 @Composable
-fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
+fun CardResultados(
+    onClickProduto: () -> Unit,
+    produto: Produto,
+    favoritado: String,
+    onFavoritoClick: (String) -> Unit
+) {
 
-    var favoritado by remember { mutableStateOf<String?>(null) }
-    val repository = ProdutoRepository()
-    LaunchedEffect(Unit) {
-        repository.verificarProdutoListaDesejos(produto.idProduto, clienteLogado.idListaDesejos) {
-            favoritado = it
-        }
-    }
+    val localeBR = java.util.Locale("pt", "BR")
+    val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
     //imagem do produto
     val painter = rememberAsyncImagePainter(
@@ -136,14 +130,14 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
                 )
                 Text(
                     modifier = Modifier.padding(top = 5.dp),
-                    text = "De: R$ ${produto.preco}",
+                    text = "De: ${numberFormat.format(produto.preco.toDouble())}",
                     textDecoration = TextDecoration.LineThrough,
                     fontSize = 13.sp
                 )
                 val valorComDesconto =
                     produto.preco.toDouble() - ((produto.preco.toDouble() * produto.desconto.toDouble()))
                 Text(
-                    text = "Por: R$ $valorComDesconto",
+                    text = "Por: ${numberFormat.format(valorComDesconto)}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
@@ -172,20 +166,7 @@ fun CardResultados(onClickProduto: () -> Unit, produto: Produto) {
                 ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
-                    onClick = {
-                        if (favoritado == "0") {
-                            repository.adicionarProdutoListaDesejos(
-                                produto.idProduto, clienteLogado.idCliente
-                            )
-                            favoritado = "1"
-                        } else if (favoritado == "1") {
-                            repository.removerProdutoListaDesejos(
-                                produto.idProduto,
-                                clienteLogado.idCliente
-                            )
-                            favoritado = "0"
-                        }
-                    },
+                    onClick = { onFavoritoClick(favoritado) },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {

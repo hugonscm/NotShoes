@@ -27,11 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,17 +44,17 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
-import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.produtoSelecionado
 import java.text.NumberFormat
 
-// essa tela esta vinculada aos produtos que estao em promoçao na tela de inicio
-// e tambem aos produtos que estao na lista de desejos, portanto so tem callback
-// para voltar pra tela anterior, e ela remove/adiciona o produto na lista de desejos aqui mesmo
+// essa tela esta vinculada as telas de resultados de busca por nome e categoria
+// ela tem callback para atualizar o icone de favorito do produto na tela anterior
 @SuppressLint("DefaultLocale")
 @Composable
-fun ProdutoScreen(onBackPressed: () -> Unit) {
+fun ProdutoScreenResultado(
+    onBackPressed: () -> Unit, favoritado: String,
+    onFavoritoClick: (String) -> Unit
+) {
 
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
@@ -70,16 +65,6 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
         onBackPressed()
     }
 
-    var favoritado by remember { mutableStateOf<String?>(null) }
-    val repository = ProdutoRepository()
-    LaunchedEffect(Unit) {
-        repository.verificarProdutoListaDesejos(
-            produtoSelecionado.idProduto,
-            clienteLogado.idListaDesejos
-        ) {
-            favoritado = it
-        }
-    }
 
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -127,18 +112,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    if (favoritado == "0") {
-                        repository.adicionarProdutoListaDesejos(
-                            produtoSelecionado.idProduto, clienteLogado.idCliente
-                        )
-                        favoritado = "1"
-                    } else if (favoritado == "1") {
-                        repository.removerProdutoListaDesejos(
-                            produtoSelecionado.idProduto,
-                            clienteLogado.idCliente
-                        )
-                        favoritado = "0"
-                    }
+                    onFavoritoClick(favoritado)
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
