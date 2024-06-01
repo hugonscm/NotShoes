@@ -75,46 +75,6 @@ class ProdutoRepository {
         return this.produtosList
     }
 
-    // ok nao mexa mais, faça igual, nos outros se possivel
-    suspend fun getProduto(idProduto: Int): Produto? {
-        return withContext(Dispatchers.IO) {
-            val jsonObj = JsonObject().apply {
-                addProperty("idProduto", idProduto)
-            }
-
-            val requestBody = jsonObj.toString().toRequestBody("application/json".toMediaType())
-            val request = Request.Builder()
-                .url("http://10.0.2.2:5000/get_produto")
-                .post(requestBody)
-                .build()
-
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                response.body?.string()?.let { json ->
-                    val gson = Gson()
-                    val jsonElement = gson.fromJson(json, JsonElement::class.java)
-
-                    if (jsonElement.isJsonObject) {
-                        val produtoJson = jsonElement.asJsonObject
-                        return@withContext Produto(
-                            idProduto = produtoJson.get("idProduto").asInt,
-                            nomeProduto = produtoJson.get("nomeProduto").asString,
-                            estoqueProduto = produtoJson.get("estoqueProduto").asInt,
-                            descricao = produtoJson.get("descricao").asString,
-                            tamanhoProduto = produtoJson.get("tamanhoProduto").asString,
-                            corPrincipal = produtoJson.get("corPrincipal").asString,
-                            preco = produtoJson.get("preco").asString,
-                            desconto = produtoJson.get("desconto").asString,
-                            imagemProduto = produtoJson.get("imagemProduto").asString,
-                            emOferta = produtoJson.get("emOferta").asBoolean
-                        )
-                    }
-                }
-            }
-            return@withContext null
-        }
-    }
-
     fun filtrarProdutoCategoria(categoria: String): List<Produto> {
         val request =
             Request.Builder().url("http://10.0.2.2:5000/filtrar_produto_categoria/$categoria")

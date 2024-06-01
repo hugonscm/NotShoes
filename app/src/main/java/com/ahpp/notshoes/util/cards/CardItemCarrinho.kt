@@ -25,17 +25,15 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.NumberFormat
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun CardItemCarrinho(
     item: ItemCarrinho,
+    produto: Produto,
     onRemoveProduto: (ItemCarrinho) -> Unit,
     adicionarUnidade: (ItemCarrinho) -> Unit,
     removerUnidade: (ItemCarrinho) -> Unit
@@ -43,23 +41,10 @@ fun CardItemCarrinho(
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
-    val repository = ProdutoRepository()
-
-    // Estado para armazenar o produto
-    var produto by remember { mutableStateOf<Produto?>(null) }
-    val scope = rememberCoroutineScope()
-
-    //obter os dados do protudo para exibir no card
-    LaunchedEffect(Unit) {
-        scope.launch(Dispatchers.IO) {
-            produto = repository.getProduto(item.idProduto)
-        }
-    }
-
     // imagem do produto
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(produto?.imagemProduto)
+            .data(produto.imagemProduto)
             .crossfade(true)
             .size(Size.ORIGINAL)
             .build()
@@ -75,7 +60,7 @@ fun CardItemCarrinho(
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
-        produto?.let { produto ->
+        produto.let { produto ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -98,7 +83,7 @@ fun CardItemCarrinho(
 
                         is AsyncImagePainter.State.Error -> {
                             Image(
-                                painter = painterResource(id = R.drawable.baseline_image_24),
+                                painter = painterResource(id = R.drawable.baseline_close_24),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(100.dp)

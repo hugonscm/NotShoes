@@ -1,10 +1,6 @@
 package com.ahpp.notshoes.util.screensReutilizaveis
 
 import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,11 +49,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.carrinho.CarrinhoRepository
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
+import com.ahpp.notshoes.util.funcoes.produto.adicionarProdutoCarrinho
 import com.ahpp.notshoes.util.produtoSelecionado
-import java.io.IOException
 import java.text.NumberFormat
 
 // essa tela esta vinculada aos produtos que estao em promoçao na tela de inicio
@@ -78,7 +74,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
         onBackPressed()
     }
 
-    var favoritado by remember { mutableStateOf<String?>(null) }
+    var adicionadoListaDesejosCheck by remember { mutableStateOf<String?>(null) }
 
     val produtoRepository = ProdutoRepository()
 
@@ -87,7 +83,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
             produtoSelecionado.idProduto,
             clienteLogado.idListaDesejos
         ) {
-            favoritado = it
+            adicionadoListaDesejosCheck = it
         }
     }
 
@@ -137,24 +133,17 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    if (favoritado == "0") {
-                        produtoRepository.adicionarProdutoListaDesejos(
-                            produtoSelecionado.idProduto, clienteLogado.idCliente
+                    adicionadoListaDesejosCheck = adicionadoListaDesejosCheck?.let {
+                        adicionarListaDesejos(
+                            it, produtoSelecionado
                         )
-                        favoritado = "1"
-                    } else if (favoritado == "1") {
-                        produtoRepository.removerProdutoListaDesejos(
-                            produtoSelecionado.idProduto,
-                            clienteLogado.idCliente
-                        )
-                        favoritado = "0"
                     }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    painter = painterResource(if (favoritado != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
+                    painter = painterResource(if (adicionadoListaDesejosCheck != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
                     contentDescription = "Adicionar aos favoritos.",
                     modifier = Modifier.size(30.dp)
                 )
@@ -308,65 +297,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
 
                     ElevatedButton(
                         onClick = {
-                            val carrinhoRepository = CarrinhoRepository(
-                                produtoSelecionado.idProduto,
-                                clienteLogado.idCliente
-                            )
-
-                            carrinhoRepository.adicionarItemCarrinho(object :
-                                CarrinhoRepository.Callback {
-                                override fun onSuccess(codigoRecebido: String) {
-                                    // -1 estoque insuficiente, 0 erro, 1 sucesso
-                                    Log.i(
-                                        "CODIGO RECEBIDO (ADICIONAR ITEM CARRINHO): ",
-                                        codigoRecebido
-                                    )
-                                    when (codigoRecebido) {
-                                        "-1" -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Estoque insuficiente.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-
-                                        "0" -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                                .show()
-                                        }
-
-                                        "1" -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Item adicionado ao carrinho.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-
-                                        else -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Erro de rede.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-                                    }
-                                }
-
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }
-                                    Log.e("Erro: ", e.message.toString())
-                                }
-                            })
+                            adicionarProdutoCarrinho(ctx, produtoSelecionado)
                         },
                         modifier = Modifier
                             .width(95.dp)
@@ -630,65 +561,7 @@ fun ProdutoScreen(
 
                     ElevatedButton(
                         onClick = {
-                            val carrinhoRepository = CarrinhoRepository(
-                                produtoSelecionado.idProduto,
-                                clienteLogado.idCliente
-                            )
-
-                            carrinhoRepository.adicionarItemCarrinho(object :
-                                CarrinhoRepository.Callback {
-                                override fun onSuccess(codigoRecebido: String) {
-                                    // -1 estoque insuficiente, 0 erro, 1 sucesso
-                                    Log.i(
-                                        "CODIGO RECEBIDO (ADICIONAR ITEM CARRINHO): ",
-                                        codigoRecebido
-                                    )
-                                    when (codigoRecebido) {
-                                        "-1" -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Estoque insuficiente.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-
-                                        "0" -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                                .show()
-                                        }
-
-                                        "1" -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Item adicionado ao carrinho.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-
-                                        else -> Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Erro de rede.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-                                    }
-                                }
-
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }
-                                    Log.e("Erro: ", e.message.toString())
-                                }
-                            })
+                            adicionarProdutoCarrinho(ctx, produtoSelecionado)
                         },
                         modifier = Modifier
                             .width(95.dp)

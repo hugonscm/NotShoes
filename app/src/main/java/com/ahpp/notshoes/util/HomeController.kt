@@ -37,7 +37,7 @@ import com.ahpp.notshoes.bd.cliente.ClienteRepository
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.view.viewsLogado.CarrinhoScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
 import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
 import com.ahpp.notshoes.view.viewsLogado.InicioScreen
 import com.ahpp.notshoes.view.viewsLogado.ListaDeDesejoscreen

@@ -1,6 +1,7 @@
 package com.ahpp.notshoes.bd.carrinho
 
 import com.ahpp.notshoes.model.ItemCarrinho
+import com.ahpp.notshoes.model.Produto
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -167,5 +168,58 @@ suspend fun getItensCarrinho(idCarrinho: Int): List<ItemCarrinho> {
         }
 
         return@withContext itensList
+    }
+}
+
+// ok nao mexa mais, faça igual, nos outros se possivel
+suspend fun getProdutoCarrinho(idCarrinho: Int): List<Produto> {
+    return withContext(Dispatchers.IO) {
+        val client = OkHttpClient()
+        val url = "http://10.0.2.2:5000/get_produtos_carrinho_cliente"
+
+        var produtosList: List<Produto> = emptyList()
+
+        val jsonMessage = JsonObject().apply {
+            addProperty("idCarrinho", idCarrinho)
+        }
+
+        val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        try {
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                response.body?.string()?.let { json ->
+                    val gson = Gson()
+                    val jsonElement = gson.fromJson(json, JsonElement::class.java)
+
+                    if (jsonElement.isJsonArray) {
+                        val jsonArray = jsonElement.asJsonArray
+                        produtosList = jsonArray.map { produtoJson ->
+                            val produtoArray = produtoJson.asJsonArray
+                            Produto(
+                                produtoArray[0].asInt,
+                                produtoArray[1].asString,
+                                produtoArray[2].asInt,
+                                produtoArray[3].asString,
+                                produtoArray[4].asString,
+                                produtoArray[5].asString,
+                                produtoArray[6].asString,
+                                produtoArray[7].asString,
+                                produtoArray[8].asString,
+                                produtoArray[9].asBoolean
+                            )
+                        }
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return@withContext produtosList
     }
 }

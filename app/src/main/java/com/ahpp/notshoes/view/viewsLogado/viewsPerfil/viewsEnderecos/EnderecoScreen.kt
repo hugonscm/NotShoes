@@ -41,11 +41,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.endereco.EnderecoRepository
+import com.ahpp.notshoes.bd.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.cards.CardEndereco
 import com.ahpp.notshoes.util.clienteLogado
-import kotlinx.coroutines.delay
 
 lateinit var enderecoSelecionado: Endereco
 
@@ -72,9 +71,7 @@ fun EnderecosScreen(
             var isLoading by remember { mutableStateOf(true) }
 
             LaunchedEffect(Unit) {
-                delay(500) // Aguarde 500 ms
-                val repository = EnderecoRepository()
-                enderecosList = repository.getEnderecos(clienteLogado.idCliente)
+                enderecosList = getEnderecos(clienteLogado.idCliente)
                 isLoading = false
             }
 
@@ -84,13 +81,6 @@ fun EnderecosScreen(
                         .fillMaxSize()
                         .background(
                             Color.White
-//                            Brush.verticalGradient(
-//                                listOf(
-//                                    Color(0xFFFFFFFF),
-//                                    Color(0xFF86D0E2),
-//                                    Color(0xFFFFFFFF)
-//                                )
-//                            )
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -195,7 +185,7 @@ fun EnderecosScreen(
                                     containerColor = Color(0xFF029CCA),
                                     contentColor = Color.White
                                 ) {
-                                    Icon(Icons.Filled.Add, "Localized description")
+                                    Icon(Icons.Filled.Add, "Adicionar endereço")
                                 }
                             }
                         } else {

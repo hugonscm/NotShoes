@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.ahpp.notshoes.bd.carrinho.CarrinhoRepository
 import com.ahpp.notshoes.model.ItemCarrinho
+import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.clienteLogado
 import java.io.IOException
 
@@ -145,3 +146,27 @@ fun removerProduto(ctx: Context, item: ItemCarrinho, onSuccess: () -> Unit) {
         }
     })
 }
+
+fun calcularValorCarrinhoTotal(itensList: List<ItemCarrinho>, produtosList: List<Produto>): Double {
+    return itensList.sumOf { item ->
+        val produto = produtosList.find { it.idProduto == item.idProduto }
+        produto?.let {
+            produto.preco.toDouble() * item.quantidade
+        } ?: 0.0
+    }
+}
+
+fun calcularValorCarrinhoComDesconto(
+    itensList: List<ItemCarrinho>,
+    produtosList: List<Produto>
+): Double {
+    return itensList.sumOf { item ->
+        val produto = produtosList.find { it.idProduto == item.idProduto }
+        produto?.let {
+            val precoFinal = produto.preco.toDouble() * (1.0 - produto.desconto.toDouble())
+            precoFinal * item.quantidade
+        } ?: 0.0
+    }
+}
+
+

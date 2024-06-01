@@ -54,6 +54,7 @@ import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.util.cards.CardResultados
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.filtros.filtrarProdutos
+import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.produtoSelecionado
 
 //esse ResultadosBuscaNomeScreen é usado quando o usuário busca por nome do produto
@@ -182,19 +183,7 @@ fun ResultadosBuscaNomeScreen(onBackPressed: () -> Unit, nomeProduto: String) {
         ProdutoScreen(onBackPressed = { clickedProduto = false },
             favoritado = favoritos[produtoSelecionado.idProduto] ?: "0",
             onFavoritoClick = { favoritado ->
-                val novoFavoritado = if (favoritado == "0") "1" else "0"
-                if (novoFavoritado == "1") {
-                    repository.adicionarProdutoListaDesejos(
-                        produtoSelecionado.idProduto,
-                        clienteLogado.idCliente
-                    )
-                } else {
-                    repository.removerProdutoListaDesejos(
-                        produtoSelecionado.idProduto,
-                        clienteLogado.idCliente
-                    )
-                }
-                favoritos[produtoSelecionado.idProduto] = novoFavoritado
+                favoritos[produtoSelecionado.idProduto] = adicionarListaDesejos(favoritado, produtoSelecionado)
             })
     } else {
 
@@ -586,19 +575,8 @@ fun ResultadosBuscaNomeScreen(onBackPressed: () -> Unit, nomeProduto: String) {
                                 produto = produto,
                                 favoritado = favoritos[produto.idProduto] ?: "0",
                                 onFavoritoClick = { favoritado ->
-                                    val novoFavoritado = if (favoritado == "0") "1" else "0"
-                                    if (novoFavoritado == "1") {
-                                        repository.adicionarProdutoListaDesejos(
-                                            produto.idProduto,
-                                            clienteLogado.idCliente
-                                        )
-                                    } else {
-                                        repository.removerProdutoListaDesejos(
-                                            produto.idProduto,
-                                            clienteLogado.idCliente
-                                        )
-                                    }
-                                    favoritos[produto.idProduto] = novoFavoritado
+                                    favoritos[produto.idProduto] =
+                                        adicionarListaDesejos(favoritado, produto)
                                 }
                             )
                         }

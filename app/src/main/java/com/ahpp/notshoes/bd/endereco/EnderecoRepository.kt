@@ -1,9 +1,12 @@
 package com.ahpp.notshoes.bd.endereco
 
 import com.ahpp.notshoes.model.Endereco
+import com.ahpp.notshoes.model.Produto
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,13 +16,12 @@ import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class EnderecoRepository {
-    private val client = OkHttpClient()
-    private var enderecosList: List<Endereco> = emptyList()
-
-    fun getEnderecos(idClienteLogado: Int): List<Endereco> {
-
+suspend fun getEnderecos(idClienteLogado: Int): List<Endereco> {
+    return withContext(Dispatchers.IO) {
+        val client = OkHttpClient()
         val url = "http://10.0.2.2:5000/get_enderecos_cliente"
+
+        var enderecosList: List<Endereco> = emptyList()
 
         val jsonMessage = JsonObject().apply {
             addProperty("idClienteLogado", idClienteLogado)
@@ -31,49 +33,36 @@ class EnderecoRepository {
             .post(requestBody)
             .build()
 
-        val executor = Executors.newSingleThreadExecutor()
-
-        executor.execute {
+        try {
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
-                try {
-                    val json = response.body?.string()
+                response.body?.string()?.let { json ->
                     val gson = Gson()
                     val jsonElement = gson.fromJson(json, JsonElement::class.java)
 
                     if (jsonElement.isJsonArray) {
                         val jsonArray = jsonElement.asJsonArray
-                        enderecosList = jsonArray.map { produtoJson ->
-                            val produtoArray = produtoJson.asJsonArray
+                        enderecosList = jsonArray.map { enderecoJson ->
+                            val enderecoArray = enderecoJson.asJsonArray
                             Endereco(
-                                produtoArray[0].asInt,
-                                produtoArray[1].asString,
-                                produtoArray[2].asString,
-                                produtoArray[3].asString,
-                                produtoArray[4].asString,
-                                produtoArray[5].asString,
-                                produtoArray[6].asInt,
-                                produtoArray[7].asString,
-                                produtoArray[8].asInt,
+                                enderecoArray[0].asInt,
+                                enderecoArray[1].asString,
+                                enderecoArray[2].asString,
+                                enderecoArray[3].asString,
+                                enderecoArray[4].asString,
+                                enderecoArray[5].asString,
+                                enderecoArray[6].asInt,
+                                enderecoArray[7].asString,
+                                enderecoArray[8].asInt,
                             )
                         }
                     }
-
-                } catch (e: XmlPullParserException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } finally {
-                    executor.shutdown()
                 }
             }
-        }
-
-        try {
-            executor.awaitTermination(5, TimeUnit.SECONDS)
-        } catch (e: InterruptedException) {
+        } catch (e: IOException) {
             e.printStackTrace()
         }
-        return this.enderecosList
+
+        return@withContext enderecosList
     }
 }
