@@ -3,7 +3,7 @@ package com.ahpp.notshoes.util.filtros
 import com.ahpp.notshoes.model.Produto
 
 fun filtrarProdutosPorCor(produtosList: List<Produto>, cor: String): List<Produto> {
-    return produtosList.filter { it.corProduto.equals(cor, ignoreCase = true) }
+    return produtosList.filter { it.corPrincipal.equals(cor, ignoreCase = true) }
 }
 
 fun filtrarProdutosPorTamanho(produtosList: List<Produto>, tamanho: String): List<Produto> {

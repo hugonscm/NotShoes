@@ -179,7 +179,7 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
     val listState = rememberLazyListState()
 
     if (clickedProduto) {
-        ProdutoScreenResultado(onBackPressed = { clickedProduto = false },
+        ProdutoScreen(onBackPressed = { clickedProduto = false },
             favoritado = favoritos[produtoSelecionado.idProduto] ?: "0",
             onFavoritoClick = { favoritado ->
                 val novoFavoritado = if (favoritado == "0") "1" else "0"

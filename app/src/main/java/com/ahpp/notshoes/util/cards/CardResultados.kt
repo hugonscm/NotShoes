@@ -58,7 +58,7 @@ fun CardResultados(
     //imagem do produto
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(produto.fotoProduto)
+            .data(produto.imagemProduto)
             .crossfade(true)
             .size(Size.ORIGINAL)
             .build()

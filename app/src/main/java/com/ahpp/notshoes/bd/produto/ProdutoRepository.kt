@@ -5,6 +5,8 @@ import com.ahpp.notshoes.model.Produto
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -71,6 +73,46 @@ class ProdutoRepository {
             e.printStackTrace()
         }
         return this.produtosList
+    }
+
+    // ok nao mexa mais, faça igual, nos outros se possivel
+    suspend fun getProduto(idProduto: Int): Produto? {
+        return withContext(Dispatchers.IO) {
+            val jsonObj = JsonObject().apply {
+                addProperty("idProduto", idProduto)
+            }
+
+            val requestBody = jsonObj.toString().toRequestBody("application/json".toMediaType())
+            val request = Request.Builder()
+                .url("http://10.0.2.2:5000/get_produto")
+                .post(requestBody)
+                .build()
+
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                response.body?.string()?.let { json ->
+                    val gson = Gson()
+                    val jsonElement = gson.fromJson(json, JsonElement::class.java)
+
+                    if (jsonElement.isJsonObject) {
+                        val produtoJson = jsonElement.asJsonObject
+                        return@withContext Produto(
+                            idProduto = produtoJson.get("idProduto").asInt,
+                            nomeProduto = produtoJson.get("nomeProduto").asString,
+                            estoqueProduto = produtoJson.get("estoqueProduto").asInt,
+                            descricao = produtoJson.get("descricao").asString,
+                            tamanhoProduto = produtoJson.get("tamanhoProduto").asString,
+                            corPrincipal = produtoJson.get("corPrincipal").asString,
+                            preco = produtoJson.get("preco").asString,
+                            desconto = produtoJson.get("desconto").asString,
+                            imagemProduto = produtoJson.get("imagemProduto").asString,
+                            emOferta = produtoJson.get("emOferta").asBoolean
+                        )
+                    }
+                }
+            }
+            return@withContext null
+        }
     }
 
     fun filtrarProdutoCategoria(categoria: String): List<Produto> {
@@ -175,65 +217,54 @@ class ProdutoRepository {
         return this.produtosList
     }
 
-    fun getProdutosListaDesejos(idListaDesejos: Int): List<Produto> {
+    // ok nao mexa mais, faça igual, nos outros se possivel
+    suspend fun getProdutosListaDesejos(idListaDesejos: Int): List<Produto> {
+        return withContext(Dispatchers.IO) {
+            val url = "http://10.0.2.2:5000/get_lista_desejos"
 
-        val url = "http://10.0.2.2:5000/get_lista_desejos"
+            val jsonMessage = JsonObject().apply {
+                addProperty("idListaDesejos", idListaDesejos)
+            }
 
-        val jsonMessage = JsonObject().apply {
-            addProperty("idListaDesejos", idListaDesejos)
-        }
+            val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
 
-        val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
+            try {
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    response.body?.string()?.let { json ->
+                        val gson = Gson()
+                        val jsonElement = gson.fromJson(json, JsonElement::class.java)
 
-        val executor = Executors.newSingleThreadExecutor()
-
-        executor.execute {
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                try {
-                    val json = response.body?.string()
-                    val gson = Gson()
-                    val jsonElement = gson.fromJson(json, JsonElement::class.java)
-
-                    if (jsonElement.isJsonArray) {
-                        val jsonArray = jsonElement.asJsonArray
-                        produtosList = jsonArray.map { produtoJson ->
-                            val produtoArray = produtoJson.asJsonArray
-                            Produto(
-                                produtoArray[0].asInt,
-                                produtoArray[1].asString,
-                                produtoArray[2].asInt,
-                                produtoArray[3].asString,
-                                produtoArray[4].asString,
-                                produtoArray[5].asString,
-                                produtoArray[6].asString,
-                                produtoArray[7].asString,
-                                produtoArray[8].asString,
-                                produtoArray[9].asBoolean
-                            )
+                        if (jsonElement.isJsonArray) {
+                            val jsonArray = jsonElement.asJsonArray
+                            produtosList = jsonArray.map { produtoJson ->
+                                val produtoArray = produtoJson.asJsonArray
+                                Produto(
+                                    produtoArray[0].asInt,
+                                    produtoArray[1].asString,
+                                    produtoArray[2].asInt,
+                                    produtoArray[3].asString,
+                                    produtoArray[4].asString,
+                                    produtoArray[5].asString,
+                                    produtoArray[6].asString,
+                                    produtoArray[7].asString,
+                                    produtoArray[8].asString,
+                                    produtoArray[9].asBoolean
+                                )
+                            }
                         }
                     }
-
-                } catch (e: XmlPullParserException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } finally {
-                    executor.shutdown()
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        }
 
-        try {
-            executor.awaitTermination(5, TimeUnit.SECONDS)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
+            return@withContext produtosList
         }
-        return this.produtosList
     }
 
     fun removerProdutoListaDesejos(idProduto: Int, idCliente: Int) {
@@ -294,7 +325,11 @@ class ProdutoRepository {
         }
     }
 
-    fun verificarProdutoListaDesejos(idProduto: Int, idListaDesejos: Int, callback: (String) -> Unit) {
+    fun verificarProdutoListaDesejos(
+        idProduto: Int,
+        idListaDesejos: Int,
+        callback: (String) -> Unit
+    ) {
 
         val url = "http://10.0.2.2:5000/verificar_produto_lista_desejos"
 

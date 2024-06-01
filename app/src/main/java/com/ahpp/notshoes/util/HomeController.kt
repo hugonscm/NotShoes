@@ -138,7 +138,7 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
         ) {
             composable(BottomNavItem.Inicio.route) { InicioScreen(modifier, navController) }
             composable(BottomNavItem.Categorias.route) { CategoriaScreen() }
-            composable(BottomNavItem.Carrinho.route) { CarrinhoScreen(modifier) }
+            composable(BottomNavItem.Carrinho.route) { CarrinhoScreen() }
             composable(BottomNavItem.ListaDesejos.route) { ListaDeDesejoscreen() }
             composable(BottomNavItem.Perfil.route) { PerfilScreen(modifier, navControllerInicio) }
         }

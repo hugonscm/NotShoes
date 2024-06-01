@@ -1,6 +1,10 @@
 package com.ahpp.notshoes.util.screensReutilizaveis
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,9 +53,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.bd.carrinho.CarrinhoRepository
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.produtoSelecionado
+import java.io.IOException
 import java.text.NumberFormat
 
 // essa tela esta vinculada aos produtos que estao em promoçao na tela de inicio
@@ -64,6 +70,8 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
+    val ctx = LocalContext.current
+
     // backhandler eh ativado quando o usuario aperta em voltar no aparelho
     // para evitar que volte direto pra tela inicio
     BackHandler {
@@ -71,9 +79,11 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
     }
 
     var favoritado by remember { mutableStateOf<String?>(null) }
-    val repository = ProdutoRepository()
+
+    val produtoRepository = ProdutoRepository()
+
     LaunchedEffect(Unit) {
-        repository.verificarProdutoListaDesejos(
+        produtoRepository.verificarProdutoListaDesejos(
             produtoSelecionado.idProduto,
             clienteLogado.idListaDesejos
         ) {
@@ -83,7 +93,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
 
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(produtoSelecionado.fotoProduto)
+            .data(produtoSelecionado.imagemProduto)
             .crossfade(true)
             .size(Size.ORIGINAL)
             .build()
@@ -128,12 +138,12 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                 contentPadding = PaddingValues(0.dp),
                 onClick = {
                     if (favoritado == "0") {
-                        repository.adicionarProdutoListaDesejos(
+                        produtoRepository.adicionarProdutoListaDesejos(
                             produtoSelecionado.idProduto, clienteLogado.idCliente
                         )
                         favoritado = "1"
                     } else if (favoritado == "1") {
-                        repository.removerProdutoListaDesejos(
+                        produtoRepository.removerProdutoListaDesejos(
                             produtoSelecionado.idProduto,
                             clienteLogado.idCliente
                         )
@@ -297,7 +307,67 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     }
 
                     ElevatedButton(
-                        onClick = { },
+                        onClick = {
+                            val carrinhoRepository = CarrinhoRepository(
+                                produtoSelecionado.idProduto,
+                                clienteLogado.idCliente
+                            )
+
+                            carrinhoRepository.adicionarItemCarrinho(object :
+                                CarrinhoRepository.Callback {
+                                override fun onSuccess(codigoRecebido: String) {
+                                    // -1 estoque insuficiente, 0 erro, 1 sucesso
+                                    Log.i(
+                                        "CODIGO RECEBIDO (ADICIONAR ITEM CARRINHO): ",
+                                        codigoRecebido
+                                    )
+                                    when (codigoRecebido) {
+                                        "-1" -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Estoque insuficiente.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+
+                                        "0" -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+
+                                        "1" -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Item adicionado ao carrinho.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+
+                                        else -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Erro de rede.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+                                    }
+                                }
+
+                                override fun onFailure(e: IOException) {
+                                    // erro de rede
+                                    // não é possível mostrar um Toast de um Thread
+                                    // que não seja UI, então é feito dessa forma
+                                    Handler(Looper.getMainLooper()).post {
+                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    Log.e("Erro: ", e.message.toString())
+                                }
+                            })
+                        },
                         modifier = Modifier
                             .width(95.dp)
                             .height(55.dp)
@@ -307,7 +377,329 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_shopping_cart_24),
-                            contentDescription = "Toque para voltar",
+                            contentDescription = "Adicionar ao carrinho",
+                            modifier = Modifier.size(35.dp)
+                        )
+                    }
+                }
+
+                Text(
+                    modifier = Modifier.padding(top = 35.dp),
+                    text = "Detalhes do produto",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color.DarkGray
+                )
+
+                Text(
+                    modifier = Modifier.padding(top = 5.dp),
+                    text = produtoSelecionado.descricao,
+                    fontSize = 15.sp,
+                    color = Color.DarkGray,
+                    textAlign = TextAlign.Justify
+                )
+            }
+        }
+    }
+}
+
+// essa tela esta vinculada as telas de resultados de busca por nome e categoria
+// ela tem callback para atualizar o icone de favorito do produto na tela anterior
+@SuppressLint("DefaultLocale")
+@Composable
+fun ProdutoScreen(
+    onBackPressed: () -> Unit, favoritado: String,
+    onFavoritoClick: (String) -> Unit
+) {
+
+    val localeBR = java.util.Locale("pt", "BR")
+    val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
+
+    val ctx = LocalContext.current
+
+    // backhandler eh ativado quando o usuario aperta em voltar no aparelho
+    // para evitar que volte direto pra tela inicio
+    BackHandler {
+        onBackPressed()
+    }
+
+
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(produtoSelecionado.imagemProduto)
+            .crossfade(true)
+            .size(Size.ORIGINAL)
+            .build()
+    )
+    //estado para monitorar se deu erro ou nao
+    val state = painter.state
+
+    Column {
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White)
+        )
+        //essa row tem os 2 botoes que ficam no topo da tela
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFF029CCA)),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                modifier = Modifier
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
+                onClick = { onBackPressed() },
+                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                elevation = ButtonDefaults.buttonElevation(10.dp)
+            ) {
+                Image(
+                    Icons.Default.Close,
+                    contentDescription = "Toque para voltar",
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+            Button(
+                modifier = Modifier
+                    .size(65.dp)
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                contentPadding = PaddingValues(0.dp),
+                onClick = {
+                    onFavoritoClick(favoritado)
+                },
+                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                elevation = ButtonDefaults.buttonElevation(10.dp)
+            ) {
+                Image(
+                    painter = painterResource(if (favoritado != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
+                    contentDescription = "Adicionar aos favoritos.",
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        }
+
+        //a coluna abaixo tem o resto
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .background(Color.White)
+        ) {
+            when (state) {
+                is AsyncImagePainter.State.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .fillMaxWidth()
+                            .height(400.dp)
+                    )
+                }
+
+                is AsyncImagePainter.State.Error -> {
+                    Image(
+                        Icons.Default.Close,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(400.dp)
+                            .clip(RoundedCornerShape(3.dp))
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                else -> {
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(400.dp)
+                            .clip(RoundedCornerShape(3.dp))
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
+            Column(modifier = Modifier.padding(10.dp)) {
+                Text(
+                    text = produtoSelecionado.nomeProduto,
+                    fontSize = 30.sp,
+                )
+
+                if (produtoSelecionado.emOferta) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 15.dp)
+                            .height(50.dp)
+                            .clip(RoundedCornerShape(5.dp))
+                            .background(Color(0xFF00C4FF))
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = 10.dp)
+                                    .size(35.dp),
+                                painter = painterResource(id = R.drawable.baseline_access_alarm_24),
+                                contentDescription = null,
+                            )
+                            Column(
+                                modifier = Modifier,
+                                horizontalAlignment = Alignment.Start,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "Este produto está em oferta. Aproveite!",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    style = TextStyle(color = Color.Black)
+                                )
+                                Text(text = "Enquanto durar o estoque!", fontSize = 12.sp)
+                            }
+                        }
+                    }
+                }
+
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(end = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Row {
+                            Text(
+                                text = numberFormat.format(produtoSelecionado.preco.toDouble()),
+                                textDecoration = TextDecoration.LineThrough,
+                                style = TextStyle(Color.Gray),
+                                fontSize = 15.sp
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            val percentualDesconto = 100 * produtoSelecionado.desconto.toDouble()
+                            val percentualDescontoFormated =
+                                String.format("%.0f", percentualDesconto)
+                            Text(
+                                text = "-$percentualDescontoFormated%",
+                                style = TextStyle(Color(0xFF00E20A)),
+                                fontSize = 15.sp
+                            )
+                        }
+
+                        val valorComDesconto =
+                            produtoSelecionado.preco.toDouble() - ((produtoSelecionado.preco.toDouble() * produtoSelecionado.desconto.toDouble()))
+
+                        Row(modifier = Modifier, verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = numberFormat.format(valorComDesconto),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 35.sp
+                            )
+                            Text(
+                                text = " à vista",
+                                fontSize = 20.sp
+                            )
+                        }
+
+                        if (produtoSelecionado.estoqueProduto > 0) {
+                            Text(
+                                modifier = Modifier.padding(top = 5.dp),
+                                text = "Em estoque. Envio imediato!",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                color = Color.DarkGray
+                            )
+                        } else {
+                            Text(
+                                modifier = Modifier.padding(top = 5.dp),
+                                text = "Estoque esgotado :(",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                color = Color.Red
+                            )
+                        }
+                    }
+
+                    ElevatedButton(
+                        onClick = {
+                            val carrinhoRepository = CarrinhoRepository(
+                                produtoSelecionado.idProduto,
+                                clienteLogado.idCliente
+                            )
+
+                            carrinhoRepository.adicionarItemCarrinho(object :
+                                CarrinhoRepository.Callback {
+                                override fun onSuccess(codigoRecebido: String) {
+                                    // -1 estoque insuficiente, 0 erro, 1 sucesso
+                                    Log.i(
+                                        "CODIGO RECEBIDO (ADICIONAR ITEM CARRINHO): ",
+                                        codigoRecebido
+                                    )
+                                    when (codigoRecebido) {
+                                        "-1" -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Estoque insuficiente.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+
+                                        "0" -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+
+                                        "1" -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Item adicionado ao carrinho.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+
+                                        else -> Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Erro de rede.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+                                    }
+                                }
+
+                                override fun onFailure(e: IOException) {
+                                    // erro de rede
+                                    // não é possível mostrar um Toast de um Thread
+                                    // que não seja UI, então é feito dessa forma
+                                    Handler(Looper.getMainLooper()).post {
+                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    Log.e("Erro: ", e.message.toString())
+                                }
+                            })
+                        },
+                        modifier = Modifier
+                            .width(95.dp)
+                            .height(55.dp)
+                            .align(Alignment.CenterVertically),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E20A))
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.baseline_add_shopping_cart_24),
+                            contentDescription = "Adicionar ao carrinho",
                             modifier = Modifier.size(35.dp)
                         )
                     }

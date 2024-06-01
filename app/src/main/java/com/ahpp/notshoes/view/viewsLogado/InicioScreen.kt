@@ -529,7 +529,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                         //imagem do produto
                         val painter = rememberAsyncImagePainter(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(produtoEmPromocao.fotoProduto)
+                                .data(produtoEmPromocao.imagemProduto)
                                 .crossfade(true)
                                 .size(coil.size.Size.ORIGINAL)
                                 .build()

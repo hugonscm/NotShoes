@@ -298,7 +298,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                             loginCliente.sendLoginData(object : LoginCliente.Callback {
                                 override fun onSuccess(idUsuarioRecebido: String) {
                                     // -1 usuario não existe
-                                    Log.i("ID USUARIO RECEBIDO: ", idUsuarioRecebido)
+                                    Log.i("ID USUARIO RECEBIDO (LOGIN SCREEN): ", idUsuarioRecebido)
 
                                     if (idUsuarioRecebido != "-1") {
                                         // salvar o id do usuário logado
