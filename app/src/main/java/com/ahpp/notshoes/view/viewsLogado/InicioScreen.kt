@@ -56,6 +56,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,12 +78,15 @@ import kotlinx.coroutines.delay
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
 import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaNomeScreen
 import com.ahpp.notshoes.util.categoriaSelecionada
 import com.ahpp.notshoes.util.produtoSelecionado
 import com.ahpp.notshoes.util.textoBusca
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 
 @Composable
@@ -454,7 +458,14 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
 fun Promocoes(onPromocaoClicked: () -> Unit) {
 
     val repository = ProdutoRepository()
-    val ofertas = repository.getPromocoes()
+    var ofertas by remember { mutableStateOf(emptyList<Produto>()) }
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch(Dispatchers.IO) {
+            ofertas = repository.getPromocoes()
+        }
+    }
 
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)

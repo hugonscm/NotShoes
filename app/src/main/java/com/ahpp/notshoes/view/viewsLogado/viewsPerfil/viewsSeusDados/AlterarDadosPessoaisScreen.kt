@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,12 +44,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.cliente.AtualizarDadosPessoaisCliente
-import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.visualTransformation.CpfVisualTransformation
 import com.ahpp.notshoes.util.visualTransformation.PhoneVisualTransformation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
@@ -56,6 +59,14 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
+    }
+
+    val scope = rememberCoroutineScope()
+    fun atualizarClienteLogado() {
+        scope.launch(Dispatchers.IO) {
+            clienteLogado =
+                getCliente(clienteLogado.idCliente)
+        }
     }
 
     val ctx = LocalContext.current
@@ -278,18 +289,16 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                                 AtualizarDadosPessoaisCliente.Callback {
                                 override fun onSuccess(code: String) {
                                     Log.i("CODIGO RECEBIDO{ALTERAR DADOS CLIENTE}: ", code)
+                                    atualizarClienteLogado()
                                     Handler(Looper.getMainLooper()).post {
-                                        val repository = ClienteRepository()
-                                        clienteLogado =
-                                            repository.getCliente(clienteLogado.idCliente)
                                         Toast.makeText(
                                             ctx,
                                             "Dados foram atualizados.",
                                             Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                        onBackPressed()
+                                        ).show()
                                     }
+                                    onBackPressed()
+
                                 }
 
                                 override fun onFailure(e: IOException) {

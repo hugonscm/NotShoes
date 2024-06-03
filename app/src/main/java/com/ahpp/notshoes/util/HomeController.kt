@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,7 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
@@ -42,7 +43,9 @@ import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
 import com.ahpp.notshoes.view.viewsLogado.InicioScreen
 import com.ahpp.notshoes.view.viewsLogado.ListaDeDesejoscreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreen
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 lateinit var textoBusca: String
 lateinit var categoriaSelecionada: String
@@ -67,23 +70,25 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
     }
     val idUsuarioLogado by idUsuarioFlow.collectAsState(initial = "-1")
 
+    val scope = rememberCoroutineScope()
     LaunchedEffect(idUsuarioLogado) {
-        if (idUsuarioLogado != "-1") {
-            val repository = ClienteRepository()
-            clienteLogado = repository.getCliente(idUsuarioLogado.toInt())
-        } else {
-            clienteLogado = Cliente(
-                idCliente = -1,
-                genero = "",
-                nome = "Usuário",
-                email = "",
-                senha = "",
-                cpf = "",
-                telefoneContato = "",
-                idListaDesejos = -1,
-                idCarrinho = -1,
-                idEnderecoPrincipal = -1
-            )
+        scope.launch(Dispatchers.IO) {
+            if (idUsuarioLogado != "-1") {
+                clienteLogado = getCliente(idUsuarioLogado.toInt())
+            } else {
+                clienteLogado = Cliente(
+                    idCliente = -1,
+                    genero = "",
+                    nome = "Usuário",
+                    email = "",
+                    senha = "",
+                    cpf = "",
+                    telefoneContato = "",
+                    idListaDesejos = -1,
+                    idCarrinho = -1,
+                    idEnderecoPrincipal = -1
+                )
+            }
         }
     }
 
@@ -151,6 +156,8 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: 
         BottomNavItem("categorias", Icons.AutoMirrored.Filled.List, "Categorias")
 
     data object Carrinho : BottomNavItem("carrinho", Icons.Default.ShoppingCart, "Carrinho")
-    data object ListaDesejos : BottomNavItem("lista_desejos", Icons.Default.Favorite, "Lista de desejos")
+    data object ListaDesejos :
+        BottomNavItem("lista_desejos", Icons.Default.Favorite, "Lista de desejos")
+
     data object Perfil : BottomNavItem("perfil", Icons.Default.Person, "Perfil")
 }

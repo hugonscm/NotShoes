@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -39,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,11 +53,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardResultados
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.filtros.filtrarProdutos
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.produtoSelecionado
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 //esse ResultadosBuscaCategoria é usado quando o usuário clica em alguma categoria para ver os protudos
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,29 +151,43 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
     var expandedFiltro by remember { mutableStateOf(false) }
 
     val repository = ProdutoRepository()
-    var produtosList by remember {
-        mutableStateOf(
-            repository.filtrarProdutoCategoria(
-                categoriaSelecionada
-            )
-        )
-    }
+    var produtosList by remember { mutableStateOf(emptyList<Produto>()) }
 
     // Gerencie o estado dos favoritos aqui
     val favoritos = remember { mutableStateMapOf<Int, String>() }
 
-    // verifica quais produtos estao favoritados
-    // 1 = sim
-    // 0 = não
-    LaunchedEffect(produtosList) {
-        produtosList.forEach { produto ->
-            repository.verificarProdutoListaDesejos(
-                produto.idProduto,
-                clienteLogado.idListaDesejos
-            ) {
-                favoritos[produto.idProduto] = it
+    var isLoading by remember { mutableStateOf(true) }
+
+    val scope = rememberCoroutineScope()
+    fun buscarProduto() {
+        scope.launch(Dispatchers.IO) {
+            produtosList = repository.filtrarProdutoCategoria(categoriaSelecionada)
+            produtosList =
+                filtrarProdutos(
+                    produtosList,
+                    cor,
+                    tamanho,
+                    preco,
+                    tipoOrdenacao
+                )
+
+            // verifica quais produtos estao favoritados
+            // 1 = sim
+            // 0 = não
+            produtosList.forEach { produto ->
+                repository.verificarProdutoListaDesejos(
+                    produto.idProduto,
+                    clienteLogado.idListaDesejos
+                ) {
+                    favoritos[produto.idProduto] = it
+                }
             }
+            isLoading = false
         }
+    }
+
+    LaunchedEffect(Unit) {
+        buscarProduto()
     }
 
     //clickedProduto é usado para monitorar a tela de produto selecionado
@@ -183,429 +202,402 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
         ProdutoScreen(onBackPressed = { clickedProduto = false },
             favoritado = favoritos[produtoSelecionado.idProduto] ?: "0",
             onFavoritoClick = { favoritado ->
-                favoritos[produtoSelecionado.idProduto] = adicionarListaDesejos(favoritado, produtoSelecionado)
+                favoritos[produtoSelecionado.idProduto] =
+                    adicionarListaDesejos(favoritado, produtoSelecionado)
             })
     } else {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
-                            Color(0xFFFFFFFF)
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFFFFFFF),
+                                Color(0xFF86D0E2),
+                                Color(0xFF86D0E2),
+                                Color(0xFFFFFFFF)
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFFFFFFF),
+                                Color(0xFF86D0E2),
+                                Color(0xFFFFFFFF)
+                            )
                         )
                     )
-                )
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.White)
-            )
-            Column(
-                modifier = Modifier.animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    )
-                )
             ) {
-                Row(
+                Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF029CCA)),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .size(65.dp)
-                            .padding(10.dp),
-                        contentPadding = PaddingValues(0.dp),
-                        onClick = { onBackPressed() },
-                        colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
-                        elevation = ButtonDefaults.buttonElevation(10.dp)
-                    ) {
-                        Image(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Toque para voltar",
-                            modifier = Modifier.size(30.dp)
+                        .height(1.dp)
+                        .background(Color.White)
+                )
+                Column(
+                    modifier = Modifier.animateContentSize(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessMedium
                         )
-                    }
-
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .width(220.dp),
-                        text = categoriaSelecionada,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.White
                     )
-
+                ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF029CCA)),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        if (expandedFiltro) {
-                            Button(
-                                modifier = Modifier
-                                    .size(65.dp)
-                                    .padding(10.dp),
-                                contentPadding = PaddingValues(0.dp),
-                                onClick = {
-                                    cor = coresList[0]
-                                    tamanho = tamanhosList[0]
-                                    preco = precosList[0]
-                                    tipoOrdenacao = tipoOrdenacaoList[0]
-                                    produtosList =
-                                        repository.filtrarProdutoCategoria(categoriaSelecionada)
-                                },
-                                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
-                                elevation = ButtonDefaults.buttonElevation(10.dp)
-                            ) {
-                                Image(
-                                    painterResource(id = R.drawable.baseline_refresh_24),
-                                    contentDescription = "Limpar filtro",
-                                    modifier = Modifier.size(30.dp)
-                                )
-                            }
-                        }
-
                         Button(
                             modifier = Modifier
                                 .size(65.dp)
                                 .padding(10.dp),
                             contentPadding = PaddingValues(0.dp),
-                            onClick = { expandedFiltro = !expandedFiltro },
-                            colors = if (expandedFiltro) ButtonDefaults.buttonColors(Color.Gray) else ButtonDefaults.buttonColors(
-                                Color.White
-                            ),
+                            onClick = { onBackPressed() },
+                            colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                             elevation = ButtonDefaults.buttonElevation(10.dp)
                         ) {
                             Image(
-                                painterResource(R.drawable.baseline_filter_list_24),
-                                contentDescription = "Exibir filtros",
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Toque para voltar",
                                 modifier = Modifier.size(30.dp)
                             )
                         }
-                    }
-                }
-                if (expandedFiltro) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(0xFF029CCA))
-                    ) {
-                        Row {
-                            ExposedDropdownMenuBox(
-                                modifier = Modifier
-                                    .padding(start = 10.dp, end = 5.dp)
-                                    .weight(1f),
-                                expanded = expandedPrecosList,
-                                onExpandedChange = { expandedPrecosList = it },
-                            ) {
 
-                                OutlinedTextField(
-                                    modifier = Modifier.menuAnchor(),
-                                    value = preco,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    singleLine = true,
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expandedPrecosList
-                                        )
-                                    },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
-                                    )
-                                )
-                                ExposedDropdownMenu(
-                                    expanded = expandedPrecosList,
-                                    onDismissRequest = { expandedPrecosList = false },
-                                ) {
-                                    precosList.forEach { precoSelecionadoFiltro ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(
-                                                    precoSelecionadoFiltro,
-                                                    style = MaterialTheme.typography.bodyLarge
-                                                )
-                                            },
-                                            onClick = {
-                                                preco = precoSelecionadoFiltro
-                                                expandedPrecosList = false
+                        Text(
+                            modifier = Modifier
+                                .padding(top = 10.dp)
+                                .width(220.dp),
+                            text = categoriaSelecionada,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.White
+                        )
 
-                                                produtosList =
-                                                    repository.filtrarProdutoCategoria(
-                                                        categoriaSelecionada
-                                                    )
-                                                produtosList =
-                                                    filtrarProdutos(
-                                                        produtosList,
-                                                        cor,
-                                                        tamanho,
-                                                        preco,
-                                                        tipoOrdenacao
-                                                    )
-                                            },
-                                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                        )
-                                    }
-                                }
-                            }
-                            ExposedDropdownMenuBox(
-                                modifier = Modifier
-                                    .padding(start = 10.dp, end = 5.dp)
-                                    .weight(1f),
-                                expanded = expandedTamanhosList,
-                                onExpandedChange = { expandedTamanhosList = it },
-                            ) {
-
-                                OutlinedTextField(
-                                    modifier = Modifier.menuAnchor(),
-                                    value = tamanho,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    singleLine = true,
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expandedTamanhosList
-                                        )
-                                    },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
-                                    )
-                                )
-                                ExposedDropdownMenu(
-                                    expanded = expandedTamanhosList,
-                                    onDismissRequest = { expandedTamanhosList = false },
-                                ) {
-                                    tamanhosList.forEach { tamanhoSelecionadoFiltro ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(
-                                                    tamanhoSelecionadoFiltro,
-                                                    style = MaterialTheme.typography.bodyLarge
-                                                )
-                                            },
-                                            onClick = {
-                                                tamanho = tamanhoSelecionadoFiltro
-                                                expandedTamanhosList = false
-
-                                                produtosList =
-                                                    repository.filtrarProdutoCategoria(
-                                                        categoriaSelecionada
-                                                    )
-                                                produtosList =
-                                                    filtrarProdutos(
-                                                        produtosList,
-                                                        cor,
-                                                        tamanho,
-                                                        preco,
-                                                        tipoOrdenacao
-                                                    )
-                                            },
-                                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                        )
-                                    }
-                                }
-                            }
-                        }
                         Row(
-                            modifier = Modifier.padding(bottom = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            ExposedDropdownMenuBox(
-                                modifier = Modifier
-                                    .padding(top = 10.dp, start = 10.dp, end = 5.dp)
-                                    .weight(1f),
-                                expanded = expandedCoresList,
-                                onExpandedChange = { expandedCoresList = it },
-                            ) {
-
-                                OutlinedTextField(
-                                    modifier = Modifier.menuAnchor(),
-                                    value = cor,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    singleLine = true,
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expandedCoresList
-                                        )
+                            if (expandedFiltro) {
+                                Button(
+                                    modifier = Modifier
+                                        .size(65.dp)
+                                        .padding(10.dp),
+                                    contentPadding = PaddingValues(0.dp),
+                                    onClick = {
+                                        cor = coresList[0]
+                                        tamanho = tamanhosList[0]
+                                        preco = precosList[0]
+                                        tipoOrdenacao = tipoOrdenacaoList[0]
+                                        buscarProduto()
                                     },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
+                                    colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                                    elevation = ButtonDefaults.buttonElevation(10.dp)
+                                ) {
+                                    Image(
+                                        painterResource(id = R.drawable.baseline_refresh_24),
+                                        contentDescription = "Limpar filtro",
+                                        modifier = Modifier.size(30.dp)
                                     )
+                                }
+                            }
+
+                            Button(
+                                modifier = Modifier
+                                    .size(65.dp)
+                                    .padding(10.dp),
+                                contentPadding = PaddingValues(0.dp),
+                                onClick = { expandedFiltro = !expandedFiltro },
+                                colors = if (expandedFiltro) ButtonDefaults.buttonColors(Color.Gray) else ButtonDefaults.buttonColors(
+                                    Color.White
+                                ),
+                                elevation = ButtonDefaults.buttonElevation(10.dp)
+                            ) {
+                                Image(
+                                    painterResource(R.drawable.baseline_filter_list_24),
+                                    contentDescription = "Exibir filtros",
+                                    modifier = Modifier.size(30.dp)
                                 )
-                                ExposedDropdownMenu(
+                            }
+                        }
+                    }
+                    if (expandedFiltro) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xFF029CCA))
+                        ) {
+                            Row {
+                                ExposedDropdownMenuBox(
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, end = 5.dp)
+                                        .weight(1f),
+                                    expanded = expandedPrecosList,
+                                    onExpandedChange = { expandedPrecosList = it },
+                                ) {
+
+                                    OutlinedTextField(
+                                        modifier = Modifier.menuAnchor(),
+                                        value = preco,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        singleLine = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expandedPrecosList
+                                            )
+                                        },
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            unfocusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedTextColor = Color.Black,
+                                            unfocusedTextColor = Color.Black,
+                                            unfocusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedLabelColor = Color(0xFF000000),
+                                            cursorColor = Color(0xFF029CCA),
+                                        )
+                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expandedPrecosList,
+                                        onDismissRequest = { expandedPrecosList = false },
+                                    ) {
+                                        precosList.forEach { precoSelecionadoFiltro ->
+                                            DropdownMenuItem(
+                                                text = {
+                                                    Text(
+                                                        precoSelecionadoFiltro,
+                                                        style = MaterialTheme.typography.bodyLarge
+                                                    )
+                                                },
+                                                onClick = {
+                                                    preco = precoSelecionadoFiltro
+                                                    expandedPrecosList = false
+                                                    buscarProduto()
+
+                                                },
+                                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                            )
+                                        }
+                                    }
+                                }
+                                ExposedDropdownMenuBox(
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, end = 5.dp)
+                                        .weight(1f),
+                                    expanded = expandedTamanhosList,
+                                    onExpandedChange = { expandedTamanhosList = it },
+                                ) {
+
+                                    OutlinedTextField(
+                                        modifier = Modifier.menuAnchor(),
+                                        value = tamanho,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        singleLine = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expandedTamanhosList
+                                            )
+                                        },
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            unfocusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedTextColor = Color.Black,
+                                            unfocusedTextColor = Color.Black,
+                                            unfocusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedLabelColor = Color(0xFF000000),
+                                            cursorColor = Color(0xFF029CCA),
+                                        )
+                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expandedTamanhosList,
+                                        onDismissRequest = { expandedTamanhosList = false },
+                                    ) {
+                                        tamanhosList.forEach { tamanhoSelecionadoFiltro ->
+                                            DropdownMenuItem(
+                                                text = {
+                                                    Text(
+                                                        tamanhoSelecionadoFiltro,
+                                                        style = MaterialTheme.typography.bodyLarge
+                                                    )
+                                                },
+                                                onClick = {
+                                                    tamanho = tamanhoSelecionadoFiltro
+                                                    expandedTamanhosList = false
+                                                    buscarProduto()
+                                                },
+                                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            Row(
+                                modifier = Modifier.padding(bottom = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                ExposedDropdownMenuBox(
+                                    modifier = Modifier
+                                        .padding(top = 10.dp, start = 10.dp, end = 5.dp)
+                                        .weight(1f),
                                     expanded = expandedCoresList,
-                                    onDismissRequest = { expandedCoresList = false },
+                                    onExpandedChange = { expandedCoresList = it },
                                 ) {
-                                    coresList.forEach { corSelecionadaFiltro ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(
-                                                    corSelecionadaFiltro,
-                                                    style = MaterialTheme.typography.bodyLarge
-                                                )
-                                            },
-                                            onClick = {
-                                                cor = corSelecionadaFiltro
-                                                expandedCoresList = false
 
-                                                produtosList =
-                                                    repository.filtrarProdutoCategoria(
-                                                        categoriaSelecionada
-                                                    )
-                                                produtosList =
-                                                    filtrarProdutos(
-                                                        produtosList,
-                                                        cor,
-                                                        tamanho,
-                                                        preco,
-                                                        tipoOrdenacao
-                                                    )
-                                            },
-                                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                    OutlinedTextField(
+                                        modifier = Modifier.menuAnchor(),
+                                        value = cor,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        singleLine = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expandedCoresList
+                                            )
+                                        },
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            unfocusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedTextColor = Color.Black,
+                                            unfocusedTextColor = Color.Black,
+                                            unfocusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedLabelColor = Color(0xFF000000),
+                                            cursorColor = Color(0xFF029CCA),
                                         )
-                                    }
-                                }
-                            }
-
-                            ExposedDropdownMenuBox(
-                                modifier = Modifier
-                                    .padding(top = 10.dp, start = 10.dp, end = 5.dp)
-                                    .weight(1f),
-                                expanded = expandedtipoOrdenacao,
-                                onExpandedChange = { expandedtipoOrdenacao = it },
-                            ) {
-
-                                OutlinedTextField(
-                                    modifier = Modifier.menuAnchor(),
-                                    value = tipoOrdenacao,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    singleLine = true,
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expandedtipoOrdenacao
-                                        )
-                                    },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
                                     )
-                                )
-                                ExposedDropdownMenu(
-                                    expanded = expandedtipoOrdenacao,
-                                    onDismissRequest = { expandedtipoOrdenacao = false },
-                                ) {
-                                    tipoOrdenacaoList.forEach { ordenacaoSelecionada ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(
-                                                    ordenacaoSelecionada,
-                                                    style = MaterialTheme.typography.bodyLarge
-                                                )
-                                            },
-                                            onClick = {
-                                                tipoOrdenacao = ordenacaoSelecionada
-                                                expandedtipoOrdenacao = false
-
-                                                produtosList =
-                                                    repository.filtrarProdutoCategoria(
-                                                        categoriaSelecionada
+                                    ExposedDropdownMenu(
+                                        expanded = expandedCoresList,
+                                        onDismissRequest = { expandedCoresList = false },
+                                    ) {
+                                        coresList.forEach { corSelecionadaFiltro ->
+                                            DropdownMenuItem(
+                                                text = {
+                                                    Text(
+                                                        corSelecionadaFiltro,
+                                                        style = MaterialTheme.typography.bodyLarge
                                                     )
-                                                produtosList =
-                                                    filtrarProdutos(
-                                                        produtosList,
-                                                        cor,
-                                                        tamanho,
-                                                        preco,
-                                                        tipoOrdenacao
-                                                    )
-                                            },
-                                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                        )
+                                                },
+                                                onClick = {
+                                                    cor = corSelecionadaFiltro
+                                                    expandedCoresList = false
+                                                    buscarProduto()
+                                                },
+                                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                            )
+                                        }
                                     }
                                 }
-                            }
 
+                                ExposedDropdownMenuBox(
+                                    modifier = Modifier
+                                        .padding(top = 10.dp, start = 10.dp, end = 5.dp)
+                                        .weight(1f),
+                                    expanded = expandedtipoOrdenacao,
+                                    onExpandedChange = { expandedtipoOrdenacao = it },
+                                ) {
+
+                                    OutlinedTextField(
+                                        modifier = Modifier.menuAnchor(),
+                                        value = tipoOrdenacao,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        singleLine = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expandedtipoOrdenacao
+                                            )
+                                        },
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            unfocusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedContainerColor = Color(0xFFEEF3F5),
+                                            focusedTextColor = Color.Black,
+                                            unfocusedTextColor = Color.Black,
+                                            unfocusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedBorderColor = Color(0xFFEEF3F5),
+                                            focusedLabelColor = Color(0xFF000000),
+                                            cursorColor = Color(0xFF029CCA),
+                                        )
+                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expandedtipoOrdenacao,
+                                        onDismissRequest = { expandedtipoOrdenacao = false },
+                                    ) {
+                                        tipoOrdenacaoList.forEach { ordenacaoSelecionada ->
+                                            DropdownMenuItem(
+                                                text = {
+                                                    Text(
+                                                        ordenacaoSelecionada,
+                                                        style = MaterialTheme.typography.bodyLarge
+                                                    )
+                                                },
+                                                onClick = {
+                                                    tipoOrdenacao = ordenacaoSelecionada
+                                                    expandedtipoOrdenacao = false
+                                                    buscarProduto()
+                                                },
+                                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                            )
+                                        }
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }
-            }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp)
-            ) {
-                if (produtosList.isNotEmpty()) {
-                    LazyColumn(state = listState) {
-                        items(items = produtosList) { produto ->
-                            CardResultados(
-                                onClickProduto = { clickedProduto = true },
-                                produto = produto,
-                                favoritado = favoritos[produto.idProduto] ?: "0",
-                                onFavoritoClick = { favoritado ->
-                                    val novoFavoritado = adicionarListaDesejos(favoritado, produto)
-                                    favoritos[produto.idProduto] = novoFavoritado
-                                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp)
+                ) {
+                    if (produtosList.isNotEmpty()) {
+                        LazyColumn(state = listState) {
+                            items(items = produtosList) { produto ->
+                                CardResultados(
+                                    onClickProduto = { clickedProduto = true },
+                                    produto = produto,
+                                    favoritado = favoritos[produto.idProduto] ?: "0",
+                                    onFavoritoClick = { favoritado ->
+                                        val novoFavoritado =
+                                            adicionarListaDesejos(favoritado, produto)
+                                        favoritos[produto.idProduto] = novoFavoritado
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 45.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Nenhum produto encontrado.",
+                                fontSize = 28.sp,
                             )
                         }
                     }
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 45.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Nenhum produto encontrado.",
-                            fontSize = 28.sp,
-                        )
-                    }
+
                 }
 
             }
-
         }
     }
 }

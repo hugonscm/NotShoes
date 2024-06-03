@@ -1,6 +1,5 @@
 package com.ahpp.notshoes.util.cards
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ahpp.notshoes.model.Venda
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable

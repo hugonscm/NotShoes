@@ -23,6 +23,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,11 +35,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.bd.endereco.RemoverEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
@@ -47,6 +50,14 @@ fun CardEndereco(
     enderecoCliente: Endereco,
     onRemoveEndereco: (Endereco) -> Unit
 ) {
+
+    val scope = rememberCoroutineScope()
+    fun atualizarClienteLogado() {
+        scope.launch(Dispatchers.IO) {
+            clienteLogado =
+                getCliente(clienteLogado.idCliente)
+        }
+    }
 
     val ctx = LocalContext.current
 
@@ -100,7 +111,8 @@ fun CardEndereco(
                 )
 
                 val visualTransformation = CepVisualTransformation()
-                val transformedText = visualTransformation.filter(AnnotatedString(enderecoCliente.cep)).text
+                val transformedText =
+                    visualTransformation.filter(AnnotatedString(enderecoCliente.cep)).text
 
                 Text(
                     text = "CEP: $transformedText",
@@ -120,8 +132,6 @@ fun CardEndereco(
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        //lembra de atualizar o objeto cliente logado aqui pq vai rolar alteraçao no endereco
-
                         val repository = RemoverEnderecoCliente(
                             enderecoCliente.idEndereco,
                             clienteLogado.idCliente
@@ -135,19 +145,14 @@ fun CardEndereco(
                                 )
 
                                 if (code == "1") {
-                                    Handler(Looper.getMainLooper()).post {
-                                        val clienteRepository = ClienteRepository()
-                                        clienteLogado =
-                                            clienteRepository.getCliente(clienteLogado.idCliente)
-                                    }
+                                    atualizarClienteLogado()
                                     onRemoveEndereco(enderecoCliente)
                                     Handler(Looper.getMainLooper()).post {
                                         Toast.makeText(
                                             ctx,
                                             "Endereço removido.",
                                             Toast.LENGTH_SHORT
-                                        )
-                                            .show()
+                                        ).show()
                                     }
                                 } else {
                                     Handler(Looper.getMainLooper()).post {

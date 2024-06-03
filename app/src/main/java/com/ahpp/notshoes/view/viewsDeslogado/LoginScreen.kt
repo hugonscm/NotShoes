@@ -82,7 +82,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
     //essa gambiarra aqui serve pra nao piscar a tela de login caso o usuario ja esteja logado
     LaunchedEffect(idUsuario) {
-        delay(500)
+        delay(800)
         if (idUsuario == "-1") {
             isLoading = false
         } else {

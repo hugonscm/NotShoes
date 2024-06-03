@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,9 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.cliente.AtualizarEmailCliente
-import com.ahpp.notshoes.bd.cliente.ClienteRepository
+import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
@@ -50,6 +53,14 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
+    }
+
+    val scope = rememberCoroutineScope()
+    fun atualizarClienteLogado() {
+        scope.launch(Dispatchers.IO) {
+            clienteLogado =
+                getCliente(clienteLogado.idCliente)
+        }
     }
 
     val ctx = LocalContext.current
@@ -183,17 +194,16 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                                 Log.i("CODIGO RECEBIDO {ALTERAR EMAIL}: ", code)
 
                                 if (code == "201") {
+                                    atualizarClienteLogado()
                                     Handler(Looper.getMainLooper()).post {
-                                        val repository = ClienteRepository()
-                                        clienteLogado =
-                                            repository.getCliente(clienteLogado.idCliente)
                                         Toast.makeText(
                                             ctx,
                                             "E-mail alterado com sucesso.",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                        onBackPressed()
                                     }
+                                    onBackPressed()
+
                                 }
                             }
 
