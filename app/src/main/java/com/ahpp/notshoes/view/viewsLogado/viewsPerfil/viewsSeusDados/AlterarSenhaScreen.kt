@@ -8,7 +8,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -94,14 +93,14 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA)),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+                .height(60.dp)
+                .background(Color(0xFF029CCA))
+                .padding(start = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier
-                    .size(65.dp)
-                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                    .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),

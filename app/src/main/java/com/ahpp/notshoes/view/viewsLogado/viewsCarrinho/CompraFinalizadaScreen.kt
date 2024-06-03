@@ -3,7 +3,6 @@ package com.ahpp.notshoes.view.viewsLogado.viewsCarrinho
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
 
 @Composable
-fun CompraFinalizadaScrren(onBackPressed: () -> Unit){
+fun CompraFinalizadaScrren(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
@@ -45,14 +44,14 @@ fun CompraFinalizadaScrren(onBackPressed: () -> Unit){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA)),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+                .height(60.dp)
+                .background(Color(0xFF029CCA))
+                .padding(start = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier
-                    .size(65.dp)
-                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                    .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),

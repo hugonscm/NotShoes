@@ -92,13 +92,6 @@ fun EnderecosScreen(
                         .fillMaxSize()
                         .background(
                             Color.White
-//                            Brush.verticalGradient(
-//                                listOf(
-//                                    Color(0xFFFFFFFF),
-//                                    Color(0xFF86D0E2),
-//                                    Color(0xFFFFFFFF)
-//                                )
-//                            )
                         )
                 ) {
                     Spacer(
@@ -110,13 +103,14 @@ fun EnderecosScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFF029CCA)),
+                            .height(60.dp)
+                            .background(Color(0xFF029CCA))
+                            .padding(start = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Button(
                             modifier = Modifier
-                                .size(65.dp)
-                                .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                                .size(45.dp),
                             contentPadding = PaddingValues(0.dp),
                             onClick = { onBackPressed() },
                             colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),

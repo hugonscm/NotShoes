@@ -52,7 +52,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
@@ -162,13 +161,14 @@ fun FinalizarPedidoScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF029CCA)),
+                        .height(60.dp)
+                        .background(Color(0xFF029CCA))
+                        .padding(start = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
                         modifier = Modifier
-                            .size(65.dp)
-                            .padding(10.dp),
+                            .size(45.dp),
                         contentPadding = PaddingValues(0.dp),
                         onClick = { onBackPressed() },
                         colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
@@ -186,8 +186,6 @@ fun FinalizarPedidoScreen(
                         text = "Finalizar pedido",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
                         color = Color.White
                     )
                 }

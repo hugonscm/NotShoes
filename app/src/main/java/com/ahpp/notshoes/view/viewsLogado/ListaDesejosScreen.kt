@@ -88,14 +88,14 @@ fun ListaDeDesejoscreen() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color(0xFF029CCA)),
+                    .height(60.dp)
+                    .background(Color(0xFF029CCA))
+                    .padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     modifier = Modifier
-                        .padding(start = 10.dp)
                         .width(270.dp),
                     text = "Lista de desejos", fontSize = 20.sp, maxLines = 1,
                     fontWeight = FontWeight.Bold,

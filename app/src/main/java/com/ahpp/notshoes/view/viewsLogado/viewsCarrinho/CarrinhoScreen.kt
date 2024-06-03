@@ -141,9 +141,10 @@ fun CarrinhoScreen() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color(0xFF029CCA)),
-                verticalAlignment = Alignment.CenterVertically,
+                    .height(60.dp)
+                    .background(Color(0xFF029CCA))
+                    .padding(start = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     modifier = Modifier

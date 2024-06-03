@@ -126,13 +126,14 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA)),
+                .height(60.dp)
+                .background(Color(0xFF029CCA))
+                .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier
-                    .size(65.dp)
-                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                    .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
@@ -430,7 +431,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
 
             }
 
-            if (enderecoSelecionado.idEndereco != clienteLogado.idEnderecoPrincipal){
+            if (enderecoSelecionado.idEndereco != clienteLogado.idEnderecoPrincipal) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -438,7 +439,8 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     Checkbox(
                         checked = checkedTornarEnderecoPrincipal,
                         onCheckedChange = { checkedTornarEnderecoPrincipal = it },
-                        colors = CheckboxDefaults.colors(Color(0xFF029CCA)))
+                        colors = CheckboxDefaults.colors(Color(0xFF029CCA))
+                    )
                     Text(
                         text = "Tornar esse endereço principal",
                         style = MaterialTheme.typography.bodyLarge,
@@ -488,7 +490,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                                     if (code == "1") {
                                         Handler(Looper.getMainLooper()).post {
 
-                                            if(checkedTornarEnderecoPrincipal){
+                                            if (checkedTornarEnderecoPrincipal) {
                                                 val repository = ClienteRepository()
                                                 clienteLogado =
                                                     repository.getCliente(clienteLogado.idCliente)

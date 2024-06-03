@@ -12,16 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,14 +35,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.cliente.getPedidos
-import com.ahpp.notshoes.bd.endereco.getEnderecos
-import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.model.Venda
-import com.ahpp.notshoes.util.cards.CardEndereco
 import com.ahpp.notshoes.util.cards.CardPedidos
 import com.ahpp.notshoes.util.clienteLogado
-import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.enderecoSelecionado
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun PedidosScreen(onBackPressed: () -> Unit) {
@@ -86,13 +78,14 @@ fun PedidosScreen(onBackPressed: () -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF029CCA)),
+                    .height(60.dp)
+                    .background(Color(0xFF029CCA))
+                    .padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
                     modifier = Modifier
-                        .size(65.dp)
-                        .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
+                        .size(45.dp),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { onBackPressed() },
                     colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
@@ -117,18 +110,10 @@ fun PedidosScreen(onBackPressed: () -> Unit) {
             }
 
             Box(modifier = Modifier.fillMaxWidth()) {
-
-                val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-
                 if (pedidosList.isNotEmpty()) {
                     LazyColumn {
                         items(items = pedidosList) { pedido ->
-
-                            val dataPedidoFormatada = pedido.dataPedido.format(outputFormatter)
                             CardPedidos(pedido)
-                        }
-                        item {
-                            Spacer(modifier = Modifier.height(70.dp))
                         }
                     }
                 } else {

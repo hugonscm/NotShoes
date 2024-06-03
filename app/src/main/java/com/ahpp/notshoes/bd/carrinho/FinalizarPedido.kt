@@ -24,7 +24,7 @@ class FinalizarPedido(
     fun sendFinalizarPedido(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/cadastrar_venda_atualizar_estoque"
+        val url = "http://10.0.2.2:5000/cadastrar_venda"
 
         val json = JsonObject().apply {
             addProperty("dataPedido", venda.dataPedido.toString())
