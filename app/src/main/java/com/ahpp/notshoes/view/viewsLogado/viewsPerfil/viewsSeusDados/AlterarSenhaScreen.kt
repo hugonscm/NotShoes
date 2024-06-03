@@ -123,7 +123,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
             Spacer(Modifier.padding(top = 70.dp))
             Image(
                 painter = painterResource(id = R.drawable.baseline_key_24),
-                contentDescription = "Toque para voltar",
+                contentDescription = null,
                 modifier = Modifier.size(100.dp)
             )
             Text(

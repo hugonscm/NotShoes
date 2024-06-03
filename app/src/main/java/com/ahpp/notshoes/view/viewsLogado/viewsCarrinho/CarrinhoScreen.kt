@@ -113,9 +113,23 @@ fun CarrinhoScreen() {
 
     if (clickedFinalizarPedido) {
 
-        //faça um objeto pedido, com o valor total e numero total de itens
-        // e passe para finalizarpedidoScreen pq peciso usar la
-        FinalizarPedidoScreen(onBackPressed = { clickedFinalizarPedido = false })
+        // resumo do pedido
+        val detalhesPedido = combinedList.joinToString(separator = "\n\n") { item ->
+            val valorComDesconto =
+                item.second.preco.toDouble() - (item.second.preco.toDouble() * item.second.desconto.toDouble())
+            "(${item.first.quantidade}) ${item.second.nomeProduto} - R$ ${
+                numberFormat.format(
+                    valorComDesconto * item.first.quantidade
+                )
+            }"
+        }
+        FinalizarPedidoScreen(
+            itensList,
+            detalhesPedido,
+            valorTotalComDesconto,
+            onBackPressed = { clickedFinalizarPedido = false },
+            clickFinalizarPedido = {atualizarLista()})
+
     } else {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(
@@ -231,7 +245,7 @@ fun CarrinhoScreen() {
                             modifier = Modifier
                                 .width(270.dp),
                             text = "Você irá economizar: ${numberFormat.format(valorTotal - valorTotalComDesconto)}",
-                            fontSize = 13.sp,
+                            fontSize = 11.sp,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.Bold,

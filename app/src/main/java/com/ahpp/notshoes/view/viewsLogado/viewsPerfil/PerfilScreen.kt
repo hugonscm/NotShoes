@@ -41,26 +41,28 @@ import com.ahpp.notshoes.util.usuarioLogadoPreferences
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.SeusDadosScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSobre.SobreScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.EnderecosScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsPedidos.PedidosScreen
 import kotlinx.coroutines.launch
 
 @Composable
 fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavController) {
 
-//    var clickedPedidos by remember { mutableStateOf(false) }
+    var clickedPedidos by remember { mutableStateOf(false) }
     var clickedSeusDados by remember { mutableStateOf(false) }
     var clickedEnderecos by remember { mutableStateOf(false) }
     var clickedSobre by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
-    if (clickedSeusDados) {
+    if (clickedPedidos) {
+        PedidosScreen(onBackPressed = { clickedPedidos = false })
+    } else if (clickedSeusDados) {
         SeusDadosScreen(onBackPressed = { clickedSeusDados = false })
     } else if (clickedEnderecos) {
         EnderecosScreen(onBackPressed = { clickedEnderecos = false })
     } else if (clickedSobre) {
         SobreScreen(onBackPressed = { clickedSobre = false })
     } else {
-
         Column(modifier = modifier.fillMaxSize()) {
             Spacer(
                 modifier = Modifier
@@ -126,7 +128,7 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .clickable(true, onClick = {}),
+                        .clickable(true, onClick = {clickedPedidos = true}),
                     shape = RoundedCornerShape(0.dp),
                 ) {
                     Row(
