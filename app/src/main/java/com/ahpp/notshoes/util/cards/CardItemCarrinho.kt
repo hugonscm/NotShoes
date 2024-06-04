@@ -1,6 +1,7 @@
 package com.ahpp.notshoes.util.cards
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import java.text.NumberFormat
 
 @SuppressLint("DefaultLocale")
@@ -38,6 +40,8 @@ fun CardItemCarrinho(
     adicionarUnidade: (ItemCarrinho) -> Unit,
     removerUnidade: (ItemCarrinho) -> Unit
 ) {
+    val ctx = LocalContext.current
+
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
@@ -143,7 +147,12 @@ fun CardItemCarrinho(
                         Button(
                             modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
                             onClick = {
-                                onRemoveProduto(item)
+                                if(possuiConexao(ctx)){
+                                    onRemoveProduto(item)
+                                } else {
+                                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                                }
+
                             },
                             colors = ButtonDefaults.buttonColors(Color.White),
                             elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -172,7 +181,11 @@ fun CardItemCarrinho(
                         Button(
                             modifier = Modifier.size(25.dp), contentPadding = PaddingValues(0.dp),
                             onClick = {
-                                removerUnidade(item)
+                                if(possuiConexao(ctx)){
+                                    removerUnidade(item)
+                                }else{
+                                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                                }
                             },
                             enabled = item.quantidade > 1,
                             colors = ButtonDefaults.buttonColors(Color.White),
@@ -196,7 +209,11 @@ fun CardItemCarrinho(
                         Button(
                             modifier = Modifier.size(25.dp), contentPadding = PaddingValues(0.dp),
                             onClick = {
-                                adicionarUnidade(item)
+                                if(possuiConexao(ctx)){
+                                    adicionarUnidade(item)
+                                } else {
+                                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                                }
                             },
                             colors = ButtonDefaults.buttonColors(Color.White),
                             border = BorderStroke(1.dp, Color.Gray)

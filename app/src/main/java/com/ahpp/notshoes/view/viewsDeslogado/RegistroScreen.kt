@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.RegistroCliente
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import java.io.IOException
 
@@ -255,37 +256,42 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     senhaValida = ValidarCamposDados.validarSenha(senha)
 
                     if (nomeValido && emailValido && senhaValida) {
-                        val registroCliente = RegistroCliente(nome, email, senha)
+                        if (possuiConexao(ctx)) {
+                            val registroCliente = RegistroCliente(nome, email, senha)
 
-                        registroCliente.sendRegistroData(object : RegistroCliente.Callback {
-                            override fun onSuccess(code: String) {
-                                //500 = usuario ja existe
-                                //201 = usuario criado com sucesso
-                                codigoStatusRegistro = code
-                                Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
+                            registroCliente.sendRegistroData(object : RegistroCliente.Callback {
+                                override fun onSuccess(code: String) {
+                                    //500 = usuario ja existe
+                                    //201 = usuario criado com sucesso
+                                    codigoStatusRegistro = code
+                                    Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
 
-                                if (code == "201") {
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(
-                                            ctx,
-                                            "Conta criada com sucesso.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        navController.navigate("login")
+                                    if (code == "201") {
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Conta criada com sucesso.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            navController.navigate("login")
+                                        }
                                     }
                                 }
-                            }
 
-                            override fun onFailure(e: IOException) {
-                                // erro de rede
-                                // não é possível mostrar um Toast de um Thread
-                                // que não seja UI, então é feito dessa forma
-                                Handler(Looper.getMainLooper()).post {
-                                    Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT).show()
+                                override fun onFailure(e: IOException) {
+                                    // erro de rede
+                                    // não é possível mostrar um Toast de um Thread
+                                    // que não seja UI, então é feito dessa forma
+                                    Handler(Looper.getMainLooper()).post {
+                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    Log.e("Erro: ", e.message.toString())
                                 }
-                                Log.e("Erro: ", e.message.toString())
-                            }
-                        })
+                            })
+                        } else {
+                            Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 },
                 modifier

@@ -63,6 +63,8 @@ import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.cards.CardEnderecoCarrinho
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.CadastrarEnderecoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,8 +80,8 @@ fun FinalizarPedidoScreen(
     onBackPressed: () -> Unit,
     clickFinalizarPedido: () -> Unit
 ) {
-
     val ctx = LocalContext.current
+    var internetCheker by remember { mutableStateOf(possuiConexao(ctx)) }
 
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
@@ -100,13 +102,20 @@ fun FinalizarPedidoScreen(
             onBackPressed()
         })
     } else if (clickedCadastrarEndereco) {
-        CadastrarEnderecoScreen(onBackPressed = { clickedCadastrarEndereco = false })
+        CadastrarEnderecoScreen(onBackPressed = {
+            clickedCadastrarEndereco = false
+            internetCheker = possuiConexao(ctx)
+        })
+    } else if (!internetCheker) {
+        SemConexaoScreen(onBackPressed = {
+            internetCheker = possuiConexao(ctx)
+        })
     } else {
 
         var tipoEntrega by remember { mutableStateOf("Expressa") }
         var tipoPagamento by remember { mutableStateOf("Pix") }
 
-        var valorFrete by remember { mutableDoubleStateOf(if(tipoEntrega == "Expressa") 30.0 else 0.0) }
+        var valorFrete by remember { mutableDoubleStateOf(if (tipoEntrega == "Expressa") 30.0 else 0.0) }
 
         var expandedEnderecos by remember { mutableStateOf(false) }
 
@@ -494,55 +503,60 @@ fun FinalizarPedidoScreen(
 
                     ElevatedButton(
                         onClick = {
+
+                            internetCheker = possuiConexao(ctx)
+
                             if (enderecoParaEntrega != null) {
-                                val resumoCompra =
-                                    "$detalhesPedido\n\nForma de pagamento: $tipoPagamento\nTipo de entrega: $tipoEntrega\n\nValor Total: ${
-                                        numberFormat.format(
-                                            valorTotalPedido + valorFrete
-                                        )
-                                    }"
-
-                                val venda =
-                                    Venda(
-                                        dataPedido = LocalDate.now(),
-                                        status = "Em processamento",
-                                        detalhesPedido = resumoCompra,
-                                        formaPagamento = tipoPagamento,
-                                        idCarrinho = clienteLogado.idCarrinho
-                                    )
-
-                                val finalizarPedido = FinalizarPedido(venda, itensList)
-
-                                finalizarPedido.sendFinalizarPedido(
-                                    object : FinalizarPedido.Callback {
-                                        override fun onSuccess(code: String) {
-                                            Log.i(
-                                                "CODIGO RECEBIDO (sucesso finalizar pedido): ",
-                                                code
+                                if (internetCheker) {
+                                    val resumoCompra =
+                                        "$detalhesPedido\n\nForma de pagamento: $tipoPagamento\nTipo de entrega: $tipoEntrega\n\nValor Total: ${
+                                            numberFormat.format(
+                                                valorTotalPedido + valorFrete
                                             )
+                                        }"
 
-                                            if (code == "1") {
-                                                clickFinalizarPedido()
-                                                compraFinalizada = true
-                                            }
-                                        }
+                                    val venda =
+                                        Venda(
+                                            dataPedido = LocalDate.now(),
+                                            status = "Em processamento",
+                                            detalhesPedido = resumoCompra,
+                                            formaPagamento = tipoPagamento,
+                                            idCarrinho = clienteLogado.idCarrinho
+                                        )
 
-                                        override fun onFailure(e: IOException) {
-                                            // erro de rede
-                                            // não é possível mostrar um Toast de um Thread
-                                            // que não seja UI, então é feito dessa forma
-                                            Handler(Looper.getMainLooper()).post {
-                                                Toast.makeText(
-                                                    ctx,
-                                                    "Erro de rede.",
-                                                    Toast.LENGTH_SHORT
+                                    val finalizarPedido = FinalizarPedido(venda, itensList)
+
+                                    finalizarPedido.sendFinalizarPedido(
+                                        object : FinalizarPedido.Callback {
+                                            override fun onSuccess(code: String) {
+                                                Log.i(
+                                                    "CODIGO RECEBIDO (sucesso finalizar pedido): ",
+                                                    code
                                                 )
-                                                    .show()
+
+                                                if (code == "1") {
+                                                    clickFinalizarPedido()
+                                                    compraFinalizada = true
+                                                }
                                             }
-                                            Log.e("Erro: ", e.message.toString())
+
+                                            override fun onFailure(e: IOException) {
+                                                // erro de rede
+                                                // não é possível mostrar um Toast de um Thread
+                                                // que não seja UI, então é feito dessa forma
+                                                Handler(Looper.getMainLooper()).post {
+                                                    Toast.makeText(
+                                                        ctx,
+                                                        "Erro de rede.",
+                                                        Toast.LENGTH_SHORT
+                                                    )
+                                                        .show()
+                                                }
+                                                Log.e("Erro: ", e.message.toString())
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             } else {
                                 Toast.makeText(
                                     ctx,

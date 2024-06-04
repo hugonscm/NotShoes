@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,6 +40,8 @@ import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
 import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
 import com.ahpp.notshoes.view.viewsLogado.InicioScreen
@@ -60,8 +64,8 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
 
     // recuperar o id do usuario logado, e armazenar o objeto na variavel cliente
     //que vai ficar disponivel para todas as telas definidas na HomeController
-    val context = LocalContext.current
-    dataStore = context.dataStore
+    val ctx = LocalContext.current
+    dataStore = ctx.dataStore
     val idUsuarioFlow = remember {
         dataStore.data
             .map { preferences ->
@@ -70,26 +74,20 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
     }
     val idUsuarioLogado by idUsuarioFlow.collectAsState(initial = "-1")
 
+    var internetCheker by remember { mutableStateOf(false) }
+
     val scope = rememberCoroutineScope()
-    LaunchedEffect(idUsuarioLogado) {
-        scope.launch(Dispatchers.IO) {
-            if (idUsuarioLogado != "-1") {
+    fun atualizarClienteLogado() {
+        internetCheker = possuiConexao(ctx)
+        if (idUsuarioLogado != "-1" && internetCheker) {
+            scope.launch(Dispatchers.IO) {
                 clienteLogado = getCliente(idUsuarioLogado.toInt())
-            } else {
-                clienteLogado = Cliente(
-                    idCliente = -1,
-                    genero = "",
-                    nome = "Usuário",
-                    email = "",
-                    senha = "",
-                    cpf = "",
-                    telefoneContato = "",
-                    idListaDesejos = -1,
-                    idCarrinho = -1,
-                    idEnderecoPrincipal = -1
-                )
             }
         }
+    }
+
+    LaunchedEffect(idUsuarioLogado) {
+        atualizarClienteLogado()
     }
 
     val navController = rememberNavController()
@@ -101,52 +99,58 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
         BottomNavItem.Perfil
     )
 
-    Scaffold(
-        bottomBar = {
-            NavigationBar(
-                modifier = Modifier.height(50.dp),
-                containerColor = Color(0xFFD1E9F0),
-                tonalElevation = 3.dp,
-            ) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                items.forEach { screen ->
-                    NavigationBarItem(
-                        colors = NavigationBarItemDefaults.colors(
-                            Color.Black,
-                            Color.Black,
-                            Color(0xFF82D7F0)
-                        ),
-                        //label = { Text(screen.label) },
-                        icon = { Icon(screen.icon, contentDescription = screen.label) },
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                        onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+    if (internetCheker){
+        Scaffold(
+            bottomBar = {
+                NavigationBar(
+                    modifier = Modifier.height(50.dp),
+                    containerColor = Color(0xFFD1E9F0),
+                    tonalElevation = 3.dp,
+                ) {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    items.forEach { screen ->
+                        NavigationBarItem(
+                            colors = NavigationBarItemDefaults.colors(
+                                Color.Black,
+                                Color.Black,
+                                Color(0xFF82D7F0)
+                            ),
+                            //label = { Text(screen.label) },
+                            icon = { Icon(screen.icon, contentDescription = screen.label) },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    // // evitar abrir novamente a mesma tela ao reselecionar mesmo item
+                                    launchSingleTop = true
+                                    // restaura o estado ao voltar para a tela anterior
+                                    restoreState = true
                                 }
-                                // // evitar abrir novamente a mesma tela ao reselecionar mesmo item
-                                launchSingleTop = true
-                                // restaura o estado ao voltar para a tela anterior
-                                restoreState = true
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
+        ) { innerPadding ->
+            NavHost(
+                navController,
+                startDestination = BottomNavItem.Inicio.route,
+                Modifier.padding(innerPadding)
+            ) {
+                composable(BottomNavItem.Inicio.route) { InicioScreen(modifier, navController) }
+                composable(BottomNavItem.Categorias.route) { CategoriaScreen() }
+                composable(BottomNavItem.Carrinho.route) { CarrinhoScreen() }
+                composable(BottomNavItem.ListaDesejos.route) { ListaDeDesejoscreen() }
+                composable(BottomNavItem.Perfil.route) { PerfilScreen(modifier, navControllerInicio) }
+            }
         }
-    ) { innerPadding ->
-        NavHost(
-            navController,
-            startDestination = BottomNavItem.Inicio.route,
-            Modifier.padding(innerPadding)
-        ) {
-            composable(BottomNavItem.Inicio.route) { InicioScreen(modifier, navController) }
-            composable(BottomNavItem.Categorias.route) { CategoriaScreen() }
-            composable(BottomNavItem.Carrinho.route) { CarrinhoScreen() }
-            composable(BottomNavItem.ListaDesejos.route) { ListaDeDesejoscreen() }
-            composable(BottomNavItem.Perfil.route) { PerfilScreen(modifier, navControllerInicio) }
-        }
+    } else {
+        SemConexaoScreen (onBackPressed = {
+            atualizarClienteLogado()
+        })
     }
 }
 

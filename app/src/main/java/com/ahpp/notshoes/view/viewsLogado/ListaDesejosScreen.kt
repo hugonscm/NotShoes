@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,11 +36,17 @@ import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardListaDesejos
 import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun ListaDeDesejoscreen() {
+
+    val ctx = LocalContext.current
+
+    var internetCheker by remember { mutableStateOf(possuiConexao(ctx)) }
 
     // manter a posicao do scroll ao voltar pra tela
     val listState = rememberLazyListState()
@@ -52,8 +59,15 @@ fun ListaDeDesejoscreen() {
 
     if (clickedProduto) {
         ProdutoScreen(
-            onBackPressed = { clickedProduto = false },
+            onBackPressed = {
+                clickedProduto = false
+                internetCheker = possuiConexao(ctx)
+            },
         )
+    } else if (!internetCheker) {
+        SemConexaoScreen(onBackPressed = {
+            internetCheker = possuiConexao(ctx)
+        })
     } else {
 
         var produtosList by remember { mutableStateOf(emptyList<Produto>()) }

@@ -55,6 +55,7 @@ import com.ahpp.notshoes.bd.endereco.EditarEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -476,56 +477,66 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                         cidadeValido = ValidarCamposEndereco.validarCidade(cidade)
 
                         if (cepValido && enderecoValido && numeroValido && bairroValido && estadoValido && cidadeValido) {
-                            val editarEnderecoCliente =
-                                EditarEnderecoCliente(
-                                    estado,
-                                    cidade,
-                                    cep,
-                                    endereco,
-                                    bairro,
-                                    numero,
-                                    complemento,
-                                    clienteLogado.idCliente,
-                                    enderecoSelecionado.idEndereco,
-                                    checkedTornarEnderecoPrincipal
-                                )
-
-                            editarEnderecoCliente.sendEditarEnderecoCliente(object :
-                                EditarEnderecoCliente.Callback {
-                                override fun onSuccess(code: String) {
-                                    Log.i(
-                                        "CODIGO RECEBIDO (sucesso na atualizacao de endereço): ",
-                                        code
+                            if (possuiConexao(ctx)) {
+                                val editarEnderecoCliente =
+                                    EditarEnderecoCliente(
+                                        estado,
+                                        cidade,
+                                        cep,
+                                        endereco,
+                                        bairro,
+                                        numero,
+                                        complemento,
+                                        clienteLogado.idCliente,
+                                        enderecoSelecionado.idEndereco,
+                                        checkedTornarEnderecoPrincipal
                                     )
-                                    if (code == "1") {
-                                        if (checkedTornarEnderecoPrincipal) {
-                                            atualizarClienteLogado()
+
+                                editarEnderecoCliente.sendEditarEnderecoCliente(object :
+                                    EditarEnderecoCliente.Callback {
+                                    override fun onSuccess(code: String) {
+                                        Log.i(
+                                            "CODIGO RECEBIDO (sucesso na atualizacao de endereço): ",
+                                            code
+                                        )
+                                        if (code == "1") {
+                                            if (checkedTornarEnderecoPrincipal) {
+                                                atualizarClienteLogado()
+                                            }
+                                            Handler(Looper.getMainLooper()).post {
+                                                Toast.makeText(
+                                                    ctx,
+                                                    "Endereço atualizado com sucesso.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                            onBackPressed()
+
                                         }
+                                    }
+
+                                    override fun onFailure(e: IOException) {
+                                        // erro de rede
+                                        // não é possível mostrar um Toast de um Thread
+                                        // que não seja UI, então é feito dessa forma
                                         Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Endereço atualizado com sucesso.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
                                         }
-                                        onBackPressed()
-
+                                        Log.e("Erro: ", e.message.toString())
                                     }
+                                })
+                            } else {
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(
+                                        ctx,
+                                        "Sem conexão com a internet.",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
                                 }
-
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }
-                                    Log.e("Erro: ", e.message.toString())
-                                }
-                            })
+                            }
                         }
-
                     },
                     modifier = Modifier
                         .width(230.dp)

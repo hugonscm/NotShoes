@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.util.cards
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.produtoSelecionado
 import java.text.NumberFormat
 
@@ -52,12 +54,14 @@ fun CardResultados(
     onFavoritoClick: (String) -> Unit
 ) {
 
+    val ctx = LocalContext.current
+
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
     //imagem do produto
     val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
+        model = ImageRequest.Builder(ctx)
             .data(produto.imagemProduto)
             .crossfade(true)
             .size(Size.ORIGINAL)
@@ -166,7 +170,12 @@ fun CardResultados(
                 ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
-                    onClick = { onFavoritoClick(favoritado) },
+                    onClick = { if (possuiConexao(ctx)){
+                        onFavoritoClick(favoritado)
+                    } else {
+                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT).show()
+                    }
+                                                       },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {

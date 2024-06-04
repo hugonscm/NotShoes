@@ -44,6 +44,7 @@ import com.ahpp.notshoes.bd.cliente.AtualizarEmailCliente
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -182,42 +183,49 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                     emailValido = ValidarCamposDados.validarEmail(emailNovo)
 
                     if (emailValido) {
-                        val atualizarEmailCliente =
-                            AtualizarEmailCliente(emailNovo)
+                        if (possuiConexao(ctx)) {
+                            val atualizarEmailCliente =
+                                AtualizarEmailCliente(emailNovo)
 
-                        atualizarEmailCliente.sendAtualizarData(object :
-                            AtualizarEmailCliente.Callback {
-                            override fun onSuccess(code: String) {
-                                //500 = email ja existe
-                                //201 = email alterado com sucesso
-                                codigoStatusAlteracao = code
-                                Log.i("CODIGO RECEBIDO {ALTERAR EMAIL}: ", code)
+                            atualizarEmailCliente.sendAtualizarData(object :
+                                AtualizarEmailCliente.Callback {
+                                override fun onSuccess(code: String) {
+                                    //500 = email ja existe
+                                    //201 = email alterado com sucesso
+                                    codigoStatusAlteracao = code
+                                    Log.i("CODIGO RECEBIDO {ALTERAR EMAIL}: ", code)
 
-                                if (code == "201") {
-                                    atualizarClienteLogado()
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(
-                                            ctx,
-                                            "E-mail alterado com sucesso.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                    if (code == "201") {
+                                        atualizarClienteLogado()
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "E-mail alterado com sucesso.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        onBackPressed()
+
                                     }
-                                    onBackPressed()
-
                                 }
-                            }
 
-                            override fun onFailure(e: IOException) {
-                                // erro de rede
-                                // não é possível mostrar um Toast de um Thread
-                                // que não seja UI, então é feito dessa forma
-                                Handler(Looper.getMainLooper()).post {
-                                    Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                        .show()
+                                override fun onFailure(e: IOException) {
+                                    // erro de rede
+                                    // não é possível mostrar um Toast de um Thread
+                                    // que não seja UI, então é feito dessa forma
+                                    Handler(Looper.getMainLooper()).post {
+                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    Log.e("Erro: ", e.message.toString())
                                 }
-                                Log.e("Erro: ", e.message.toString())
+                            })
+                        } else {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                    .show()
                             }
-                        })
+                        }
                     }
                 },
                 modifier = Modifier

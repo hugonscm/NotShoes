@@ -1,6 +1,9 @@
 package com.ahpp.notshoes.util.screensReutilizaveis
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,6 +54,7 @@ import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.funcoes.produto.adicionarProdutoCarrinho
 import com.ahpp.notshoes.util.produtoSelecionado
@@ -79,11 +83,13 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
     val produtoRepository = ProdutoRepository()
 
     LaunchedEffect(Unit) {
-        produtoRepository.verificarProdutoListaDesejos(
-            produtoSelecionado.idProduto,
-            clienteLogado.idListaDesejos
-        ) {
-            adicionadoListaDesejosCheck = it
+        if (possuiConexao(ctx)) {
+            produtoRepository.verificarProdutoListaDesejos(
+                produtoSelecionado.idProduto,
+                clienteLogado.idListaDesejos
+            ) {
+                adicionadoListaDesejosCheck = it
+            }
         }
     }
 
@@ -133,10 +139,17 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    adicionadoListaDesejosCheck = adicionadoListaDesejosCheck?.let {
-                        adicionarListaDesejos(
-                            it, produtoSelecionado
-                        )
+                    if (possuiConexao(ctx)) {
+                        adicionadoListaDesejosCheck = adicionadoListaDesejosCheck?.let {
+                            adicionarListaDesejos(
+                                it, produtoSelecionado
+                            )
+                        }
+                    } else {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
@@ -297,7 +310,17 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
 
                     ElevatedButton(
                         onClick = {
-                            adicionarProdutoCarrinho(ctx, produtoSelecionado)
+                            if (possuiConexao(ctx)) {
+                                adicionarProdutoCarrinho(ctx, produtoSelecionado)
+                            } else {
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(
+                                        ctx,
+                                        "Sem conexão com a internet.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
                         },
                         modifier = Modifier
                             .width(95.dp)
@@ -401,7 +424,14 @@ fun ProdutoScreen(
                     .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    onFavoritoClick(favoritado)
+                    if (possuiConexao(ctx)) {
+                        onFavoritoClick(favoritado)
+                    } else {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -561,7 +591,17 @@ fun ProdutoScreen(
 
                     ElevatedButton(
                         onClick = {
-                            adicionarProdutoCarrinho(ctx, produtoSelecionado)
+                            if (possuiConexao(ctx)) {
+                                adicionarProdutoCarrinho(ctx, produtoSelecionado)
+                            } else {
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(
+                                        ctx,
+                                        "Sem conexão com a internet.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
                         },
                         modifier = Modifier
                             .width(95.dp)

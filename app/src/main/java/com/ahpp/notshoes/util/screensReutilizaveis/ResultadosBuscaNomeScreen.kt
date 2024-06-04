@@ -1,5 +1,8 @@
 package com.ahpp.notshoes.util.screensReutilizaveis
 
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -46,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,6 +61,7 @@ import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardResultados
 import com.ahpp.notshoes.util.clienteLogado
 import com.ahpp.notshoes.util.filtros.filtrarProdutos
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.produtoSelecionado
 import kotlinx.coroutines.Dispatchers
@@ -158,28 +163,36 @@ fun ResultadosBuscaNomeScreen(onBackPressed: () -> Unit, nomeProduto: String) {
 
     var isLoading by remember { mutableStateOf(true) }
 
+    val ctx = LocalContext.current
+
     val scope = rememberCoroutineScope()
     fun buscarProduto() {
         scope.launch(Dispatchers.IO) {
-            produtosList = repository.buscarProdutoNome(nomeProduto)
-            produtosList =
-                filtrarProdutos(
-                    produtosList,
-                    cor,
-                    tamanho,
-                    preco,
-                    tipoOrdenacao
-                )
+            if (!possuiConexao(ctx)) {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                produtosList = repository.buscarProdutoNome(nomeProduto)
+                produtosList =
+                    filtrarProdutos(
+                        produtosList,
+                        cor,
+                        tamanho,
+                        preco,
+                        tipoOrdenacao
+                    )
 
-            // verifica quais produtos estao favoritados
-            // 1 = sim
-            // 0 = não
-            produtosList.forEach { produto ->
-                repository.verificarProdutoListaDesejos(
-                    produto.idProduto,
-                    clienteLogado.idListaDesejos
-                ) {
-                    favoritos[produto.idProduto] = it
+                // verifica quais produtos estao favoritados
+                // 1 = sim
+                // 0 = não
+                produtosList.forEach { produto ->
+                    repository.verificarProdutoListaDesejos(
+                        produto.idProduto,
+                        clienteLogado.idListaDesejos
+                    ) {
+                        favoritos[produto.idProduto] = it
+                    }
                 }
             }
             isLoading = false

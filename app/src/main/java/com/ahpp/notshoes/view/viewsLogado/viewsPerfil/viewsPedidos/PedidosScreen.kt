@@ -1,5 +1,8 @@
 package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsPedidos
 
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,15 +42,25 @@ import com.ahpp.notshoes.bd.cliente.getPedidos
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.util.cards.CardPedidos
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 @Composable
 fun PedidosScreen(onBackPressed: () -> Unit) {
+
+    val ctx = LocalContext.current
 
     var pedidosList by remember { mutableStateOf(emptyList<Venda>()) }
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        pedidosList = getPedidos(clienteLogado.idCliente)
+        if (!possuiConexao(ctx)) {
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            pedidosList = getPedidos(clienteLogado.idCliente)
+        }
+
         isLoading = false
     }
 

@@ -51,6 +51,8 @@ import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoComDesconto
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoTotal
 import com.ahpp.notshoes.util.funcoes.carrinho.removerProduto
 import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
+import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,6 +60,8 @@ import java.text.NumberFormat
 
 @Composable
 fun CarrinhoScreen() {
+
+    var internetCheker by remember { mutableStateOf(false) }
 
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
@@ -83,26 +87,30 @@ fun CarrinhoScreen() {
     val scope = rememberCoroutineScope()
 
     fun atualizarLista() {
-        scope.launch(Dispatchers.IO) {
-            val itens = getItensCarrinho(clienteLogado.idCarrinho)
-            val produtos = getProdutoCarrinho(clienteLogado.idCarrinho)
+        internetCheker = possuiConexao(ctx)
+        if (internetCheker) {
+            scope.launch(Dispatchers.IO) {
+                val itens = getItensCarrinho(clienteLogado.idCarrinho)
+                val produtos = getProdutoCarrinho(clienteLogado.idCarrinho)
 
-            // Combine itensList e produtosList
-            val combined = itens.mapNotNull { item ->
-                val produto = produtos.find { it.idProduto == item.idProduto }
-                if (produto != null) {
-                    item to produto
-                } else {
-                    null
+                // Combine itensList e produtosList
+                val combined = itens.mapNotNull { item ->
+                    val produto = produtos.find { it.idProduto == item.idProduto }
+                    if (produto != null) {
+                        item to produto
+                    } else {
+                        null
+                    }
                 }
-            }
 
-            withContext(Dispatchers.Main) {
-                itensList = itens
-                produtosList = produtos
-                combinedList = combined
-                valorTotal = calcularValorCarrinhoTotal(itensList, produtosList)
-                valorTotalComDesconto = calcularValorCarrinhoComDesconto(itensList, produtosList)
+                withContext(Dispatchers.Main) {
+                    itensList = itens
+                    produtosList = produtos
+                    combinedList = combined
+                    valorTotal = calcularValorCarrinhoTotal(itensList, produtosList)
+                    valorTotalComDesconto =
+                        calcularValorCarrinhoComDesconto(itensList, produtosList)
+                }
             }
         }
     }
@@ -128,9 +136,9 @@ fun CarrinhoScreen() {
             detalhesPedido,
             valorTotalComDesconto,
             onBackPressed = { clickedFinalizarPedido = false },
-            clickFinalizarPedido = {atualizarLista()})
+            clickFinalizarPedido = { atualizarLista() })
 
-    } else {
+    } else if (internetCheker) {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(
                 modifier = Modifier
@@ -285,6 +293,10 @@ fun CarrinhoScreen() {
                 }
             }
         }
+    } else {
+        SemConexaoScreen(onBackPressed = {
+            atualizarLista()
+        })
     }
 }
 

@@ -52,6 +52,7 @@ import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.bd.endereco.AdicionarEnderecoCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -454,51 +455,61 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                         cidadeValido = ValidarCamposEndereco.validarCidade(cidade)
 
                         if (cepValido && enderecoValido && numeroValido && bairroValido && estadoValido && cidadeValido) {
-                            val adicionarEnderecoCliente =
-                                AdicionarEnderecoCliente(
-                                    estado,
-                                    cidade,
-                                    cep,
-                                    endereco,
-                                    bairro,
-                                    numero,
-                                    complemento,
-                                )
-
-                            adicionarEnderecoCliente.sendAdicionarEnderecoCliente(object :
-                                AdicionarEnderecoCliente.Callback {
-                                override fun onSuccess(code: String) {
-                                    Log.i(
-                                        "CODIGO RECEBIDO (sucesso no cadastro de endereço): ",
-                                        code
+                            if (possuiConexao(ctx)) {
+                                val adicionarEnderecoCliente =
+                                    AdicionarEnderecoCliente(
+                                        estado,
+                                        cidade,
+                                        cep,
+                                        endereco,
+                                        bairro,
+                                        numero,
+                                        complemento,
                                     )
-                                    if (code == "1") {
-                                        atualizarClienteLogado()
-                                        Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Endereço adicionado com sucesso.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+
+                                adicionarEnderecoCliente.sendAdicionarEnderecoCliente(object :
+                                    AdicionarEnderecoCliente.Callback {
+                                    override fun onSuccess(code: String) {
+                                        Log.i(
+                                            "CODIGO RECEBIDO (sucesso no cadastro de endereço): ",
+                                            code
+                                        )
+                                        if (code == "1") {
+                                            atualizarClienteLogado()
+                                            Handler(Looper.getMainLooper()).post {
+                                                Toast.makeText(
+                                                    ctx,
+                                                    "Endereço adicionado com sucesso.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                            onBackPressed()
                                         }
-                                        onBackPressed()
+
                                     }
 
-                                }
-
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
+                                    override fun onFailure(e: IOException) {
+                                        // erro de rede
+                                        // não é possível mostrar um Toast de um Thread
+                                        // que não seja UI, então é feito dessa forma
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+                                        Log.e("Erro: ", e.message.toString())
                                     }
-                                    Log.e("Erro: ", e.message.toString())
+                                })
+                            } else {
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(
+                                        ctx,
+                                        "Sem conexão com a internet.",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
                                 }
-                            })
+                            }
                         }
-
                     },
                     modifier = Modifier
                         .width(230.dp)

@@ -83,7 +83,9 @@ import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
 import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaNomeScreen
 import com.ahpp.notshoes.util.categoriaSelecionada
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.produtoSelecionado
+import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.util.textoBusca
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,6 +93,8 @@ import java.text.NumberFormat
 
 @Composable
 fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+
+    var internetCheker by remember { mutableStateOf(false) }
 
     // manter a posicao do scroll ao voltar pra tela
     val scrollState = rememberScrollState()
@@ -117,10 +121,14 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
             onBackPressed = { clickedProduto = false },
         )
     } else {
+
+        val ctx = LocalContext.current
+
+        internetCheker = possuiConexao(ctx)
+
         //funcionalidade "toque novamente pra sair"
         //dessa forma só atinte a tela inicio
         var backPressedOnce = false
-        val ctx = LocalContext.current
         val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current
         val backCallback = remember {
             object : OnBackPressedCallback(true) {
@@ -151,17 +159,23 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
             }
         }
 
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-        ) {
-            SearchBar(onSearchClicked = { clickedPesquisa = true })
-            PagerDescontos()
-            PagerFiltroValores()
-            FiltrosTelaInicial(navController, onIconClicked = { clickedCategoria = true })
-            Promocoes(onPromocaoClicked = { clickedProduto = true })
-            NavegarPorMarcas(onMarcaClicked = { clickedCategoria = true })
+        if (!internetCheker) {
+            SemConexaoScreen(onBackPressed = {
+                internetCheker = possuiConexao(ctx)
+            })
+        } else {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+            ) {
+                SearchBar(onSearchClicked = { clickedPesquisa = true })
+                PagerDescontos()
+                PagerFiltroValores()
+                FiltrosTelaInicial(navController, onIconClicked = { clickedCategoria = true })
+                Promocoes(onPromocaoClicked = { clickedProduto = true })
+                NavegarPorMarcas(onMarcaClicked = { clickedCategoria = true })
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.bd.endereco.RemoverEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -132,48 +133,54 @@ fun CardEndereco(
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        val repository = RemoverEnderecoCliente(
-                            enderecoCliente.idEndereco,
-                            clienteLogado.idCliente
-                        )
-                        repository.sendRemoverEnderecoCliente(object :
-                            RemoverEnderecoCliente.Callback {
-                            override fun onSuccess(code: String) {
-                                Log.i(
-                                    "CODIGO RECEBIDO (sucesso na remocao do endereço): ",
-                                    code
-                                )
+                        if (possuiConexao(ctx)) {
+                            val repository = RemoverEnderecoCliente(
+                                enderecoCliente.idEndereco,
+                                clienteLogado.idCliente
+                            )
+                            repository.sendRemoverEnderecoCliente(object :
+                                RemoverEnderecoCliente.Callback {
+                                override fun onSuccess(code: String) {
+                                    Log.i(
+                                        "CODIGO RECEBIDO (sucesso na remocao do endereço): ",
+                                        code
+                                    )
 
-                                if (code == "1") {
-                                    atualizarClienteLogado()
-                                    onRemoveEndereco(enderecoCliente)
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(
-                                            ctx,
-                                            "Endereço removido.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                    if (code == "1") {
+                                        atualizarClienteLogado()
+                                        onRemoveEndereco(enderecoCliente)
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Endereço removido.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    } else {
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+                                        Log.e("Erro ao remover endereço, codigo recebido: ", code)
                                     }
-                                } else {
+                                }
+
+                                override fun onFailure(e: IOException) {
+                                    // erro de rede
+                                    // não é possível mostrar um Toast de um Thread
+                                    // que não seja UI, então é feito dessa forma
                                     Handler(Looper.getMainLooper()).post {
                                         Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
                                             .show()
                                     }
-                                    Log.e("Erro ao remover endereço, codigo recebido: ", code)
+                                    Log.e("Erro ao remover endereço: ", e.message.toString())
                                 }
+                            })
+                        } else {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT).show()
                             }
-
-                            override fun onFailure(e: IOException) {
-                                // erro de rede
-                                // não é possível mostrar um Toast de um Thread
-                                // que não seja UI, então é feito dessa forma
-                                Handler(Looper.getMainLooper()).post {
-                                    Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                                Log.e("Erro ao remover endereço: ", e.message.toString())
-                            }
-                        })
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)

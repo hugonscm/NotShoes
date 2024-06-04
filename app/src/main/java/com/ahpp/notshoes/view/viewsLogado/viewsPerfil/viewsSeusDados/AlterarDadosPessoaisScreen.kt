@@ -48,6 +48,7 @@ import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CpfVisualTransformation
 import com.ahpp.notshoes.util.visualTransformation.PhoneVisualTransformation
 import kotlinx.coroutines.Dispatchers
@@ -277,41 +278,48 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                         telefoneValido = ValidarCamposDados.validarTelefone(telefoneNovo)
 
                         if (nomeValido && cpfValido && telefoneValido) {
-                            val atualizarDadosCliente =
-                                AtualizarDadosPessoaisCliente(
-                                    nomeNovo,
-                                    cpfNovo,
-                                    telefoneNovo,
-                                    generoNovo
-                                )
+                            if (possuiConexao(ctx)) {
+                                val atualizarDadosCliente =
+                                    AtualizarDadosPessoaisCliente(
+                                        nomeNovo,
+                                        cpfNovo,
+                                        telefoneNovo,
+                                        generoNovo
+                                    )
 
-                            atualizarDadosCliente.sendAtualizarData(object :
-                                AtualizarDadosPessoaisCliente.Callback {
-                                override fun onSuccess(code: String) {
-                                    Log.i("CODIGO RECEBIDO{ALTERAR DADOS CLIENTE}: ", code)
-                                    atualizarClienteLogado()
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(
-                                            ctx,
-                                            "Dados foram atualizados.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                atualizarDadosCliente.sendAtualizarData(object :
+                                    AtualizarDadosPessoaisCliente.Callback {
+                                    override fun onSuccess(code: String) {
+                                        Log.i("CODIGO RECEBIDO{ALTERAR DADOS CLIENTE}: ", code)
+                                        atualizarClienteLogado()
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(
+                                                ctx,
+                                                "Dados foram atualizados.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        onBackPressed()
+
                                     }
-                                    onBackPressed()
 
-                                }
-
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
+                                    override fun onFailure(e: IOException) {
+                                        // erro de rede
+                                        // não é possível mostrar um Toast de um Thread
+                                        // que não seja UI, então é feito dessa forma
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+                                        Log.e("Erro: ", e.message.toString())
                                     }
-                                    Log.e("Erro: ", e.message.toString())
+                                })
+                            } else {
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
-                            })
+                            }
                         }
                     },
                     modifier = Modifier

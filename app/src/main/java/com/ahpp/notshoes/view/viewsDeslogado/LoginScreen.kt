@@ -56,6 +56,7 @@ import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.LoginCliente
 import com.ahpp.notshoes.dataStore
+import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import kotlinx.coroutines.delay
@@ -293,38 +294,42 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         senhaValida = ValidarCamposDados.validarSenha(senha)
 
                         if (emailValido && senhaValida) {
-                            val loginCliente = LoginCliente(email, senha)
+                            if (possuiConexao(ctx)) {
+                                val loginCliente = LoginCliente(email, senha)
+                                loginCliente.sendLoginData(object : LoginCliente.Callback {
+                                    override fun onSuccess(idUsuarioRecebido: String) {
+                                        // -1 usuario não existe
+                                        Log.i("ID USUARIO RECEBIDO (LOGIN SCREEN): ", idUsuarioRecebido)
 
-                            loginCliente.sendLoginData(object : LoginCliente.Callback {
-                                override fun onSuccess(idUsuarioRecebido: String) {
-                                    // -1 usuario não existe
-                                    Log.i("ID USUARIO RECEBIDO (LOGIN SCREEN): ", idUsuarioRecebido)
-
-                                    if (idUsuarioRecebido != "-1") {
-                                        // salvar o id do usuário logado
-                                        scope.launch {
-                                            dataStore.edit { preferences ->
-                                                preferences[usuarioLogadoPreferences] =
-                                                    idUsuarioRecebido
+                                        if (idUsuarioRecebido != "-1") {
+                                            // salvar o id do usuário logado
+                                            scope.launch {
+                                                dataStore.edit { preferences ->
+                                                    preferences[usuarioLogadoPreferences] =
+                                                        idUsuarioRecebido
+                                                }
                                             }
+
+                                        } else {
+                                            dadosIncorretos = true
                                         }
-
-                                    } else {
-                                        dadosIncorretos = true
                                     }
-                                }
 
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
+                                    override fun onFailure(e: IOException) {
+                                        // erro de rede
+                                        // não é possível mostrar um Toast de um Thread
+                                        // que não seja UI, então é feito dessa forma
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+                                        Log.e("Erro: ", e.message.toString())
                                     }
-                                    Log.e("Erro: ", e.message.toString())
-                                }
-                            })
+                                })
+                            } else {
+                                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     },
                     modifier

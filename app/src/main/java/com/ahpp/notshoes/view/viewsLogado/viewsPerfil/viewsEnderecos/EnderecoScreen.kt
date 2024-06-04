@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,6 +46,8 @@ import com.ahpp.notshoes.bd.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.cards.CardEndereco
 import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 
 lateinit var enderecoSelecionado: Endereco
 
@@ -52,9 +55,14 @@ lateinit var enderecoSelecionado: Endereco
 fun EnderecosScreen(
     onBackPressed: () -> Unit,
 ) {
+
+    val ctx = LocalContext.current
+    var internetCheker by remember { mutableStateOf(possuiConexao(ctx)) }
+
     BackHandler {
         onBackPressed()
     }
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         var clickedEditarEndereco by remember { mutableStateOf(false) }
@@ -62,10 +70,20 @@ fun EnderecosScreen(
 
         if (clickedEditarEndereco) {
             EditarEnderecoScreen(
-                onBackPressed = { clickedEditarEndereco = false }, enderecoSelecionado
+                onBackPressed = {
+                    clickedEditarEndereco = false
+                    internetCheker = possuiConexao(ctx)
+                }, enderecoSelecionado
             )
         } else if (clickedAdicionarEndereco) {
-            CadastrarEnderecoScreen(onBackPressed = { clickedAdicionarEndereco = false })
+            CadastrarEnderecoScreen(onBackPressed = {
+                clickedAdicionarEndereco = false
+                internetCheker = possuiConexao(ctx)
+            })
+        } else if (!internetCheker) {
+            SemConexaoScreen(onBackPressed = {
+                internetCheker = possuiConexao(ctx)
+            })
         } else {
             var enderecosList by remember { mutableStateOf(emptyList<Endereco>()) }
             var isLoading by remember { mutableStateOf(true) }
