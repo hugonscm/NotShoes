@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 
 lateinit var textoBusca: String
 lateinit var categoriaSelecionada: String
+lateinit var filtroPrecoSelecionado: String
 lateinit var produtoSelecionado: Produto
 
 lateinit var clienteLogado: Cliente
@@ -116,7 +117,8 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
                                 Color.Black,
                                 Color(0xFF82D7F0)
                             ),
-                            //label = { Text(screen.label) },
+                            //label = { Text(screen.label, fontSize = 8.sp) },
+                            alwaysShowLabel = false,
                             icon = { Icon(screen.icon, contentDescription = screen.label) },
                             selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                             onClick = {

@@ -122,29 +122,32 @@ fun CardResultados(
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(250.dp)
-                    .padding(start = 5.dp)
+                    .weight(1f)
+                    .padding(start = 5.dp, end = 5.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    modifier = Modifier.padding(top = 10.dp),
                     text = produto.nomeProduto,
-                    fontSize = 20.sp,
-                    maxLines = 1,
+                    fontSize = 15.sp,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     modifier = Modifier.padding(top = 5.dp),
-                    text = "De: ${numberFormat.format(produto.preco.toDouble())}",
+                    text = numberFormat.format(produto.preco.toDouble()),
                     textDecoration = TextDecoration.LineThrough,
-                    fontSize = 13.sp
+                    fontSize = 12.sp,
+                    color = Color.Gray
                 )
                 val valorComDesconto =
                     produto.preco.toDouble() - ((produto.preco.toDouble() * produto.desconto.toDouble()))
+
                 Text(
-                    text = "Por: ${numberFormat.format(valorComDesconto)}",
+                    text = numberFormat.format(valorComDesconto),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 20.sp
                 )
+
                 if (produto.estoqueProduto > 0) {
                     Text(
                         modifier = Modifier.padding(top = 5.dp),
@@ -162,22 +165,21 @@ fun CardResultados(
             }
             Row(
                 Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 15.dp, end = 15.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom,
-
-                ) {
+                    .fillMaxHeight()
+                    .padding(top = 10.dp, end = 10.dp),
+                verticalAlignment = Alignment.Top,
+            ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
-                    onClick = { if (possuiConexao(ctx)){
-                        onFavoritoClick(favoritado)
-                    } else {
-                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT).show()
-                    }
-                                                       },
+                    onClick = {
+                        if (possuiConexao(ctx)) {
+                            onFavoritoClick(favoritado)
+                        } else {
+                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    elevation = ButtonDefaults.buttonElevation(10.dp)
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Image(
                         painter = painterResource(if (favoritado != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),

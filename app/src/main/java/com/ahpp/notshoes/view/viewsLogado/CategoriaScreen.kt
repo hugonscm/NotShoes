@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -48,14 +47,15 @@ fun CategoriaScreen() {
     val elevationCards = 2.dp
     val tamanhoPaddingLinha = 5.dp
     val corCards = Color(0xFFFFFFFF)
-    val corBackground = (
-            Brush.verticalGradient(
-                listOf(
-                    Color(0xFFFFFFFF),
-                    Color(0xFF86D0E2),
-                    Color(0xFFFFFFFF)
-                )
-            ))
+    val corBackground = Color.White
+
+//        (Brush.verticalGradient(
+//                listOf(
+//                    Color(0xFFFFFFFF),
+//                    Color(0xFF86D0E2),
+//                    Color(0xFFFFFFFF)
+//                )
+//            ))
 
     var clicked by remember { mutableStateOf(false) }
     if (clicked) {
@@ -138,7 +138,7 @@ fun CategoriaScreen() {
                         }
                         Image(
                             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                            contentDescription = "Acessar categoria Regata"
+                            contentDescription = "Acessar categoria Regata",
                         )
                     }
                 }

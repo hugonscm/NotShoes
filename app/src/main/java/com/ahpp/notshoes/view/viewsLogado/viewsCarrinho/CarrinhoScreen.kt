@@ -209,7 +209,7 @@ fun CarrinhoScreen() {
                             Text(
                                 text = "Seu carrinho está vazio.",
                                 fontSize = 25.sp,
-                                color = Color.Black
+                                color = Color(0xFF029CCA)
                             )
                         }
                     }

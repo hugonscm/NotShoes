@@ -241,15 +241,7 @@ fun ResultadosBuscaNomeScreen(onBackPressed: () -> Unit, nomeProduto: String) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color(0xFFFFFFFF),
-                                Color(0xFF86D0E2),
-                                Color(0xFFFFFFFF)
-                            )
-                        )
-                    )
+                    .background(Color.White)
             ) {
                 Spacer(
                     modifier = Modifier

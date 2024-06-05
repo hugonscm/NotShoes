@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,6 +49,9 @@ import com.ahpp.notshoes.R
 
 @Composable
 fun SobreScreen(onBackPressed: () -> Unit) {
+
+    val corPredominante = Color(0xFF029CCA)
+
     BackHandler {
         onBackPressed()
     }
@@ -96,15 +100,7 @@ fun SobreScreen(onBackPressed: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
-                            Color(0xFFFFFFFF)
-                        )
-                    )
-                ),
+                .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.padding(top = 50.dp))
@@ -113,10 +109,8 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                 text = "NOTSHOES",
                 fontWeight = FontWeight.Bold,
                 fontSize = 40.sp,
-                textAlign = TextAlign.Center
-//                style = TextStyle(
-//                    Color(0xFF029CCA)
-//                )
+                textAlign = TextAlign.Center,
+                color = corPredominante
             )
 
             AnimatedBorderCard(
@@ -125,11 +119,12 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                     .fillMaxWidth()
                     .padding(top = 30.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(size = 10.dp),
-                gradient = Brush.linearGradient(listOf(Color(0xFF1866DD), Color.Cyan)),
+                gradient = Brush.linearGradient(listOf(Color.Yellow, Color.Cyan)),
                 borderWidth = 7.dp
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
+                    Icon(
+                        tint = corPredominante,
                         painter = painterResource(id = R.drawable.baseline_school_24),
                         contentDescription = null,
                         modifier = Modifier
@@ -141,10 +136,8 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                         text = "Aplicativo desenvolvido para disciplina de\nEngenharia de Software II.",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        textAlign = TextAlign.Center
-//                style = TextStyle(
-//                    Color(0xFF029CCA)
-//                )
+                        textAlign = TextAlign.Center,
+                        color = corPredominante
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
@@ -152,10 +145,8 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                         text = "2024.1 - T01",
                         fontWeight = FontWeight.Bold,
                         fontSize = 25.sp,
-                        textAlign = TextAlign.Center
-//                style = TextStyle(
-//                    Color(0xFF029CCA)
-//                )
+                        textAlign = TextAlign.Center,
+                        color = corPredominante
                     )
                 }
             }

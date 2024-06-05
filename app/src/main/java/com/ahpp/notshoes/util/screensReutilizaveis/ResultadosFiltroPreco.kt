@@ -67,10 +67,10 @@ import com.ahpp.notshoes.util.produtoSelecionado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//esse ResultadosBuscaCategoria é usado quando o usuário clica em alguma categoria para ver os protudos
+// usado nos banners de preço da tela inicial
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSelecionada: String) {
+fun ResultadosFiltroPreco(onBackPressed: () -> Unit, filtroPreco: String) {
 
     BackHandler {
         onBackPressed()
@@ -173,12 +173,7 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
                     Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
                 }
             } else {
-
-                // unificar as telas de resultados, e de acordo com a flag recebida, chamar
-                // filtrarProdutoCategoria(), buscarProdutoNome() ou getProdutosFiltroIntervalo()
-                // atualmente todas recebem onBackPressed e uma string
-
-                produtosList = repository.filtrarProdutoCategoria(categoriaSelecionada)
+                produtosList = repository.getProdutosFiltroIntervalo(filtroPreco)
                 produtosList =
                     filtrarProdutos(
                         produtosList,
@@ -288,7 +283,7 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .width(220.dp),
-                            text = categoriaSelecionada,
+                            text = filtroPreco,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             maxLines = 1,

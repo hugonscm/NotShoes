@@ -122,29 +122,32 @@ fun CardListaDesejos(
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(250.dp)
-                    .padding(start = 5.dp)
+                    .weight(1f)
+                    .padding(start = 5.dp, end = 5.dp)
             ) {
                 Text(
                     modifier = Modifier.padding(top = 10.dp),
                     text = produto.nomeProduto,
-                    fontSize = 20.sp,
-                    maxLines = 1,
+                    fontSize = 15.sp,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     modifier = Modifier.padding(top = 5.dp),
-                    text = "De: ${numberFormat.format(produto.preco.toDouble())}",
+                    text = numberFormat.format(produto.preco.toDouble()),
                     textDecoration = TextDecoration.LineThrough,
-                    fontSize = 13.sp
+                    fontSize = 12.sp,
+                    color = Color.Gray
                 )
                 val valorComDesconto =
                     produto.preco.toDouble() - ((produto.preco.toDouble() * produto.desconto.toDouble()))
+
                 Text(
-                    text = "Por: ${numberFormat.format(valorComDesconto)}",
+                    text = numberFormat.format(valorComDesconto),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 20.sp
                 )
+
                 if (produto.estoqueProduto > 0) {
                     Text(
                         modifier = Modifier.padding(top = 5.dp),
@@ -160,14 +163,13 @@ fun CardListaDesejos(
                     )
                 }
             }
-            Row(
+            Column(
                 Modifier
-                    .fillMaxSize()
-                    .padding(top = 10.dp, end = 10.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Top,
-
-                ) {
+                    .fillMaxHeight()
+                    .padding(top = 10.dp, bottom = 10.dp, end = 10.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Button(
                     modifier = Modifier.size(30.dp), contentPadding = PaddingValues(0.dp),
                     onClick = {
@@ -183,7 +185,7 @@ fun CardListaDesejos(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    elevation = ButtonDefaults.buttonElevation(10.dp)
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.baseline_close_24),

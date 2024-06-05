@@ -24,7 +24,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -83,15 +82,7 @@ fun ListaDeDesejoscreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
-                            Color(0xFFFFFFFF)
-                        )
-                    )
-                )
+                .background(Color.White)
         ) {
             Spacer(
                 modifier = Modifier
@@ -146,6 +137,7 @@ fun ListaDeDesejoscreen() {
                         Text(
                             text = "Sua lista de desejos está vazia.",
                             fontSize = 25.sp,
+                            color = Color(0xFF029CCA)
                         )
                     }
                 }

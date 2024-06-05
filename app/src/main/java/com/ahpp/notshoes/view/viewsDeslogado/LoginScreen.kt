@@ -15,13 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -115,6 +116,22 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
         }
     } else {
 
+        val colorsTextFields = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Color(0xFFEEF3F5),
+            focusedContainerColor = Color(0xFFEEF3F5),
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+            unfocusedBorderColor = Color(0xFFEEF3F5),
+            focusedBorderColor = Color(0xFF029CCA),
+            focusedLabelColor = Color.Black,
+            errorContainerColor = Color(0xFFEEF3F5),
+            cursorColor = Color(0xFF029CCA),
+        )
+
+        val shapeArredondado = RoundedCornerShape(10.dp)
+
+        val elevationButton = ButtonDefaults.buttonElevation(10.dp)
+
         var dadosIncorretos by remember { mutableStateOf(false) }
 
         var email by remember { mutableStateOf("") }
@@ -144,6 +161,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                             Color(0xFFFFFFFF),
                             Color(0xFFFFFFFF),
                             Color(0xFFFFFFFF),
+                            Color(0xFFFFFFFF),
+                            Color(0xFFFFFFFF),
                             Color(0xFF86D0E2),
                             Color(0xFF029CCA)
                         )
@@ -154,18 +173,16 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
             Row(
                 modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 80.dp)
+                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+                    .height(150.dp), verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "NotShoes", fontSize = 44.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Row(modifier.align(Alignment.CenterHorizontally)) {
-                Text(text = "Entre e aproveite as nossas ofertas!", fontSize = 20.sp)
-            }
-
-            Row(modifier.padding(top = 35.dp)) {
-                Text(text = "E-mail", fontWeight = FontWeight.Bold)
+                Text(
+                    text = "Entre e aproveite as nossas ofertas!",
+                    fontSize = 35.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF029CCA)
+                )
             }
 
             OutlinedTextField(
@@ -185,29 +202,17 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         Text(text = "Dados incorretos.")
                     }
                 },
-                placeholder = { Text(text = "email@exemplo.com", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "E-mail", color = Color(0xFF4A5255)) },
                 leadingIcon = {
                     Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
                 },
                 maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 5.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                )
+                    .padding(top = 20.dp),
+                colors = colorsTextFields,
+                shape = shapeArredondado
             )
-
-            Row(modifier.padding(top = 10.dp)) {
-                Text(text = "Senha", fontWeight = FontWeight.Bold)
-            }
 
             OutlinedTextField(
                 value = senha,
@@ -226,7 +231,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     senhaValida = ValidarCamposDados.validarSenha(senha)
                     dadosIncorretos = false
                 },
-                placeholder = { Text(text = "Digite sua senha", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Senha", color = Color(0xFF4A5255)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 leadingIcon = {
                     Icon(Icons.Filled.Lock, contentDescription = "Icone senha", tint = Color.Black)
@@ -247,16 +252,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 5.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                )
+                colors = colorsTextFields,
+                shape = shapeArredondado
             )
 
             Row(
@@ -274,7 +271,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }),
-                    text = "Esqueceu a senha?",
+                    text = "Esqueceu sua senha?",
                     fontSize = 16.sp,
                     style = TextStyle(
                         Color(0xFF029CCA)
@@ -287,7 +284,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 25.dp)
             ) {
-                ElevatedButton(
+                FilledTonalButton(
                     onClick = {
 
                         emailValido = ValidarCamposDados.validarEmail(email)
@@ -299,7 +296,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                 loginCliente.sendLoginData(object : LoginCliente.Callback {
                                     override fun onSuccess(idUsuarioRecebido: String) {
                                         // -1 usuario não existe
-                                        Log.i("ID USUARIO RECEBIDO (LOGIN SCREEN): ", idUsuarioRecebido)
+                                        Log.i(
+                                            "ID USUARIO RECEBIDO (LOGIN SCREEN): ",
+                                            idUsuarioRecebido
+                                        )
 
                                         if (idUsuarioRecebido != "-1") {
                                             // salvar o id do usuário logado
@@ -327,15 +327,21 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                     }
                                 })
                             } else {
-                                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    ctx,
+                                    "Sem conexão com a internet.",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                         }
                     },
                     modifier
-                        .width(230.dp)
+                        .fillMaxWidth()
                         .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA)),
+                    shape = shapeArredondado,
+                    elevation = elevationButton
                 ) {
                     Text(
                         text = "Entrar",

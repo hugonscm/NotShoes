@@ -60,6 +60,56 @@ class ProdutoRepository {
         }
     }
 
+    suspend fun getProdutosFiltroIntervalo(intervaloValor: String): List<Produto> {
+        return withContext(Dispatchers.IO) {
+
+            val url = "http://10.0.2.2:5000/get_produtos_filtro_intervalo"
+
+            val jsonMessage = JsonObject().apply {
+                addProperty("intervaloValor", intervaloValor)
+            }
+
+            val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            try {
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    response.body?.string()?.let { json ->
+                        val gson = Gson()
+                        val jsonElement = gson.fromJson(json, JsonElement::class.java)
+
+                        if (jsonElement.isJsonArray) {
+                            val jsonArray = jsonElement.asJsonArray
+                            produtosList = jsonArray.map { produtoJson ->
+                                val produtoArray = produtoJson.asJsonArray
+                                Produto(
+                                    produtoArray[0].asInt,
+                                    produtoArray[1].asString,
+                                    produtoArray[2].asInt,
+                                    produtoArray[3].asString,
+                                    produtoArray[4].asString,
+                                    produtoArray[5].asString,
+                                    produtoArray[6].asString,
+                                    produtoArray[7].asString,
+                                    produtoArray[8].asString,
+                                    produtoArray[9].asBoolean
+                                )
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return@withContext produtosList
+        }
+    }
+
+
     suspend fun filtrarProdutoCategoria(categoria: String): List<Produto> {
         return withContext(Dispatchers.IO) {
 

@@ -177,6 +177,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             .align(Alignment.CenterHorizontally)
                             .fillMaxWidth()
                             .height(400.dp)
+                            .padding(top = 10.dp)
                     )
                 }
 
@@ -189,6 +190,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             .height(400.dp)
                             .clip(RoundedCornerShape(3.dp))
                             .align(Alignment.CenterHorizontally)
+                            .padding(top = 10.dp)
                     )
                 }
 
@@ -201,23 +203,24 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             .height(400.dp)
                             .clip(RoundedCornerShape(3.dp))
                             .align(Alignment.CenterHorizontally)
+                            .padding(top = 10.dp)
                     )
                 }
             }
-            Column(modifier = Modifier.padding(10.dp)) {
+            Column {
                 Text(
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp),
                     text = produtoSelecionado.nomeProduto,
-                    fontSize = 30.sp,
+                    fontSize = 25.sp,
                 )
 
                 if (produtoSelecionado.emOferta) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 15.dp)
+                            .padding(top = 10.dp)
                             .height(50.dp)
-                            .clip(RoundedCornerShape(5.dp))
-                            .background(Color(0xFF00C4FF))
+                            .background(Color(0xFF59D35E))
                     ) {
                         Row(
                             modifier = Modifier
@@ -252,7 +255,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(end = 10.dp),
+                        .padding(10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
@@ -338,7 +341,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                 }
 
                 Text(
-                    modifier = Modifier.padding(top = 35.dp),
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp),
                     text = "Detalhes do produto",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -346,7 +349,12 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                 )
 
                 Text(
-                    modifier = Modifier.padding(top = 5.dp),
+                    modifier = Modifier.padding(
+                        top = 5.dp,
+                        start = 10.dp,
+                        end = 10.dp,
+                        bottom = 10.dp
+                    ),
                     text = produtoSelecionado.descricao,
                     fontSize = 15.sp,
                     color = Color.DarkGray,
@@ -458,6 +466,7 @@ fun ProdutoScreen(
                             .align(Alignment.CenterHorizontally)
                             .fillMaxWidth()
                             .height(400.dp)
+                            .padding(top = 10.dp)
                     )
                 }
 
@@ -470,6 +479,7 @@ fun ProdutoScreen(
                             .height(400.dp)
                             .clip(RoundedCornerShape(3.dp))
                             .align(Alignment.CenterHorizontally)
+                            .padding(top = 10.dp)
                     )
                 }
 
@@ -482,23 +492,24 @@ fun ProdutoScreen(
                             .height(400.dp)
                             .clip(RoundedCornerShape(3.dp))
                             .align(Alignment.CenterHorizontally)
+                            .padding(top = 10.dp)
                     )
                 }
             }
-            Column(modifier = Modifier.padding(10.dp)) {
+            Column {
                 Text(
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp),
                     text = produtoSelecionado.nomeProduto,
-                    fontSize = 30.sp,
+                    fontSize = 25.sp,
                 )
 
                 if (produtoSelecionado.emOferta) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 15.dp)
+                            .padding(top = 10.dp)
                             .height(50.dp)
-                            .clip(RoundedCornerShape(5.dp))
-                            .background(Color(0xFF00C4FF))
+                            .background(Color(0xFF59D35E))
                     ) {
                         Row(
                             modifier = Modifier
@@ -533,7 +544,7 @@ fun ProdutoScreen(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(end = 10.dp),
+                        .padding(10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
@@ -619,7 +630,7 @@ fun ProdutoScreen(
                 }
 
                 Text(
-                    modifier = Modifier.padding(top = 35.dp),
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp),
                     text = "Detalhes do produto",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -627,7 +638,12 @@ fun ProdutoScreen(
                 )
 
                 Text(
-                    modifier = Modifier.padding(top = 5.dp),
+                    modifier = Modifier.padding(
+                        top = 5.dp,
+                        start = 10.dp,
+                        end = 10.dp,
+                        bottom = 10.dp
+                    ),
                     text = produtoSelecionado.descricao,
                     fontSize = 15.sp,
                     color = Color.DarkGray,

@@ -62,6 +62,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -83,8 +84,10 @@ import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
 import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaNomeScreen
 import com.ahpp.notshoes.util.categoriaSelecionada
+import com.ahpp.notshoes.util.filtroPrecoSelecionado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.produtoSelecionado
+import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosFiltroPreco
 import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.util.textoBusca
 import kotlinx.coroutines.Dispatchers
@@ -100,6 +103,7 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
     val scrollState = rememberScrollState()
 
     var clickedPesquisa by remember { mutableStateOf(false) }
+    var clickedBanner by remember { mutableStateOf(false) }
     var clickedCategoria by remember { mutableStateOf(false) }
     var clickedProduto by remember { mutableStateOf(false) }
 
@@ -110,6 +114,11 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
         ResultadosBuscaNomeScreen(
             onBackPressed = { clickedPesquisa = false },
             textoBusca
+        )
+    } else if (clickedBanner) {
+        ResultadosFiltroPreco(
+            onBackPressed = { clickedBanner = false },
+            filtroPreco = filtroPrecoSelecionado
         )
     } else if (clickedCategoria) {
         ResultadosBuscaCategoriaScreen(
@@ -171,7 +180,7 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
             ) {
                 SearchBar(onSearchClicked = { clickedPesquisa = true })
                 PagerDescontos()
-                PagerFiltroValores()
+                PagerFiltroValores(onBannerClicked = { clickedBanner = true })
                 FiltrosTelaInicial(navController, onIconClicked = { clickedCategoria = true })
                 Promocoes(onPromocaoClicked = { clickedProduto = true })
                 NavegarPorMarcas(onMarcaClicked = { clickedCategoria = true })
@@ -188,8 +197,8 @@ fun SearchBar(onSearchClicked: () -> Unit) {
 
     SearchBar(modifier = Modifier
         .fillMaxWidth()
-        .padding(start = 10.dp, end = 10.dp, top = 2.dp, bottom = 10.dp),
-        colors = SearchBarDefaults.colors(Color(0xFFCAD4D6)),
+        .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+        colors = SearchBarDefaults.colors(Color(0xFFD6D9DA)),
         query = text,
         onQueryChange = { text = it },
         onSearch = {
@@ -200,7 +209,7 @@ fun SearchBar(onSearchClicked: () -> Unit) {
         },
         active = false,
         onActiveChange = { },
-        placeholder = { Text(text = "Busque um produto!", fontSize = 14.sp) },
+        placeholder = { Text(text = "Busque um produto! :)", fontSize = 14.sp) },
         trailingIcon = {
             IconButton(
                 onClick = {
@@ -216,7 +225,8 @@ fun SearchBar(onSearchClicked: () -> Unit) {
                     contentDescription = "Buscar produtos.",
                 )
             }
-        }
+        },
+        shape = RoundedCornerShape(20.dp)
     ) {
     }
 }
@@ -225,9 +235,10 @@ fun SearchBar(onSearchClicked: () -> Unit) {
 @Composable
 fun PagerDescontos() {
     val images = listOf(
-        painterResource(R.drawable.img_nike_day),
-        painterResource(R.drawable.img_promocoes),
-        painterResource(R.drawable.img_air_jordan),
+        painterResource(R.drawable.img_banner_nike_day),
+        painterResource(R.drawable.img_banner_adidas),
+        painterResource(R.drawable.img_banner_olymp),
+        painterResource(R.drawable.img_banner_air_jordan),
     )
 
     val pagerState =
@@ -256,7 +267,7 @@ fun PagerDescontos() {
                 Card(
                     modifier = Modifier
                         .clickable(enabled = true, onClick = {}),
-                    elevation = CardDefaults.cardElevation(8.dp)
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     Image(
                         modifier = Modifier
@@ -308,12 +319,19 @@ fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PagerFiltroValores() {
+fun PagerFiltroValores(onBannerClicked: () -> Unit) {
     val images = listOf(
         painterResource(R.drawable.img_valor_ate_199),
         painterResource(R.drawable.img_valor_200_ate_399),
         painterResource(R.drawable.img_valor_400_ate_599),
         painterResource(R.drawable.img_valor_acima_600)
+    )
+
+    val filtrosPrecoList = listOf(
+        "ate R$199",
+        "de R$200 ate R$399",
+        "de R$400 ate R$599",
+        "acima de R$600"
     )
 
     val pagerState =
@@ -337,15 +355,22 @@ fun PagerFiltroValores() {
             ) { currentPage ->
                 Card(
                     modifier = Modifier
-                        .clickable(enabled = true, onClick = {}),
-                    elevation = CardDefaults.cardElevation(8.dp)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                filtroPrecoSelecionado =
+                                    filtrosPrecoList[currentPage]; onBannerClicked()
+                            }),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     Image(
                         modifier = Modifier
-                            .height(58.dp)
-                            .width(332.dp),
+                            //.height(60.dp)
+                            .width(325.dp),
                         painter = images[currentPage],
-                        contentDescription = "",
+                        contentDescription = null,
+                        contentScale = ContentScale.FillWidth
                     )
                 }
             }
@@ -358,12 +383,12 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 15.dp, start = 15.dp, end = 15.dp),
+            .padding(top = 15.dp, start = 0.dp, end = 0.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Button(
-                modifier = Modifier.size(50.dp), contentPadding = PaddingValues(0.dp),
+                modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
                     categoriaSelecionada = "Camisa Básica"
                     onIconClicked()
@@ -372,9 +397,9 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.icon_shirt),
+                    painter = painterResource(R.drawable.img_categoria_camisa_basica),
                     contentDescription = "Icone ver produtos da categoria camisa básica.",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
@@ -382,23 +407,49 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 "Camisa básica",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
-                color = Color.Black,
+                color = Color.DarkGray,
             )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Button(
-                modifier = Modifier.size(50.dp), contentPadding = PaddingValues(0.dp),
+                modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    categoriaSelecionada = "Calça"
+                    categoriaSelecionada = "Regata"
                     onIconClicked()
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.icon_pants),
+                    painter = painterResource(R.drawable.img_categoria_regata),
+                    contentDescription = "Icone ver produtos da categoria regata.",
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+            Spacer(Modifier.height(5.dp))
+            Text(
+                "Regata",
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                fontSize = 10.sp,
+                color = Color.DarkGray,
+            )
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Button(
+                modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
+                onClick = {
+                    categoriaSelecionada = "Calça"
+                    onIconClicked()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                elevation = ButtonDefaults.buttonElevation(10.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_categoria_calca),
                     contentDescription = "Icone ver produtos da categoria calças.",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
@@ -406,12 +457,12 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 "Calça",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
-                color = Color.Black,
+                color = Color.DarkGray,
             )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Button(
-                modifier = Modifier.size(50.dp), contentPadding = PaddingValues(0.dp),
+                modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
                     categoriaSelecionada = "Tênis"
                     onIconClicked()
@@ -420,9 +471,9 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.icon_shoes),
+                    painter = painterResource(R.drawable.img_categoria_tenis),
                     contentDescription = "Icone ver produtos da categoria tênis.",
-                    modifier = Modifier.size(35.dp)
+                    modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
@@ -430,12 +481,12 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 "Tênis",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
-                color = Color.Black,
+                color = Color.DarkGray,
             )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Button(
-                modifier = Modifier.size(50.dp), contentPadding = PaddingValues(0.dp),
+                modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
                     navController.navigate("categorias") {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -453,7 +504,7 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 Image(
                     Icons.AutoMirrored.Filled.List,
                     contentDescription = "Icone ir para tela de categorias.",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(40.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
@@ -461,7 +512,7 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
                 "Ver Tudo",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
-                color = Color.Black,
+                color = Color.DarkGray,
             )
         }
     }
@@ -488,10 +539,9 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 15.dp, bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(top = 15.dp, bottom = 10.dp)
                 .height(50.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(Color(0xFF00C4FF))
+                .background(Color(0xFF59D35E))
         ) {
             Row(
                 modifier = Modifier
@@ -512,12 +562,12 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "PROMOÇÕES",
+                        text = "PROMOÇÕES ATIVAS",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        style = TextStyle(color = Color.Black)
+                        color = Color.Black
                     )
-                    Text(text = "Enquanto durar o estoque!", fontSize = 12.sp)
+                    Text(text = "Enquanto durar o estoque!", color = Color.Black, fontSize = 12.sp)
                 }
             }
         }
@@ -544,6 +594,14 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                 )
             }
         } else {
+
+            val cardColors = CardColors(
+                containerColor = Color.White,
+                contentColor = Color.Black,
+                disabledContainerColor = Color.Black,
+                disabledContentColor = Color.Black,
+            )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -563,21 +621,16 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                         val state = painter.state
 
                         Card(
-                            shape = RoundedCornerShape(3.dp),
-                            colors = CardColors(
-                                containerColor = Color.White,
-                                Color.Black,
-                                Color.Black,
-                                Color.Black
-                            ),
+                            shape = RoundedCornerShape(5.dp),
+                            colors = cardColors,
                             modifier = Modifier
-                                .height(165.dp)
-                                .padding(horizontal = 3.dp)
+                                //.height(185.dp)
+                                .padding(horizontal = 5.dp)
                                 .clickable(enabled = true, onClick = {
                                     produtoSelecionado = produtoEmPromocao
                                     onPromocaoClicked()
                                 }),
-                            elevation = CardDefaults.cardElevation(4.dp)
+                            elevation = CardDefaults.cardElevation(2.dp)
                         ) {
                             Column(
                                 Modifier
@@ -615,26 +668,37 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                         )
                                     }
                                 }
+                                Row(
+                                    modifier = Modifier
+                                        .height(35.dp)
+                                        .fillMaxWidth()
+                                        .padding(top = 5.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = produtoEmPromocao.nomeProduto,
+                                        fontSize = 10.sp,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                                Spacer(Modifier.height(5.dp))
                                 Text(
-                                    text = produtoEmPromocao.nomeProduto,
-                                    fontSize = 14.sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Text(
-                                    text = "De: ${numberFormat.format(produtoEmPromocao.preco.toDouble())}",
+                                    text = numberFormat.format(produtoEmPromocao.preco.toDouble()),
                                     textDecoration = TextDecoration.LineThrough,
-                                    fontSize = 10.sp
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
                                 )
 
                                 val valorComDesconto =
                                     produtoEmPromocao.preco.toDouble() - ((produtoEmPromocao.preco.toDouble() * produtoEmPromocao.desconto.toDouble()))
-
                                 Text(
-                                    text = "Por: ${numberFormat.format(valorComDesconto)}",
+                                    text = numberFormat.format(valorComDesconto),
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp
+                                    fontSize = 16.sp,
+                                    color = Color.Black
                                 )
+                                Spacer(Modifier.height(5.dp))
                                 if (produtoEmPromocao.estoqueProduto > 0) {
                                     Text(
                                         text = "Restam ${produtoEmPromocao.estoqueProduto} unidades!",
@@ -662,7 +726,7 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
     //valores para usar na altura, largura e padding horizontal das imagens que estao na Row
     val dpHeightItens = 70.dp
     val dpWidthItens = 130.dp
-    val dpPaddingHorizontalItens = 10.dp
+    val dpPaddingHorizontalItens = 5.dp
 
     Column(Modifier.padding(top = 20.dp)) {
         Text(

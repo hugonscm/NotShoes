@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,15 +16,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -55,6 +60,8 @@ import java.io.IOException
 @Composable
 fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) {
 
+    var checkedTermos by remember { mutableStateOf(false) }
+
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
@@ -84,12 +91,30 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
     else
         painterResource(id = R.drawable.baseline_visibility_off_24)
 
+    val colorsTextFields = OutlinedTextFieldDefaults.colors(
+        unfocusedContainerColor = Color(0xFFEEF3F5),
+        focusedContainerColor = Color(0xFFEEF3F5),
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        unfocusedBorderColor = Color(0xFFEEF3F5),
+        focusedBorderColor = Color(0xFF029CCA),
+        focusedLabelColor = Color.Black,
+        errorContainerColor = Color(0xFFEEF3F5),
+        cursorColor = Color(0xFF029CCA),
+    )
+
+    val shapeArredondado = RoundedCornerShape(10.dp)
+
+    val elevationButton = ButtonDefaults.buttonElevation(5.dp)
+
     Column(
         modifier
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
                     listOf(
+                        Color(0xFFFFFFFF),
+                        Color(0xFFFFFFFF),
                         Color(0xFFFFFFFF),
                         Color(0xFFFFFFFF),
                         Color(0xFFFFFFFF),
@@ -103,18 +128,16 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
 
         Row(
             modifier
-                .padding(top = 35.dp)
-                .align(Alignment.CenterHorizontally)
+                .padding(top = 20.dp)
+                .fillMaxWidth()
+                .height(150.dp), verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Crie sua conta", fontSize = 34.sp, fontWeight = FontWeight.Bold)
-        }
-
-        Row(modifier.align(Alignment.CenterHorizontally)) {
-            Text(text = "Corra e aproveite nossas ofertas!", fontSize = 20.sp)
-        }
-
-        Row(modifier.padding(top = 25.dp, start = 10.dp)) {
-            Text(text = "Nome", fontWeight = FontWeight.Bold)
+            Text(
+                text = "Crie sua conta e aproveite nossas ofertas!",
+                fontSize = 35.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF029CCA)
+            )
         }
 
         OutlinedTextField(
@@ -131,29 +154,17 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     Text(text = "Digite um nome válido.")
                 }
             },
-            placeholder = { Text(text = "Seu nome", color = Color(0xFF4A5255)) },
+            placeholder = { Text(text = "Nome Completo", color = Color(0xFF4A5255)) },
             leadingIcon = {
                 Icon(Icons.Filled.Person, contentDescription = "Icone pessoa", tint = Color.Black)
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 5.dp),
+                .padding(top = 20.dp),
             maxLines = 1,
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFEEF3F5),
-                focusedContainerColor = Color(0xFFEEF3F5),
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                unfocusedBorderColor = Color.Black,
-                focusedBorderColor = Color(0xFF029CCA),
-                focusedLabelColor = Color(0xFF000000),
-                cursorColor = Color(0xFF029CCA),
-            )
+            colors = colorsTextFields,
+            shape = shapeArredondado
         )
-
-        Row(modifier.padding(top = 10.dp, start = 10.dp)) {
-            Text(text = "E-mail", fontWeight = FontWeight.Bold)
-        }
 
         OutlinedTextField(
             value = email,
@@ -172,7 +183,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     Text(text = "E-mail já cadastrado.")
                 }
             },
-            placeholder = { Text(text = "email@exemplo.com", color = Color(0xFF4A5255)) },
+            placeholder = { Text(text = "E-mail", color = Color(0xFF4A5255)) },
             leadingIcon = {
                 Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
             },
@@ -180,21 +191,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .fillMaxWidth()
                 .padding(top = 5.dp),
             maxLines = 1,
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFEEF3F5),
-                focusedContainerColor = Color(0xFFEEF3F5),
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                unfocusedBorderColor = Color.Black,
-                focusedBorderColor = Color.Black,
-                focusedLabelColor = Color(0xFF000000),
-                cursorColor = Color(0xFF029CCA),
-            )
+            colors = colorsTextFields,
+            shape = shapeArredondado
         )
-
-        Row(modifier.padding(top = 10.dp, start = 10.dp)) {
-            Text(text = "Senha", fontWeight = FontWeight.Bold)
-        }
 
         OutlinedTextField(
             value = senha,
@@ -210,7 +209,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 }
                 senhaValida = ValidarCamposDados.validarSenha(senha)
             },
-            placeholder = { Text(text = "Crie uma nova senha", color = Color(0xFF4A5255)) },
+            placeholder = { Text(text = "Senha", color = Color(0xFF4A5255)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             leadingIcon = {
                 Icon(Icons.Filled.Lock, contentDescription = "Icone senha", tint = Color.Black)
@@ -232,72 +231,107 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .fillMaxWidth()
                 .padding(top = 5.dp),
             maxLines = 1,
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFEEF3F5),
-                focusedContainerColor = Color(0xFFEEF3F5),
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                unfocusedBorderColor = Color.Black,
-                focusedBorderColor = Color(0xFF029CCA),
-                focusedLabelColor = Color(0xFF000000),
-                cursorColor = Color(0xFF029CCA),
-            )
+            colors = colorsTextFields,
+            shape = shapeArredondado
         )
 
         Row(
             modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 25.dp)
+                .fillMaxWidth()
+                .height(30.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            ElevatedButton(
+            Checkbox(
+                checked = checkedTermos,
+                onCheckedChange = { checkedTermos = it },
+                colors = CheckboxDefaults.colors(Color(0xFF029CCA))
+            )
+            Row {
+                Text(
+                    text = "Eu li e concordo com os ",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 15.sp
+                )
+                Text(
+                    modifier = Modifier.clickable(
+                        enabled = true,
+                        onClick = { }),
+                    text = "termos de uso.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    color = Color(0xFF029CCA)
+                )
+            }
+        }
+
+        Row(
+            modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            FilledTonalButton(
                 onClick = {
                     nomeValido = ValidarCamposDados.validarNome(nome)
                     emailValido = ValidarCamposDados.validarEmail(email)
                     senhaValida = ValidarCamposDados.validarSenha(senha)
 
-                    if (nomeValido && emailValido && senhaValida) {
-                        if (possuiConexao(ctx)) {
-                            val registroCliente = RegistroCliente(nome, email, senha)
+                    if (checkedTermos) {
+                        if (nomeValido && emailValido && senhaValida) {
+                            if (possuiConexao(ctx)) {
+                                val registroCliente = RegistroCliente(nome, email, senha)
 
-                            registroCliente.sendRegistroData(object : RegistroCliente.Callback {
-                                override fun onSuccess(code: String) {
-                                    //500 = usuario ja existe
-                                    //201 = usuario criado com sucesso
-                                    codigoStatusRegistro = code
-                                    Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
+                                registroCliente.sendRegistroData(object : RegistroCliente.Callback {
+                                    override fun onSuccess(code: String) {
+                                        //500 = usuario ja existe
+                                        //201 = usuario criado com sucesso
+                                        codigoStatusRegistro = code
+                                        Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
 
-                                    if (code == "201") {
-                                        Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                "Conta criada com sucesso.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            navController.navigate("login")
+                                        if (code == "201") {
+                                            Handler(Looper.getMainLooper()).post {
+                                                Toast.makeText(
+                                                    ctx,
+                                                    "Conta criada com sucesso.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                navController.navigate("login")
+                                            }
                                         }
                                     }
-                                }
 
-                                override fun onFailure(e: IOException) {
-                                    // erro de rede
-                                    // não é possível mostrar um Toast de um Thread
-                                    // que não seja UI, então é feito dessa forma
-                                    Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
-                                            .show()
+                                    override fun onFailure(e: IOException) {
+                                        // erro de rede
+                                        // não é possível mostrar um Toast de um Thread
+                                        // que não seja UI, então é feito dessa forma
+                                        Handler(Looper.getMainLooper()).post {
+                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+                                        Log.e("Erro: ", e.message.toString())
                                     }
-                                    Log.e("Erro: ", e.message.toString())
-                                }
-                            })
-                        } else {
-                            Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                                })
+                            } else {
+                                Toast.makeText(
+                                    ctx,
+                                    "Sem conexão com a internet.",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
                         }
+                    } else {
+                        Toast.makeText(ctx, "Aceite os termos de uso.", Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier
-                    .width(230.dp)
+                    .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA)),
+                shape = shapeArredondado,
+                elevation = elevationButton
             ) {
                 Text(
                     text = "Criar conta",
@@ -316,11 +350,12 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = "Já possui uma? ",
+                text = "Já possui uma conta? ",
                 fontSize = 15.sp,
-                style = TextStyle(
-                    Color.Black
-                )
+                style = MaterialTheme.typography.bodyLarge,
+                color =
+                Color.Black
+
             )
             Text(
                 modifier = Modifier.clickable(
@@ -329,9 +364,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 text = "Entre",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
-                style = TextStyle(
-                    Color(0xFF029CCA)
-                )
+                style = MaterialTheme.typography.bodyLarge,
+                color =
+                Color(0xFF029CCA)
             )
         }
 
