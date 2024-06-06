@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardListaDesejos
-import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
-import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.cliente.getPedidos
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.util.cards.CardPedidos
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 @Composable

@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.bd.endereco.AdicionarEnderecoCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import kotlinx.coroutines.Dispatchers
@@ -123,6 +123,19 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var estado by remember { mutableStateOf(estadosList[0]) }
 
+    val colorsTextField = OutlinedTextFieldDefaults.colors(
+        unfocusedContainerColor = Color(0xFFEEF3F5),
+        focusedContainerColor = Color(0xFFEEF3F5),
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        unfocusedBorderColor = Color.Transparent,
+        focusedBorderColor = Color.Black,
+        focusedLabelColor = Color(0xFF000000),
+        cursorColor = Color(0xFF029CCA),
+        errorContainerColor = Color(0xFFEEF3F5),
+        errorSupportingTextColor = Color(0xFFC00404)
+    )
+
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(
             modifier = Modifier
@@ -191,16 +204,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                ),
+                colors = colorsTextField,
                 visualTransformation = CepVisualTransformation()
             )
 
@@ -225,16 +229,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                )
+                colors = colorsTextField
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -265,16 +260,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                         .padding(start = 10.dp, end = 5.dp)
                         .weight(1f),
                     maxLines = 1,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                        focusedContainerColor = Color(0xFFEEF3F5),
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        focusedBorderColor = Color(0xFF029CCA),
-                        focusedLabelColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF029CCA),
-                    )
+                    colors = colorsTextField
                 )
 
                 OutlinedTextField(
@@ -294,18 +280,8 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                         .padding(start = 5.dp, end = 10.dp)
                         .weight(1f),
                     maxLines = 1,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                        focusedContainerColor = Color(0xFFEEF3F5),
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        focusedBorderColor = Color(0xFF029CCA),
-                        focusedLabelColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF029CCA),
-                    )
+                    colors = colorsTextField
                 )
-
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -329,16 +305,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                )
+                colors = colorsTextField
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -366,16 +333,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                         readOnly = true,
                         singleLine = true,
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color(0xFFEEF3F5),
-                            focusedContainerColor = Color(0xFFEEF3F5),
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            unfocusedBorderColor = Color.Black,
-                            focusedBorderColor = Color(0xFF029CCA),
-                            focusedLabelColor = Color(0xFF000000),
-                            cursorColor = Color(0xFF029CCA),
-                        )
+                        colors = colorsTextField
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
@@ -424,18 +382,8 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                         .padding(start = 5.dp, end = 10.dp)
                         .weight(1f),
                     maxLines = 1,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                        focusedContainerColor = Color(0xFFEEF3F5),
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        focusedBorderColor = Color(0xFF029CCA),
-                        focusedLabelColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF029CCA),
-                    )
+                    colors = colorsTextField
                 )
-
             }
 
             Spacer(modifier = Modifier.height(15.dp))

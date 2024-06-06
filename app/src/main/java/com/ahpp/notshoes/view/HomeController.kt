@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util
+package com.ahpp.notshoes.view
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,7 +41,7 @@ import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.funcoes.possuiConexao
-import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
 import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
 import com.ahpp.notshoes.view.viewsLogado.InicioScreen

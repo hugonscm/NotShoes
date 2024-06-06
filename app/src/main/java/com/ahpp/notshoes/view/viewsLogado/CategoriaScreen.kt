@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
-import com.ahpp.notshoes.util.categoriaSelecionada
+import com.ahpp.notshoes.view.categoriaSelecionada
+import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosBusca
 
 @Composable
 fun CategoriaScreen() {
@@ -49,20 +49,12 @@ fun CategoriaScreen() {
     val corCards = Color(0xFFFFFFFF)
     val corBackground = Color.White
 
-//        (Brush.verticalGradient(
-//                listOf(
-//                    Color(0xFFFFFFFF),
-//                    Color(0xFF86D0E2),
-//                    Color(0xFFFFFFFF)
-//                )
-//            ))
-
     var clicked by remember { mutableStateOf(false) }
     if (clicked) {
         //esse onBackPressed() pode ser chamado la no ResultadosBuscaCategoria() para voltar para a tela
         // anterior ele altera o valor de clicked para false, assim caindo no else aqui em baixo
         // e voltando pra tela categoria
-        ResultadosBuscaCategoriaScreen(onBackPressed = { clicked = false }, categoriaSelecionada)
+        ResultadosBusca(onBackPressed = { clicked = false }, categoriaSelecionada, "categoria")
     } else {
         Column(
             modifier = Modifier

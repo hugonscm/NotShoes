@@ -47,7 +47,7 @@ import com.ahpp.notshoes.bd.cliente.AtualizarDadosPessoaisCliente
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CpfVisualTransformation
 import com.ahpp.notshoes.util.visualTransformation.PhoneVisualTransformation
@@ -80,6 +80,19 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
     var nomeValido by remember { mutableStateOf(true) }
     var cpfValido by remember { mutableStateOf(true) }
     var telefoneValido by remember { mutableStateOf(true) }
+
+    val colorsTextField = OutlinedTextFieldDefaults.colors(
+        unfocusedContainerColor = Color(0xFFEEF3F5),
+        focusedContainerColor = Color(0xFFEEF3F5),
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        unfocusedBorderColor = Color.Transparent,
+        focusedBorderColor = Color.Black,
+        focusedLabelColor = Color(0xFF000000),
+        cursorColor = Color(0xFF029CCA),
+        errorContainerColor = Color(0xFFEEF3F5),
+        errorSupportingTextColor = Color(0xFFC00404)
+    )
 
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(
@@ -148,16 +161,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                )
+                colors = colorsTextField
             )
 
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
@@ -184,16 +188,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                ),
+                colors = colorsTextField,
                 visualTransformation = CpfVisualTransformation()
             )
 
@@ -226,16 +221,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    focusedBorderColor = Color(0xFF029CCA),
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                ),
+                colors = colorsTextField,
                 visualTransformation = PhoneVisualTransformation()
             )
 

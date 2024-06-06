@@ -11,7 +11,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ahpp.notshoes.util.HomeController
+import com.ahpp.notshoes.view.HomeController
 import com.ahpp.notshoes.view.viewsDeslogado.LoginScreen
 import com.ahpp.notshoes.view.viewsDeslogado.RegistroScreen
 

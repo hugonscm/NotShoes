@@ -1,6 +1,6 @@
 package com.ahpp.notshoes.bd.endereco
 
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

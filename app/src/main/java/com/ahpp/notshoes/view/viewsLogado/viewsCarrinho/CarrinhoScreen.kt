@@ -18,9 +18,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,14 +51,15 @@ import com.ahpp.notshoes.bd.carrinho.getProdutoCarrinho
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardItemCarrinho
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.carrinho.adicionarUnidade
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoComDesconto
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoTotal
 import com.ahpp.notshoes.util.funcoes.carrinho.removerProduto
 import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
 import com.ahpp.notshoes.util.funcoes.possuiConexao
-import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.AlterarDadosPessoaisScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,6 +74,7 @@ fun CarrinhoScreen() {
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
     var clickedFinalizarPedido by remember { mutableStateOf(false) }
+    var clickedCompletarCadastro by remember { mutableStateOf(false) }
 
     // manter a posicao do scroll ao voltar pra tela
     val listState = rememberLazyListState()
@@ -120,7 +128,6 @@ fun CarrinhoScreen() {
     }
 
     if (clickedFinalizarPedido) {
-
         // resumo do pedido
         val detalhesPedido = combinedList.joinToString(separator = "\n\n") { item ->
             val valorComDesconto =
@@ -137,8 +144,57 @@ fun CarrinhoScreen() {
             valorTotalComDesconto,
             onBackPressed = { clickedFinalizarPedido = false },
             clickFinalizarPedido = { atualizarLista() })
-
+    } else if (clickedCompletarCadastro) {
+        AlterarDadosPessoaisScreen(onBackPressed = { clickedCompletarCadastro = false })
     } else if (internetCheker) {
+
+        val openDialog = remember { mutableStateOf(false) }
+
+        if (openDialog.value) {
+            AlertDialog(
+                containerColor = Color.White,
+
+                onDismissRequest = {
+                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                    // button. If you want to disable that functionality, simply use an empty
+                    // onDismissRequest.
+                    openDialog.value = false
+                },
+                icon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                title = {
+                    Text(
+                        text = "Dados incompletos",
+                        textAlign = TextAlign.Center
+                    )
+                },
+                text = {
+                    Text(
+                        "Complete seus dados para prosseguir.",
+                        textAlign = TextAlign.Start
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog.value = false
+                            clickedCompletarCadastro = true
+                        }
+                    ) {
+                        Text("Confirmar", color = Color.Black)
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog.value = false
+                        }
+                    ) {
+                        Text("Cancelar", color = Color.Black)
+                    }
+                }
+            )
+        }
+
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(
                 modifier = Modifier
@@ -264,7 +320,14 @@ fun CarrinhoScreen() {
                         )
                     }
                     ElevatedButton(
-                        onClick = { if (itensList.isNotEmpty()) clickedFinalizarPedido = true },
+                        onClick = {
+                            if (itensList.isNotEmpty() && clienteLogado.cpf != "" && clienteLogado.telefoneContato != "") {
+                                clickedFinalizarPedido =
+                                    true
+                            } else {
+                                openDialog.value = true
+                            }
+                        },
                         modifier = Modifier
                             .width(110.dp)
                             .height(50.dp),
@@ -299,4 +362,3 @@ fun CarrinhoScreen() {
         })
     }
 }
-

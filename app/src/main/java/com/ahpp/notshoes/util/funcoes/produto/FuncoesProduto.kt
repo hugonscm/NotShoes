@@ -8,7 +8,7 @@ import android.widget.Toast
 import com.ahpp.notshoes.bd.carrinho.CarrinhoRepository
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import java.io.IOException
 
 fun adicionarProdutoCarrinho(ctx: Context, produto: Produto) {

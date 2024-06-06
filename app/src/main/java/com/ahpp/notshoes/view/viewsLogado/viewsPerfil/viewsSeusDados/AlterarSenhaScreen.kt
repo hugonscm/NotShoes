@@ -49,7 +49,7 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.cliente.AtualizarSenhaCliente
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util.screensReutilizaveis
+package com.ahpp.notshoes.view.screensReutilizaveis
 
 import android.os.Handler
 import android.os.Looper
@@ -59,18 +59,18 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardResultados
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.filtros.filtrarProdutos
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
-import com.ahpp.notshoes.util.produtoSelecionado
+import com.ahpp.notshoes.view.produtoSelecionado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//esse ResultadosBuscaCategoria é usado quando o usuário clica em alguma categoria para ver os protudos
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSelecionada: String) {
+fun ResultadosBusca(onBackPressed: () -> Unit, valorBusca: String, tipoBusca: String) {
 
     BackHandler {
         onBackPressed()
@@ -178,7 +178,20 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
                 // filtrarProdutoCategoria(), buscarProdutoNome() ou getProdutosFiltroIntervalo()
                 // atualmente todas recebem onBackPressed e uma string
 
-                produtosList = repository.filtrarProdutoCategoria(categoriaSelecionada)
+                produtosList = when (tipoBusca) {
+                    "nome" -> {
+                        repository.buscarProdutoNome(valorBusca)
+                    }
+
+                    "categoria" -> {
+                        repository.filtrarProdutoCategoria(valorBusca)
+                    }
+
+                    else -> {
+                        repository.getProdutosFiltroIntervalo(valorBusca)
+                    }
+                }
+
                 produtosList =
                     filtrarProdutos(
                         produtosList,
@@ -288,7 +301,7 @@ fun ResultadosBuscaCategoriaScreen(onBackPressed: () -> Unit, categoriaSeleciona
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .width(220.dp),
-                            text = categoriaSelecionada,
+                            text = valorBusca,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             maxLines = 1,

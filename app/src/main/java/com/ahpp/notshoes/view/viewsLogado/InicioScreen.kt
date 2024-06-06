@@ -80,16 +80,14 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.util.screensReutilizaveis.ProdutoScreen
-import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaCategoriaScreen
-import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosBuscaNomeScreen
-import com.ahpp.notshoes.util.categoriaSelecionada
-import com.ahpp.notshoes.util.filtroPrecoSelecionado
+import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
+import com.ahpp.notshoes.view.categoriaSelecionada
+import com.ahpp.notshoes.view.filtroPrecoSelecionado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
-import com.ahpp.notshoes.util.produtoSelecionado
-import com.ahpp.notshoes.util.screensReutilizaveis.ResultadosFiltroPreco
-import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
-import com.ahpp.notshoes.util.textoBusca
+import com.ahpp.notshoes.view.produtoSelecionado
+import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosBusca
+import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.textoBusca
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -111,19 +109,22 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
         //esse onBackPressed() é chamado la no ResultadosBuscaNome() para voltar para a tela
         // anterior ele altera o valor de clicked para false, assim caindo no else aqui em baixo
         // e voltando pra tela inicio
-        ResultadosBuscaNomeScreen(
+        ResultadosBusca(
             onBackPressed = { clickedPesquisa = false },
-            textoBusca
+            textoBusca,
+            "nome"
         )
     } else if (clickedBanner) {
-        ResultadosFiltroPreco(
+        ResultadosBusca(
             onBackPressed = { clickedBanner = false },
-            filtroPreco = filtroPrecoSelecionado
+            filtroPrecoSelecionado,
+            "preco"
         )
     } else if (clickedCategoria) {
-        ResultadosBuscaCategoriaScreen(
+        ResultadosBusca(
             onBackPressed = { clickedCategoria = false },
-            categoriaSelecionada
+            categoriaSelecionada,
+            "categoria"
         )
     } else if (clickedProduto) {
         ProdutoScreen(
@@ -179,7 +180,7 @@ fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController
                     .verticalScroll(scrollState)
             ) {
                 SearchBar(onSearchClicked = { clickedPesquisa = true })
-                PagerDescontos()
+                PagerDescontos(onBannerClicked = { clickedPesquisa = true })
                 PagerFiltroValores(onBannerClicked = { clickedBanner = true })
                 FiltrosTelaInicial(navController, onIconClicked = { clickedCategoria = true })
                 Promocoes(onPromocaoClicked = { clickedProduto = true })
@@ -195,9 +196,10 @@ fun SearchBar(onSearchClicked: () -> Unit) {
 
     var text by remember { mutableStateOf("") }
 
-    SearchBar(modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+    SearchBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
         colors = SearchBarDefaults.colors(Color(0xFFD6D9DA)),
         query = text,
         onQueryChange = { text = it },
@@ -233,12 +235,19 @@ fun SearchBar(onSearchClicked: () -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PagerDescontos() {
+fun PagerDescontos(onBannerClicked: () -> Unit) {
     val images = listOf(
         painterResource(R.drawable.img_banner_nike_day),
         painterResource(R.drawable.img_banner_adidas),
         painterResource(R.drawable.img_banner_olymp),
         painterResource(R.drawable.img_banner_air_jordan),
+    )
+
+    val itensList = listOf(
+        "nike",
+        "tênis adidas",
+        "tênis olympikus",
+        "air jordan 1 mid"
     )
 
     val pagerState =
@@ -266,7 +275,10 @@ fun PagerDescontos() {
             ) { currentPage ->
                 Card(
                     modifier = Modifier
-                        .clickable(enabled = true, onClick = {}),
+                        .clickable(enabled = true, onClick = {
+                            textoBusca = itensList[currentPage]
+                            onBannerClicked()
+                        }),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Image(
@@ -366,7 +378,6 @@ fun PagerFiltroValores(onBannerClicked: () -> Unit) {
                 ) {
                     Image(
                         modifier = Modifier
-                            //.height(60.dp)
                             .width(325.dp),
                         painter = images[currentPage],
                         contentDescription = null,
@@ -605,7 +616,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp)
+                    .padding(start = 5.dp, end = 5.dp)
             ) {
                 LazyRow {
                     items(items = ofertas) { produtoEmPromocao ->

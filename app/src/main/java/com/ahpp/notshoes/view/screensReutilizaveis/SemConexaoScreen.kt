@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util.screensReutilizaveis
+package com.ahpp.notshoes.view.screensReutilizaveis
 
 import android.widget.Toast
 import androidx.compose.animation.Animatable
@@ -36,10 +36,9 @@ fun SemConexaoScreen(onBackPressed: () -> Unit) {
 
     val ctx = LocalContext.current
 
-    val color = remember { Animatable(Color.Gray) }
+    val color = remember { Animatable(Color.Red) }
     LaunchedEffect(Unit) {
-        color.animateTo(Color.Red, animationSpec = tween(500))
-        color.animateTo(Color(0xFF38C4E6), animationSpec = tween(1000))
+        color.animateTo(Color(0xFF38C4E6), animationSpec = tween(1500))
     }
 
     Box(

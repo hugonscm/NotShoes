@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.model.Endereco
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 
 @Composable
 fun CardEnderecoCarrinho(enderecoParaEntrega: Endereco){

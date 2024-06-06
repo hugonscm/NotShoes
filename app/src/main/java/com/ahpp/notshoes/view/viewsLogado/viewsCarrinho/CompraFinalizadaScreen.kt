@@ -1,6 +1,8 @@
 package com.ahpp.notshoes.view.viewsLogado.viewsCarrinho
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,10 +32,15 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
 
 @Composable
-fun CompraFinalizadaScrren(onBackPressed: () -> Unit) {
+fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
+    }
+
+    val color = remember { Animatable(Color(0xFF59D35E)) }
+    LaunchedEffect(Unit) {
+        color.animateTo(Color(0xFF38C4E6), animationSpec = tween(1500))
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -67,7 +76,7 @@ fun CompraFinalizadaScrren(onBackPressed: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF029CCA)),
+                .background(color.value),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.padding(top = 70.dp))

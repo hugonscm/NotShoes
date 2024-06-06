@@ -62,9 +62,9 @@ import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.cards.CardEnderecoCarrinho
-import com.ahpp.notshoes.util.clienteLogado
+import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
-import com.ahpp.notshoes.util.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.CadastrarEnderecoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -94,11 +94,11 @@ fun FinalizarPedidoScreen(
     }
 
     var clickedCadastrarEndereco by remember { mutableStateOf(false) }
-    var compraFinalizada by remember { mutableStateOf(false) }
+    var clickedCompraFinalizada by remember { mutableStateOf(false) }
 
-    if (compraFinalizada) {
-        CompraFinalizadaScrren(onBackPressed = {
-            compraFinalizada = false
+    if (clickedCompraFinalizada) {
+        CompraFinalizadaScreen(onBackPressed = {
+            clickedCompraFinalizada = false
             onBackPressed()
         })
     } else if (clickedCadastrarEndereco) {
@@ -536,7 +536,7 @@ fun FinalizarPedidoScreen(
 
                                                 if (code == "1") {
                                                     clickFinalizarPedido()
-                                                    compraFinalizada = true
+                                                    clickedCompraFinalizada = true
                                                 }
                                             }
 
