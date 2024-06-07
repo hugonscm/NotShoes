@@ -60,7 +60,6 @@ import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -80,18 +79,23 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 preferences[usuarioLogadoPreferences] ?: "-1"
             }
     }
-    val idUsuario by idUsuarioFlow.collectAsState(initial = "-1")
+    val idUsuario by idUsuarioFlow.collectAsState(initial = "-2")
 
-    //essa gambiarra aqui serve pra nao piscar a tela de login caso o usuario ja esteja logado
+    // -2 é o valor inicial da variavel idUsuario, ou seja, ainda esta carregando o id do banco local
+    // retorna -1 caso nao tenha usuario logado, ou qualquer outro se ja estiver logado
+
     LaunchedEffect(idUsuario) {
-        delay(800)
-        if (idUsuario == "-1") {
-            isLoading = false
-        } else {
-            if (idUsuario.isNotEmpty()) {
-                navController.navigate("homeController") { launchSingleTop = true }
-            } else {
+        when (idUsuario) {
+            "-1" -> {
                 isLoading = false
+            }
+
+            "-2" -> {
+                isLoading = true
+            }
+
+            else -> {
+                navController.navigate("homeController") { launchSingleTop = true }
             }
         }
     }
@@ -115,7 +119,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             CircularProgressIndicator()
         }
     } else {
-
         val colorsTextFields = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = Color(0xFFEEF3F5),
             focusedContainerColor = Color(0xFFEEF3F5),
