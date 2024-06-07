@@ -14,7 +14,20 @@ import java.io.IOException
 
 suspend fun getCliente(idClienteLogado: Int): Cliente {
     return withContext(Dispatchers.IO) {
-        lateinit var cliente: Cliente
+
+        var cliente = Cliente(
+            idCliente = -1, // Default values
+            genero = "",
+            nome = "",
+            email = "",
+            senha = "",
+            cpf = "",
+            telefoneContato = "",
+            idListaDesejos = -1,
+            idCarrinho = -1,
+            idEnderecoPrincipal = -1
+        )
+
         val client = OkHttpClient()
         val url = "http://10.0.2.2:5000/get_cliente"
 

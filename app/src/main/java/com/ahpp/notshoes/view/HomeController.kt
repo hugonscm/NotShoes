@@ -1,5 +1,9 @@
 package com.ahpp.notshoes.view
 
+import android.app.Activity
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -83,6 +87,12 @@ fun HomeController(modifier: Modifier = Modifier, navControllerInicio: NavContro
         if (idUsuarioLogado != "-1" && internetCheker) {
             scope.launch(Dispatchers.IO) {
                 clienteLogado = getCliente(idUsuarioLogado.toInt())
+                if(clienteLogado.idCliente == -1){
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(ctx, "Servidor em manutenção.", Toast.LENGTH_SHORT).show()
+                    }
+                    (ctx as? Activity)?.finish()
+                }
             }
         }
     }
