@@ -43,9 +43,9 @@ import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.produtoSelecionado
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import java.text.NumberFormat
 
 @Composable

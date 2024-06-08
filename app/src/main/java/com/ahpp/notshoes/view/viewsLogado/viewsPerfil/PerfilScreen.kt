@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,9 +36,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.view.clienteLogado
-import com.ahpp.notshoes.view.dataStore
-import com.ahpp.notshoes.view.usuarioLogadoPreferences
+import com.ahpp.notshoes.dataStore
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
+import com.ahpp.notshoes.view.viewsDeslogado.usuarioLogadoPreferences
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.SeusDadosScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSobre.SobreScreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.EnderecosScreen
@@ -46,6 +47,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavController) {
+
+    val ctx = LocalContext.current
 
     var clickedPedidos by remember { mutableStateOf(false) }
     var clickedSeusDados by remember { mutableStateOf(false) }
@@ -95,7 +98,7 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
                             enabled = true,
                             onClick = {
                                 scope.launch {
-                                    dataStore.edit { preferences ->
+                                    ctx.dataStore.edit { preferences ->
                                         preferences[usuarioLogadoPreferences] = "-1"
                                     }
                                     navControllerInicio.navigate("login") {

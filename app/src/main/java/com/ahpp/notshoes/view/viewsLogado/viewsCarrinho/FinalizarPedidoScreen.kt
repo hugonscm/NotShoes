@@ -62,9 +62,9 @@ import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.cards.CardEnderecoCarrinho
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.CadastrarEnderecoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

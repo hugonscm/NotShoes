@@ -49,8 +49,8 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.cliente.AtualizarSenhaCliente
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -94,6 +94,19 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
         painterResource(id = R.drawable.baseline_visibility_24)
     else
         painterResource(id = R.drawable.baseline_visibility_off_24)
+
+    val colorsTextFields = OutlinedTextFieldDefaults.colors(
+        unfocusedContainerColor = Color(0xFFEEF3F5),
+        focusedContainerColor = Color(0xFFEEF3F5),
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        unfocusedBorderColor = Color.Transparent,
+        focusedBorderColor = Color.DarkGray,
+        focusedLabelColor = Color(0xFF000000),
+        cursorColor = Color(0xFF029CCA),
+        errorContainerColor = Color(0xFFEEF3F5),
+        errorSupportingTextColor = Color(0xFFC00404)
+    )
 
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(
@@ -187,18 +200,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Black,
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                    errorContainerColor = Color(0xFFEEF3F5),
-                    errorSupportingTextColor = Color(0xFFC00404)
-                )
+                colors = colorsTextFields
             )
             OutlinedTextField(
                 value = senhaNova,
@@ -236,18 +238,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 10.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFEEF3F5),
-                    focusedContainerColor = Color(0xFFEEF3F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Black,
-                    focusedLabelColor = Color(0xFF000000),
-                    cursorColor = Color(0xFF029CCA),
-                    errorContainerColor = Color(0xFFEEF3F5),
-                    errorSupportingTextColor = Color(0xFFC00404)
-                )
+                colors = colorsTextFields
             )
 
             Spacer(Modifier.padding(top = 10.dp))
@@ -300,7 +291,11 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                             })
                         } else {
                             Handler(Looper.getMainLooper()).post {
-                                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    ctx,
+                                    "Sem conexão com a internet.",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                         }

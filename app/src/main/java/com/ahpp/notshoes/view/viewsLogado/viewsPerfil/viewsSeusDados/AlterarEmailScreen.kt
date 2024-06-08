@@ -43,8 +43,8 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.cliente.AtualizarEmailCliente
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -166,8 +166,8 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                     focusedContainerColor = Color(0xFFEEF3F5),
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color(0xFFEEF3F5),
+                    focusedBorderColor = Color.DarkGray,
                     focusedLabelColor = Color(0xFF000000),
                     cursorColor = Color(0xFF029CCA),
                     errorContainerColor = Color(0xFFEEF3F5),

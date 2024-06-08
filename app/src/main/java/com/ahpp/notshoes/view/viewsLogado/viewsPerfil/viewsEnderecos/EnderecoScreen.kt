@@ -45,9 +45,9 @@ import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.bd.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.cards.CardEndereco
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 
 lateinit var enderecoSelecionado: Endereco
 
@@ -97,9 +97,7 @@ fun EnderecosScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            Color.White
-                        ),
+                        .background(Color.White),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()

@@ -1,6 +1,6 @@
 package com.ahpp.notshoes.bd.cliente
 
-import com.ahpp.notshoes.view.clienteLogado
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

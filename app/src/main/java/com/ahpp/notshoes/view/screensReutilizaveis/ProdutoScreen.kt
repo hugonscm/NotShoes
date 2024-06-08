@@ -53,11 +53,11 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.funcoes.produto.adicionarProdutoCarrinho
 import com.ahpp.notshoes.view.produtoSelecionado
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import java.text.NumberFormat
 
 // essa tela esta vinculada aos produtos que estao em promoçao na tela de inicio

@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.view.viewsDeslogado
 
+import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -49,53 +50,75 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.LoginCliente
+import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.dataStore
+import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
+
+//variavel que mantem o objeto cliente logado
+lateinit var clienteLogado: Cliente
+val usuarioLogadoPreferences = stringPreferencesKey("user_id")
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
     var isLoading by remember { mutableStateOf(true) }
+    var internetCheker by remember { mutableStateOf(false) }
+    val ctx = LocalContext.current
 
-    // o datastore é usado para ver se ja tem usuario logado, se nao define idUsuario como -1
-    val context = LocalContext.current
-    val dataStore: DataStore<Preferences> = context.dataStore
-    val usuarioLogadoPreferences = stringPreferencesKey("user_id")
     val idUsuarioFlow = remember {
-        dataStore.data
+        ctx.dataStore.data
             .map { preferences ->
                 preferences[usuarioLogadoPreferences] ?: "-1"
             }
     }
+
     val idUsuario by idUsuarioFlow.collectAsState(initial = "-2")
 
-    // -2 é o valor inicial da variavel idUsuario, ou seja, ainda esta carregando o id do banco local
-    // retorna -1 caso nao tenha usuario logado, ou qualquer outro se ja estiver logado
-
+    val scope = rememberCoroutineScope()
     LaunchedEffect(idUsuario) {
         when (idUsuario) {
+            // nao tem usuario logado
             "-1" -> {
                 isLoading = false
             }
-
+            // esta carregando o id do banco local
             "-2" -> {
                 isLoading = true
             }
-
+            // ja tem usuario logado
             else -> {
-                navController.navigate("homeController") { launchSingleTop = true }
+                internetCheker = possuiConexao(ctx)
+                if (internetCheker) {
+                    scope.launch(Dispatchers.IO) {
+                        clienteLogado = getCliente(idUsuario.toInt())
+                        if (clienteLogado.idCliente == -1) {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(ctx, "Servidor em manutenção.", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            (ctx as? Activity)?.finish()
+                        }
+                        withContext(Dispatchers.Main) { // Switch back to main thread for UI update
+                            navController.navigate("homeController") { launchSingleTop = true }
+                        }
+                    }
+                } else {
+                    Toast.makeText(ctx, "Verifique sua conexão com internet", Toast.LENGTH_SHORT).show()
+                    (ctx as? Activity)?.finish()
+                }
             }
         }
     }
@@ -104,16 +127,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
-                            Color(0xFF86D0E2),
-                            Color(0xFFFFFFFF)
-                        )
-                    )
-                ),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
@@ -146,14 +160,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
         //gerenciar visibilidade da senha
         var passwordVisibility by remember { mutableStateOf(false) }
 
-        val ctx = LocalContext.current
-
         val icon = if (passwordVisibility)
             painterResource(id = R.drawable.baseline_visibility_24)
         else
             painterResource(id = R.drawable.baseline_visibility_off_24)
-
-        val scope = rememberCoroutineScope()
 
         Column(
             modifier
@@ -307,7 +317,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                         if (idUsuarioRecebido != "-1") {
                                             // salvar o id do usuário logado
                                             scope.launch {
-                                                dataStore.edit { preferences ->
+                                                ctx.dataStore.edit { preferences ->
                                                     preferences[usuarioLogadoPreferences] =
                                                         idUsuarioRecebido
                                                 }

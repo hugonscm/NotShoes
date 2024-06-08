@@ -54,9 +54,9 @@ import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.bd.endereco.EditarEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -133,8 +133,8 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
         focusedContainerColor = Color(0xFFEEF3F5),
         focusedTextColor = Color.Black,
         unfocusedTextColor = Color.Black,
-        unfocusedBorderColor = Color.Transparent,
-        focusedBorderColor = Color.Black,
+        unfocusedBorderColor = Color(0xFFEEF3F5),
+        focusedBorderColor = Color(0xFF029CCA),
         focusedLabelColor = Color(0xFF000000),
         cursorColor = Color(0xFF029CCA),
         errorContainerColor = Color(0xFFEEF3F5),

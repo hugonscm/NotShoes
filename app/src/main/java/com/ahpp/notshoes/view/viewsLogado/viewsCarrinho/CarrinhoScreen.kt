@@ -51,7 +51,6 @@ import com.ahpp.notshoes.bd.carrinho.getProdutoCarrinho
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.cards.CardItemCarrinho
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.carrinho.adicionarUnidade
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoComDesconto
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoTotal
@@ -59,6 +58,7 @@ import com.ahpp.notshoes.util.funcoes.carrinho.removerProduto
 import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.AlterarDadosPessoaisScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

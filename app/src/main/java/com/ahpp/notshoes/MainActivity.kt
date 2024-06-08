@@ -12,13 +12,13 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ahpp.notshoes.view.HomeController
+import com.ahpp.notshoes.view.BottomNavBar
 import com.ahpp.notshoes.view.viewsDeslogado.LoginScreen
 import com.ahpp.notshoes.view.viewsDeslogado.RegistroScreen
 
 //usado para salvar o id do usuario logado, precisa ser definido no level mais alto do projeto
-// foi usado la no LoginScreen.kt
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_id_logado")
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +33,9 @@ class MainActivity : ComponentActivity() {
                     RegistroScreen(modifier = Modifier, navController)
                 }
                 composable(route = "homeController") {
-                    HomeController(modifier = Modifier, navController)
+                    BottomNavBar(modifier = Modifier, navController)
                 }
             }
-
         }
     }
 }

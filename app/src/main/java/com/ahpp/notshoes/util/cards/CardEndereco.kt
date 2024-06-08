@@ -38,9 +38,9 @@ import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.cliente.getCliente
 import com.ahpp.notshoes.bd.endereco.RemoverEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
-import com.ahpp.notshoes.view.clienteLogado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException

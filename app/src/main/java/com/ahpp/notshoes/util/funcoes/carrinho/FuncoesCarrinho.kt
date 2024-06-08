@@ -8,7 +8,7 @@ import android.widget.Toast
 import com.ahpp.notshoes.bd.carrinho.CarrinhoRepository
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
-import com.ahpp.notshoes.view.clienteLogado
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import java.io.IOException
 
 
