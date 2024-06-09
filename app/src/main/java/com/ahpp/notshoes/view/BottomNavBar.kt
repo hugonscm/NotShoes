@@ -28,20 +28,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
-import com.ahpp.notshoes.view.viewsLogado.CategoriaScreen
-import com.ahpp.notshoes.view.viewsLogado.InicioScreen
+import com.ahpp.notshoes.view.viewsLogado.CategoriaScreenController
+import com.ahpp.notshoes.view.viewsLogado.InicioScreenController
 import com.ahpp.notshoes.view.viewsLogado.ListaDeDesejoscreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreen
 
-lateinit var textoBusca: String
-lateinit var categoriaSelecionada: String
-lateinit var filtroPrecoSelecionado: String
 lateinit var produtoSelecionado: Produto
 
 @Composable
-fun BottomNavBar(modifier: Modifier = Modifier, navControllerInicio: NavController) {
+fun BottomNavBar(navControllerLogin: NavController) {
 
-    val navController = rememberNavController()
+    val navBarController = rememberNavController()
     val items = listOf(
         BottomNavItem.Inicio,
         BottomNavItem.Categorias,
@@ -57,7 +54,7 @@ fun BottomNavBar(modifier: Modifier = Modifier, navControllerInicio: NavControll
                 containerColor = Color(0xFFD1E9F0),
                 tonalElevation = 3.dp,
             ) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val navBackStackEntry by navBarController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
                     NavigationBarItem(
@@ -71,8 +68,8 @@ fun BottomNavBar(modifier: Modifier = Modifier, navControllerInicio: NavControll
                         icon = { Icon(screen.icon, contentDescription = screen.label) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
+                            navBarController.navigate(screen.route) {
+                                popUpTo(navBarController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
                                 // // evitar abrir novamente a mesma tela ao reselecionar mesmo item
@@ -87,27 +84,27 @@ fun BottomNavBar(modifier: Modifier = Modifier, navControllerInicio: NavControll
         }
     ) { innerPadding ->
         NavHost(
-            navController,
+            navBarController,
             startDestination = BottomNavItem.Inicio.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Inicio.route) { InicioScreen(modifier, navController) }
-            composable(BottomNavItem.Categorias.route) { CategoriaScreen() }
+            composable(BottomNavItem.Inicio.route) { InicioScreenController(navBarController) }
+            composable(BottomNavItem.Categorias.route) { CategoriaScreenController() }
             composable(BottomNavItem.Carrinho.route) { CarrinhoScreen() }
             composable(BottomNavItem.ListaDesejos.route) { ListaDeDesejoscreen() }
-            composable(BottomNavItem.Perfil.route) { PerfilScreen(modifier, navControllerInicio) }
+            composable(BottomNavItem.Perfil.route) { PerfilScreen(navControllerLogin) }
         }
     }
 }
 
 sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
-    data object Inicio : BottomNavItem("inicio", Icons.Default.Home, "Inicio")
+    data object Inicio : BottomNavItem("inicioScreen", Icons.Default.Home, "Inicio")
     data object Categorias :
-        BottomNavItem("categorias", Icons.AutoMirrored.Filled.List, "Categorias")
+        BottomNavItem("categoriasScreen", Icons.AutoMirrored.Filled.List, "Categorias")
 
-    data object Carrinho : BottomNavItem("carrinho", Icons.Default.ShoppingCart, "Carrinho")
+    data object Carrinho : BottomNavItem("carrinhoScreen", Icons.Default.ShoppingCart, "Carrinho")
     data object ListaDesejos :
-        BottomNavItem("lista_desejos", Icons.Default.Favorite, "Lista de desejos")
+        BottomNavItem("listaDesejosScreen", Icons.Default.Favorite, "Lista de desejos")
 
-    data object Perfil : BottomNavItem("perfil", Icons.Default.Person, "Perfil")
+    data object Perfil : BottomNavItem("perfilScreen", Icons.Default.Person, "Perfil")
 }

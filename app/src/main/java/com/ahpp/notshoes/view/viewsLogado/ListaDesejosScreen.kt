@@ -51,20 +51,18 @@ fun ListaDeDesejoscreen() {
     val listState = rememberLazyListState()
 
     //clickedProduto é usado para monitorar a tela de produto selecionado
-    //ela se torna true quando um produto é clicado lá em CardResultados()
+    //ela se torna true quando um produto é clicado lá em CardListaDesejos()
     //e false quando clica em voltar na tela de produto selecionado
 
     var clickedProduto by remember { mutableStateOf(false) }
 
-    if (clickedProduto) {
-        ProdutoScreen(
-            onBackPressed = {
-                clickedProduto = false
-                internetCheker = possuiConexao(ctx)
-            },
-        )
-    } else if (!internetCheker) {
+    if (!internetCheker) {
         SemConexaoScreen(onBackPressed = {
+            internetCheker = possuiConexao(ctx)
+        })
+    } else if (clickedProduto) {
+        ProdutoScreen(onBackPressed = {
+            clickedProduto = false
             internetCheker = possuiConexao(ctx)
         })
     } else {

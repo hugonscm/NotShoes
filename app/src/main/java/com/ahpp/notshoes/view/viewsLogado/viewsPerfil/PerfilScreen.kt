@@ -46,7 +46,7 @@ import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsPedidos.PedidosScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavController) {
+fun PerfilScreen(navControllerLogin: NavController) {
 
     val ctx = LocalContext.current
 
@@ -66,7 +66,7 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
     } else if (clickedSobre) {
         SobreScreen(onBackPressed = { clickedSobre = false })
     } else {
-        Column(modifier = modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -101,8 +101,8 @@ fun PerfilScreen(modifier: Modifier = Modifier, navControllerInicio: NavControll
                                     ctx.dataStore.edit { preferences ->
                                         preferences[usuarioLogadoPreferences] = "-1"
                                     }
-                                    navControllerInicio.navigate("login") {
-                                        popUpTo(navControllerInicio.graph.findStartDestination().id) {
+                                    navControllerLogin.navigate("login") {
+                                        popUpTo(navControllerLogin.graph.findStartDestination().id) {
                                             saveState = false
                                         }
                                         // // evitar abrir novamente a mesma tela ao reselecionar mesmo item

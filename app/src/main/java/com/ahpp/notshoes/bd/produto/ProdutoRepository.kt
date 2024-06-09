@@ -262,9 +262,9 @@ class ProdutoRepository {
             try {
                 val response = client.newCall(request).execute()
                 val code = response.body?.string().toString()
-                Log.e("Codigo recebido: ", code)
+                Log.e("Codigo recebido (removerProdutoListaDesejos): ", code)
             } catch (e: IOException) {
-                Log.e("Erro", "Erro de rede.", e)
+                Log.e("Erro (removerProdutoListaDesejos)", "Erro de rede.", e)
             } finally {
                 executor.shutdown()
             }
@@ -291,9 +291,9 @@ class ProdutoRepository {
             try {
                 val response = client.newCall(request).execute()
                 val code = response.body?.string().toString()
-                Log.e("Codigo recebido: ", code)
+                Log.e("Codigo recebido (adicionarProdutoListaDesejos): ", code)
             } catch (e: IOException) {
-                Log.e("Erro", "Erro de rede.", e)
+                Log.e("Erro (adicionarProdutoListaDesejos)", "Erro de rede.", e)
             } finally {
                 executor.shutdown()
             }
@@ -326,7 +326,7 @@ class ProdutoRepository {
                 val resultado = response.body?.string().toString()
                 callback(resultado)
             } catch (e: IOException) {
-                Log.e("Erro", "Erro de rede.", e)
+                Log.e("Erro (verificarProdutoListaDesejos) ", "Erro de rede.", e)
             } finally {
                 executor.shutdown()
             }

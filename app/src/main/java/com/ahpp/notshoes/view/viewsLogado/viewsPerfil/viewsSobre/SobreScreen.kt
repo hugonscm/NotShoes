@@ -119,7 +119,7 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                     .fillMaxWidth()
                     .padding(top = 30.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(size = 10.dp),
-                gradient = Brush.linearGradient(listOf(Color.Yellow, Color.Cyan)),
+                gradient = Brush.linearGradient(listOf(Color.Yellow, Color.Magenta, Color.Cyan, Color.Blue)),
                 borderWidth = 7.dp
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -159,7 +159,7 @@ fun AnimatedBorderCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(size = 0.dp),
     borderWidth: Dp = 2.dp,
-    gradient: Brush = Brush.sweepGradient(listOf(Color.Gray, Color.White)),
+    gradient: Brush = Brush.sweepGradient(listOf(Color.Red, Color.White)),
     animationDuration: Int = 3000,
     content: @Composable () -> Unit
 ) {

@@ -330,6 +330,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             .height(55.dp)
                             .align(Alignment.CenterVertically),
                         contentPadding = PaddingValues(0.dp),
+                        enabled = produtoSelecionado.estoqueProduto > 0,
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E20A))
                     ) {
                         Image(
@@ -618,6 +619,7 @@ fun ProdutoScreen(
                             .width(95.dp)
                             .height(55.dp)
                             .align(Alignment.CenterVertically),
+                        enabled = produtoSelecionado.estoqueProduto > 0,
                         contentPadding = PaddingValues(0.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E20A))
                     ) {

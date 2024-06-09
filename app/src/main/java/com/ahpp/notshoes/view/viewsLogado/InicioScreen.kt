@@ -73,6 +73,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.bd.produto.ProdutoRepository
 import kotlinx.coroutines.delay
@@ -81,118 +86,120 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
-import com.ahpp.notshoes.view.categoriaSelecionada
-import com.ahpp.notshoes.view.filtroPrecoSelecionado
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.produtoSelecionado
-import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosBusca
+import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosScreen
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
-import com.ahpp.notshoes.view.textoBusca
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 
 @Composable
-fun InicioScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun InicioScreenController(navBarController: NavHostController) {
+    val navControllerInicio = rememberNavController()
+    NavHost(navController = navControllerInicio, startDestination = "inicioScreen") {
+
+        composable(route = "inicioScreen") {
+            InicioScreen(navControllerInicio, navBarController)
+        }
+
+        composable(route = "resultadosScreen/{valorBusca}/{tipoBusca}/{fromScreen}",
+            arguments = listOf(
+                navArgument("valorBusca") { type = NavType.StringType },
+                navArgument("tipoBusca") { type = NavType.StringType },
+                navArgument("fromScreen") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val valorBusca = backStackEntry.arguments?.getString("valorBusca")
+            val tipoBusca = backStackEntry.arguments?.getString("tipoBusca")
+            val fromScreen = backStackEntry.arguments?.getString("fromScreen")
+            ResultadosScreen(
+                navControllerInicio,
+                valorBusca.toString(),
+                tipoBusca.toString(),
+                fromScreen.toString()
+            )
+        }
+    }
+}
+
+@Composable
+fun InicioScreen(navControllerInicio: NavHostController, navBarController: NavHostController) {
 
     var internetCheker by remember { mutableStateOf(false) }
+
+    // monitorar click em produtos
+    var clickedProduto by remember { mutableStateOf(false) }
 
     // manter a posicao do scroll ao voltar pra tela
     val scrollState = rememberScrollState()
 
-    var clickedPesquisa by remember { mutableStateOf(false) }
-    var clickedBanner by remember { mutableStateOf(false) }
-    var clickedCategoria by remember { mutableStateOf(false) }
-    var clickedProduto by remember { mutableStateOf(false) }
+    val ctx = LocalContext.current
 
-    if (clickedPesquisa) {
-        //esse onBackPressed() é chamado la no ResultadosBuscaNome() para voltar para a tela
-        // anterior ele altera o valor de clicked para false, assim caindo no else aqui em baixo
-        // e voltando pra tela inicio
-        ResultadosBusca(
-            onBackPressed = { clickedPesquisa = false },
-            textoBusca,
-            "nome"
-        )
-    } else if (clickedBanner) {
-        ResultadosBusca(
-            onBackPressed = { clickedBanner = false },
-            filtroPrecoSelecionado,
-            "preco"
-        )
-    } else if (clickedCategoria) {
-        ResultadosBusca(
-            onBackPressed = { clickedCategoria = false },
-            categoriaSelecionada,
-            "categoria"
-        )
+    internetCheker = possuiConexao(ctx)
+
+    //funcionalidade "toque novamente pra sair"
+    //dessa forma só atinte a tela inicio
+    var backPressedOnce = false
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current
+    val backCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Fecha o aplicativo ao clicar em voltar em menos de 2s
+                if (backPressedOnce) {
+                    (ctx as? Activity)?.finish()
+                } else {
+                    backPressedOnce = true
+                    Toast.makeText(
+                        ctx,
+                        "Toque em voltar mais uma vez para sair.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        { backPressedOnce = false },
+                        2000
+                    )
+                }
+            }
+        }
+    }
+
+    // callback para interceptar o evento de voltar
+    DisposableEffect(onBackPressedDispatcher) {
+        onBackPressedDispatcher?.onBackPressedDispatcher?.addCallback(backCallback)
+        onDispose {
+            backCallback.remove()
+        }
+    }
+
+    if (!internetCheker) {
+        SemConexaoScreen(onBackPressed = {
+            internetCheker = possuiConexao(ctx)
+        })
     } else if (clickedProduto) {
         ProdutoScreen(
             onBackPressed = { clickedProduto = false },
         )
     } else {
-
-        val ctx = LocalContext.current
-
-        internetCheker = possuiConexao(ctx)
-
-        //funcionalidade "toque novamente pra sair"
-        //dessa forma só atinte a tela inicio
-        var backPressedOnce = false
-        val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current
-        val backCallback = remember {
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    // Fecha o aplicativo ao clicar em voltar em menos de 2s
-                    if (backPressedOnce) {
-                        (ctx as? Activity)?.finish()
-                    } else {
-                        backPressedOnce = true
-                        Toast.makeText(
-                            ctx,
-                            "Toque em voltar mais uma vez para sair.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Handler(Looper.getMainLooper()).postDelayed(
-                            { backPressedOnce = false },
-                            2000
-                        )
-                    }
-                }
-            }
-        }
-        // callback para interceptar o evento de voltar
-        DisposableEffect(onBackPressedDispatcher) {
-            onBackPressedDispatcher?.onBackPressedDispatcher?.addCallback(backCallback)
-            onDispose {
-                backCallback.remove()
-            }
-        }
-
-        if (!internetCheker) {
-            SemConexaoScreen(onBackPressed = {
-                internetCheker = possuiConexao(ctx)
-            })
-        } else {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ) {
-                SearchBar(onSearchClicked = { clickedPesquisa = true })
-                PagerDescontos(onBannerClicked = { clickedPesquisa = true })
-                PagerFiltroValores(onBannerClicked = { clickedBanner = true })
-                FiltrosTelaInicial(navController, onIconClicked = { clickedCategoria = true })
-                Promocoes(onPromocaoClicked = { clickedProduto = true })
-                NavegarPorMarcas(onMarcaClicked = { clickedCategoria = true })
-            }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+            SearchBar(navControllerInicio)
+            PagerDescontos(navControllerInicio)
+            PagerFiltroValores(navControllerInicio)
+            FiltrosTelaInicial(navControllerInicio, navBarController)
+            Promocoes(onPromocaoClicked = { clickedProduto = true })
+            NavegarPorMarcas(navControllerInicio)
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(onSearchClicked: () -> Unit) {
+fun SearchBar(navControllerInicio: NavHostController) {
 
     var text by remember { mutableStateOf("") }
 
@@ -205,8 +212,9 @@ fun SearchBar(onSearchClicked: () -> Unit) {
         onQueryChange = { text = it },
         onSearch = {
             if (text.isNotEmpty()) {
-                textoBusca = text
-                onSearchClicked()
+                navControllerInicio.navigate("resultadosScreen/$text/nome/inicioScreen") {
+                    launchSingleTop = true
+                }
             }
         },
         active = false,
@@ -216,8 +224,9 @@ fun SearchBar(onSearchClicked: () -> Unit) {
             IconButton(
                 onClick = {
                     if (text.isNotEmpty()) {
-                        textoBusca = text
-                        onSearchClicked()
+                        navControllerInicio.navigate("resultadosScreen/$text/nome/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     }
                 },
                 enabled = true
@@ -235,7 +244,7 @@ fun SearchBar(onSearchClicked: () -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PagerDescontos(onBannerClicked: () -> Unit) {
+fun PagerDescontos(navControllerInicio: NavHostController) {
     val images = listOf(
         painterResource(R.drawable.img_banner_nike_day),
         painterResource(R.drawable.img_banner_adidas),
@@ -276,8 +285,9 @@ fun PagerDescontos(onBannerClicked: () -> Unit) {
                 Card(
                     modifier = Modifier
                         .clickable(enabled = true, onClick = {
-                            textoBusca = itensList[currentPage]
-                            onBannerClicked()
+                            navControllerInicio.navigate("resultadosScreen/${itensList[currentPage]}/nome/inicioScreen") {
+                                launchSingleTop = true
+                            }
                         }),
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -331,7 +341,8 @@ fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PagerFiltroValores(onBannerClicked: () -> Unit) {
+fun PagerFiltroValores(navControllerInicio: NavHostController) {
+
     val images = listOf(
         painterResource(R.drawable.img_valor_ate_199),
         painterResource(R.drawable.img_valor_200_ate_399),
@@ -370,8 +381,9 @@ fun PagerFiltroValores(onBannerClicked: () -> Unit) {
                         .clickable(
                             enabled = true,
                             onClick = {
-                                filtroPrecoSelecionado =
-                                    filtrosPrecoList[currentPage]; onBannerClicked()
+                                navControllerInicio.navigate("resultadosScreen/${filtrosPrecoList[currentPage]}/preco/inicioScreen") {
+                                    launchSingleTop = true
+                                }
                             }),
                     elevation = CardDefaults.cardElevation(8.dp),
                     shape = RoundedCornerShape(8.dp)
@@ -390,7 +402,7 @@ fun PagerFiltroValores(onBannerClicked: () -> Unit) {
 }
 
 @Composable
-fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Unit) {
+fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -401,8 +413,9 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             Button(
                 modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    categoriaSelecionada = "Camisa Básica"
-                    onIconClicked()
+                    navControllerInicio.navigate("resultadosScreen/Camisa Básica/categoria/inicioScreen") {
+                        launchSingleTop = true
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -425,8 +438,9 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             Button(
                 modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    categoriaSelecionada = "Regata"
-                    onIconClicked()
+                    navControllerInicio.navigate("resultadosScreen/Regata/categoria/inicioScreen") {
+                        launchSingleTop = true
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -449,8 +463,9 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             Button(
                 modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    categoriaSelecionada = "Calça"
-                    onIconClicked()
+                    navControllerInicio.navigate("resultadosScreen/Calça/categoria/inicioScreen") {
+                        launchSingleTop = true
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
@@ -475,8 +490,9 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             Button(
                 modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    categoriaSelecionada = "Tênis"
-                    onIconClicked()
+                    navControllerInicio.navigate("resultadosScreen/Tênis/categoria/inicioScreen") {
+                        launchSingleTop = true
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -499,8 +515,8 @@ fun FiltrosTelaInicial(navController: NavHostController, onIconClicked: () -> Un
             Button(
                 modifier = Modifier.size(60.dp), contentPadding = PaddingValues(0.dp),
                 onClick = {
-                    navController.navigate("categorias") {
-                        popUpTo(navController.graph.findStartDestination().id) {
+                    navBarController.navigate("categoriasScreen") {
+                        popUpTo(navControllerInicio.graph.findStartDestination().id) {
                             saveState = true
                         }
                         // // evitar abrir novamente a mesma tela ao reselecionar mesmo item
@@ -693,7 +709,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                         overflow = TextOverflow.Ellipsis
                                     )
                                 }
-                                Spacer(Modifier.height(5.dp))
+                                Spacer(Modifier.height(3.dp))
                                 Text(
                                     text = numberFormat.format(produtoEmPromocao.preco.toDouble()),
                                     textDecoration = TextDecoration.LineThrough,
@@ -709,7 +725,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                     fontSize = 16.sp,
                                     color = Color.Black
                                 )
-                                Spacer(Modifier.height(5.dp))
+                                Spacer(Modifier.height(3.dp))
                                 if (produtoEmPromocao.estoqueProduto > 0) {
                                     Text(
                                         text = "Restam ${produtoEmPromocao.estoqueProduto} unidades!",
@@ -732,7 +748,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
 }
 
 @Composable
-fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
+fun NavegarPorMarcas(navControllerInicio: NavHostController) {
 
     //valores para usar na altura, largura e padding horizontal das imagens que estao na Row
     val dpHeightItens = 70.dp
@@ -762,8 +778,9 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
                     .height(dpHeightItens)
                     .padding(horizontal = dpPaddingHorizontalItens)
                     .clickable(enabled = true, onClick = {
-                        categoriaSelecionada = "Adidas"
-                        onMarcaClicked()
+                        navControllerInicio.navigate("resultadosScreen/Adidas/categoria/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     })
             )
             Image(
@@ -774,8 +791,9 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
                     .height(dpHeightItens)
                     .padding(horizontal = dpPaddingHorizontalItens)
                     .clickable(enabled = true, onClick = {
-                        categoriaSelecionada = "Fila"
-                        onMarcaClicked()
+                        navControllerInicio.navigate("resultadosScreen/Fila/categoria/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     })
             )
             Image(
@@ -786,8 +804,9 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
                     .height(dpHeightItens)
                     .padding(horizontal = dpPaddingHorizontalItens)
                     .clickable(enabled = true, onClick = {
-                        categoriaSelecionada = "Mizuno"
-                        onMarcaClicked()
+                        navControllerInicio.navigate("resultadosScreen/Mizuno/categoria/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     })
             )
             Image(
@@ -798,8 +817,9 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
                     .height(dpHeightItens)
                     .padding(horizontal = dpPaddingHorizontalItens)
                     .clickable(enabled = true, onClick = {
-                        categoriaSelecionada = "Nike"
-                        onMarcaClicked()
+                        navControllerInicio.navigate("resultadosScreen/Nike/categoria/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     })
             )
             Image(
@@ -810,8 +830,9 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
                     .height(dpHeightItens)
                     .padding(horizontal = dpPaddingHorizontalItens)
                     .clickable(enabled = true, onClick = {
-                        categoriaSelecionada = "Olympikus"
-                        onMarcaClicked()
+                        navControllerInicio.navigate("resultadosScreen/Olympikus/categoria/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     })
             )
             Image(
@@ -822,8 +843,9 @@ fun NavegarPorMarcas(onMarcaClicked: () -> Unit) {
                     .height(dpHeightItens)
                     .padding(horizontal = dpPaddingHorizontalItens)
                     .clickable(enabled = true, onClick = {
-                        categoriaSelecionada = "Puma"
-                        onMarcaClicked()
+                        navControllerInicio.navigate("resultadosScreen/Puma/categoria/inicioScreen") {
+                            launchSingleTop = true
+                        }
                     })
             )
         }
