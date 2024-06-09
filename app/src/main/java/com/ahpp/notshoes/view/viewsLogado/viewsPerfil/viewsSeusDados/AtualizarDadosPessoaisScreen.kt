@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -37,14 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.cliente.AtualizarDadosPessoaisCliente
-import com.ahpp.notshoes.bd.cliente.getCliente
+import com.ahpp.notshoes.data.cliente.AtualizarDadosPessoaisCliente
+import com.ahpp.notshoes.data.cliente.getCliente
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.funcoes.possuiConexao
@@ -56,7 +57,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
-fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
+fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
@@ -105,7 +106,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -114,7 +115,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -125,12 +126,10 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             }
 
             Text(
-                modifier = Modifier.padding(top = 10.dp, start = 10.dp),
-                text = "Alterar dados pessoais",
+                modifier = Modifier.padding(start = 10.dp),
+                text = "Atualizar dados pessoais",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
                 color = Color.White
             )
         }
@@ -156,7 +155,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                         Text(text = "Digite um nome válido.")
                     }
                 },
-                placeholder = { Text(text = "Seu Nome", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Seu Nome", color = corPlaceholder) },
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -183,7 +182,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                         Text(text = "Digite um CPF válido.")
                     }
                 },
-                placeholder = { Text(text = "Digite seu CPF", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Digite seu CPF", color = corPlaceholder) },
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -214,7 +213,7 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 placeholder = {
                     Text(
                         text = "Digite seu telefone de contato",
-                        color = Color(0xFF4A5255)
+                        color = corPlaceholder
                     )
                 },
                 modifier = Modifier
@@ -311,15 +310,13 @@ fun AlterarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                     modifier = Modifier
                         .width(230.dp)
                         .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA))
+                    colors = ButtonDefaults.buttonColors(containerColor = azulEscuro)
                 ) {
                     Text(
-                        text = "Alterar",
+                        text = "ATUALIZAR",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        style = TextStyle(
-                            Color.White
-                        )
+                        color = Color.White
                     )
                 }
             }

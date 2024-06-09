@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -37,13 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.endereco.getEnderecos
+import com.ahpp.notshoes.data.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
+import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardEndereco
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
@@ -120,7 +120,7 @@ fun EnderecosScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(60.dp)
-                            .background(Color(0xFF029CCA))
+                            .background(azulEscuro)
                             .padding(start = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -129,7 +129,7 @@ fun EnderecosScreen(
                                 .size(45.dp),
                             contentPadding = PaddingValues(0.dp),
                             onClick = { onBackPressed() },
-                            colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                            colors = ButtonDefaults.buttonColors(Color.White),
                             elevation = ButtonDefaults.buttonElevation(10.dp)
                         ) {
                             Image(
@@ -140,12 +140,10 @@ fun EnderecosScreen(
                         }
 
                         Text(
-                            modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                            modifier = Modifier.padding(start = 10.dp),
                             text = "Seus endereços",
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
                             color = Color.White
                         )
                     }
@@ -192,7 +190,7 @@ fun EnderecosScreen(
                                     modifier = Modifier
                                         .padding(bottom = 10.dp)
                                         .align(Alignment.BottomEnd),
-                                    containerColor = Color(0xFF029CCA),
+                                    containerColor = azulEscuro,
                                     contentColor = Color.White
                                 ) {
                                     Icon(Icons.Filled.Add, "Adicionar endereço")
@@ -208,9 +206,7 @@ fun EnderecosScreen(
                                 Text(
                                     text = "Nenhum endereço cadastrado.",
                                     fontSize = 25.sp,
-                                    style = TextStyle(
-                                        Color(0xFF029CCA)
-                                    )
+                                    color = azulEscuro
                                 )
 
                                 Spacer(modifier = Modifier.height(30.dp))
@@ -223,17 +219,14 @@ fun EnderecosScreen(
                                         .width(230.dp)
                                         .height(50.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color(
-                                            0xFF029CCA
-                                        )
-                                    )
+                                        containerColor = azulEscuro
+                                    ),
+                                    shape = RoundedCornerShape(5.dp),
                                 ) {
                                     Text(
                                         text = "ADICIONAR ENDEREÇO",
                                         fontSize = 15.sp,
-                                        style = TextStyle(
-                                            Color.White
-                                        )
+                                        color = Color.White
                                     )
                                 }
                             }

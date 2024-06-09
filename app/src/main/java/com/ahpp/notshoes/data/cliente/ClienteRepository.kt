@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.bd.cliente
+package com.ahpp.notshoes.data.cliente
 
 import com.ahpp.notshoes.model.Cliente
 import com.google.gson.Gson

@@ -79,12 +79,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.data.produto.ProdutoRepository
 import kotlinx.coroutines.delay
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.backgroundBarraPesquisa
+import com.ahpp.notshoes.ui.theme.branco
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.produtoSelecionado
@@ -207,7 +210,7 @@ fun SearchBar(navControllerInicio: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
-        colors = SearchBarDefaults.colors(Color(0xFFD6D9DA)),
+        colors = SearchBarDefaults.colors(backgroundBarraPesquisa),
         query = text,
         onQueryChange = { text = it },
         onSearch = {
@@ -335,7 +338,7 @@ fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
             .padding(2.dp)
             .size(size.value)
             .clip(CircleShape)
-            .background(if (isSelected) Color(0xff373737) else Color(0xA8373737))
+            .background(if (isSelected) Color.Black else Color.Gray)
     )
 }
 
@@ -417,7 +420,7 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
                         launchSingleTop = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -442,7 +445,7 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
                         launchSingleTop = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -494,7 +497,7 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
                         launchSingleTop = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -525,7 +528,7 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
                         restoreState = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -568,7 +571,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                 .fillMaxWidth()
                 .padding(top = 15.dp, bottom = 10.dp)
                 .height(50.dp)
-                .background(Color(0xFF59D35E))
+                .background(verde)
         ) {
             Row(
                 modifier = Modifier
@@ -578,7 +581,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
             ) {
                 Image(
                     modifier = Modifier
-                        .padding(end = 10.dp)
+                        .padding(end = 5.dp)
                         .size(35.dp),
                     painter = painterResource(id = R.drawable.baseline_access_alarm_24),
                     contentDescription = null,

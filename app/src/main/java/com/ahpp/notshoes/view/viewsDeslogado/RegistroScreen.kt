@@ -52,7 +52,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.RegistroCliente
+import com.ahpp.notshoes.data.RegistroCliente
+import com.ahpp.notshoes.ui.theme.azulClaro
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import java.io.IOException
@@ -97,10 +100,10 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         focusedTextColor = Color.Black,
         unfocusedTextColor = Color.Black,
         unfocusedBorderColor = Color(0xFFEEF3F5),
-        focusedBorderColor = Color(0xFF029CCA),
+        focusedBorderColor = azulEscuro,
         focusedLabelColor = Color.Black,
         errorContainerColor = Color(0xFFEEF3F5),
-        cursorColor = Color(0xFF029CCA),
+        cursorColor = azulEscuro,
     )
 
     val shapeArredondado = RoundedCornerShape(10.dp)
@@ -113,13 +116,13 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             .background(
                 Brush.verticalGradient(
                     listOf(
-                        Color(0xFFFFFFFF),
-                        Color(0xFFFFFFFF),
-                        Color(0xFFFFFFFF),
-                        Color(0xFFFFFFFF),
-                        Color(0xFFFFFFFF),
-                        Color(0xFF86D0E2),
-                        Color(0xFF029CCA)
+                        Color.White,
+                        Color.White,
+                        Color.White,
+                        Color.White,
+                        Color.White,
+                        azulClaro,
+                        azulEscuro
                     )
                 )
             )
@@ -136,7 +139,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 text = "Crie sua conta e aproveite nossas ofertas!",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF029CCA)
+                color = azulEscuro
             )
         }
 
@@ -154,7 +157,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     Text(text = "Digite um nome válido.")
                 }
             },
-            placeholder = { Text(text = "Nome Completo", color = Color(0xFF4A5255)) },
+            placeholder = { Text(text = "Nome Completo", color = corPlaceholder) },
             leadingIcon = {
                 Icon(Icons.Filled.Person, contentDescription = "Icone pessoa", tint = Color.Black)
             },
@@ -183,7 +186,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     Text(text = "E-mail já cadastrado.")
                 }
             },
-            placeholder = { Text(text = "E-mail", color = Color(0xFF4A5255)) },
+            placeholder = { Text(text = "E-mail", color = corPlaceholder) },
             leadingIcon = {
                 Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
             },
@@ -209,7 +212,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 }
                 senhaValida = ValidarCamposDados.validarSenha(senha)
             },
-            placeholder = { Text(text = "Senha", color = Color(0xFF4A5255)) },
+            placeholder = { Text(text = "Senha", color = corPlaceholder) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             leadingIcon = {
                 Icon(Icons.Filled.Lock, contentDescription = "Icone senha", tint = Color.Black)
@@ -245,7 +248,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             Checkbox(
                 checked = checkedTermos,
                 onCheckedChange = { checkedTermos = it },
-                colors = CheckboxDefaults.colors(Color(0xFF029CCA))
+                colors = CheckboxDefaults.colors(azulEscuro)
             )
             Row {
                 Text(
@@ -261,7 +264,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
-                    color = Color(0xFF029CCA)
+                    color = azulEscuro
                 )
             }
         }
@@ -329,7 +332,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA)),
+                colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
                 shape = shapeArredondado,
                 elevation = elevationButton
             ) {
@@ -365,8 +368,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyLarge,
-                color =
-                Color(0xFF029CCA)
+                color = azulEscuro
             )
         }
 

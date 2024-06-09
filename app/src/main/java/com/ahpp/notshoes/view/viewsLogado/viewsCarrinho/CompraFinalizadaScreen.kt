@@ -30,6 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.branco
+import com.ahpp.notshoes.ui.theme.verde
 
 @Composable
 fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
@@ -38,9 +41,9 @@ fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
         onBackPressed()
     }
 
-    val color = remember { Animatable(Color(0xFF59D35E)) }
+    val color = remember { Animatable(verde) }
     LaunchedEffect(Unit) {
-        color.animateTo(Color(0xFF38C4E6), animationSpec = tween(1500))
+        color.animateTo(azulEscuro, animationSpec = tween(1500))
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -54,7 +57,7 @@ fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(color.value)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -63,7 +66,7 @@ fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -89,7 +92,7 @@ fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
                 text = "Obrigado por comprar conosco :)", fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(
-                    Color(0xFFFFFFFF)
+                    Color.White
                 )
             )
             Spacer(Modifier.padding(top = 20.dp))
@@ -100,7 +103,7 @@ fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(
-                    Color(0xFFFFFFFF)
+                    Color.White
                 )
             )
         }

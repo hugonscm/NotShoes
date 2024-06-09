@@ -55,8 +55,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.data.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.util.cards.CardResultados
 import com.ahpp.notshoes.util.filtros.filtrarProdutos
 import com.ahpp.notshoes.util.funcoes.possuiConexao
@@ -261,7 +263,7 @@ fun ResultadosScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF029CCA)),
+                        .background(azulEscuro),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Button(
@@ -284,7 +286,7 @@ fun ResultadosScreen(
                                 }
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                        colors = ButtonDefaults.buttonColors(branco),
                         elevation = ButtonDefaults.buttonElevation(10.dp)
                     ) {
                         Image(
@@ -296,7 +298,6 @@ fun ResultadosScreen(
 
                     Text(
                         modifier = Modifier
-                            .padding(top = 10.dp)
                             .width(220.dp),
                         text = valorBusca.toString(),
                         fontWeight = FontWeight.Bold,
@@ -323,7 +324,7 @@ fun ResultadosScreen(
                                     tipoOrdenacao = tipoOrdenacaoList[0]
                                     buscarProduto()
                                 },
-                                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                                colors = ButtonDefaults.buttonColors(branco),
                                 elevation = ButtonDefaults.buttonElevation(10.dp)
                             ) {
                                 Image(
@@ -354,10 +355,22 @@ fun ResultadosScreen(
                     }
                 }
                 if (expandedFiltro) {
+
+                    val colorsTextField = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = Color(0xFFEEF3F5),
+                        focusedContainerColor = Color(0xFFEEF3F5),
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        unfocusedBorderColor = Color(0xFFEEF3F5),
+                        focusedBorderColor = Color(0xFFEEF3F5),
+                        focusedLabelColor = Color(0xFF000000),
+                        cursorColor = azulEscuro
+                    )
+
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFF029CCA))
+                            .background(azulEscuro)
                     ) {
                         Row {
                             ExposedDropdownMenuBox(
@@ -379,16 +392,7 @@ fun ResultadosScreen(
                                             expanded = expandedPrecosList
                                         )
                                     },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
-                                    )
+                                    colors = colorsTextField
                                 )
                                 ExposedDropdownMenu(
                                     expanded = expandedPrecosList,
@@ -432,16 +436,7 @@ fun ResultadosScreen(
                                             expanded = expandedTamanhosList
                                         )
                                     },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
-                                    )
+                                    colors = colorsTextField
                                 )
                                 ExposedDropdownMenu(
                                     expanded = expandedTamanhosList,
@@ -489,16 +484,7 @@ fun ResultadosScreen(
                                             expanded = expandedCoresList
                                         )
                                     },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
-                                    )
+                                    colors = colorsTextField
                                 )
                                 ExposedDropdownMenu(
                                     expanded = expandedCoresList,
@@ -542,16 +528,7 @@ fun ResultadosScreen(
                                             expanded = expandedtipoOrdenacao
                                         )
                                     },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        unfocusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedContainerColor = Color(0xFFEEF3F5),
-                                        focusedTextColor = Color.Black,
-                                        unfocusedTextColor = Color.Black,
-                                        unfocusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedBorderColor = Color(0xFFEEF3F5),
-                                        focusedLabelColor = Color(0xFF000000),
-                                        cursorColor = Color(0xFF029CCA),
-                                    )
+                                    colors = colorsTextField
                                 )
                                 ExposedDropdownMenu(
                                     expanded = expandedtipoOrdenacao,

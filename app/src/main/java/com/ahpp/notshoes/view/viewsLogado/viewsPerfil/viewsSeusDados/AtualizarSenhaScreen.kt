@@ -38,7 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -46,8 +46,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.cliente.AtualizarSenhaCliente
-import com.ahpp.notshoes.bd.cliente.getCliente
+import com.ahpp.notshoes.data.cliente.AtualizarSenhaCliente
+import com.ahpp.notshoes.data.cliente.getCliente
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
@@ -119,7 +121,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -128,7 +130,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -141,7 +143,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF029CCA)),
+                .background(azulEscuro),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.padding(top = 70.dp))
@@ -151,11 +153,10 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier.size(100.dp)
             )
             Text(
-                text = "Alterar senha", fontSize = 28.sp, maxLines = 1,
+                text = stringResource(id = R.string.atualizar_senha),
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    Color(0xFFFFFFFF)
-                )
+                color = Color.White
             )
             OutlinedTextField(
                 value = senhaAtual,
@@ -182,7 +183,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                         )
                     }
                 },
-                placeholder = { Text(text = "Senha atual", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Senha atual", color = corPlaceholder) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
                     IconButton(onClick = {
@@ -220,7 +221,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                         )
                     }
                 },
-                placeholder = { Text(text = "Nova senha", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Nova senha", color = corPlaceholder) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
                     IconButton(onClick = {
@@ -307,12 +308,9 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
-                    text = "ALTERAR SENHA",
+                    text = stringResource(id = R.string.botao_atualizar),
                     fontSize = 15.sp,
-                    //fontWeight = FontWeight.Bold,
-                    style = TextStyle(
-                        Color(0xFF046380)
-                    )
+                    color = azulEscuro
                 )
             }
             Spacer(Modifier.padding(top = 10.dp))
@@ -320,10 +318,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier.clickable(true, onClick = onBackPressed),
                 text = "CANCELAR",
                 fontSize = 15.sp,
-                //fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    Color.White
-                )
+                color = Color.White
             )
         }
     }

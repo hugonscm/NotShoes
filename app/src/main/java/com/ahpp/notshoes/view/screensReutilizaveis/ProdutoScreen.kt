@@ -52,7 +52,10 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.data.produto.ProdutoRepository
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.branco
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.funcoes.produto.adicionarProdutoCarrinho
@@ -114,7 +117,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA)),
+                .background(azulEscuro),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -124,7 +127,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -152,7 +155,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                         }
                     }
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -220,7 +223,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             .fillMaxWidth()
                             .padding(top = 10.dp)
                             .height(50.dp)
-                            .background(Color(0xFF59D35E))
+                            .background(verde)
                     ) {
                         Row(
                             modifier = Modifier
@@ -272,7 +275,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                                 String.format("%.0f", percentualDesconto)
                             Text(
                                 text = "-$percentualDescontoFormated%",
-                                style = TextStyle(Color(0xFF00E20A)),
+                                style = TextStyle(verde),
                                 fontSize = 15.sp
                             )
                         }
@@ -331,7 +334,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                             .align(Alignment.CenterVertically),
                         contentPadding = PaddingValues(0.dp),
                         enabled = produtoSelecionado.estoqueProduto > 0,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E20A))
+                        colors = ButtonDefaults.buttonColors(containerColor = verde)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_shopping_cart_24),
@@ -408,7 +411,7 @@ fun ProdutoScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF029CCA)),
+                .background(azulEscuro),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -418,7 +421,7 @@ fun ProdutoScreen(
                     .padding(top = 10.dp, start = 10.dp, bottom = 10.dp, end = 10.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -442,7 +445,7 @@ fun ProdutoScreen(
                         }
                     }
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -510,7 +513,7 @@ fun ProdutoScreen(
                             .fillMaxWidth()
                             .padding(top = 10.dp)
                             .height(50.dp)
-                            .background(Color(0xFF59D35E))
+                            .background(verde)
                     ) {
                         Row(
                             modifier = Modifier
@@ -562,7 +565,7 @@ fun ProdutoScreen(
                                 String.format("%.0f", percentualDesconto)
                             Text(
                                 text = "-$percentualDescontoFormated%",
-                                style = TextStyle(Color(0xFF00E20A)),
+                                style = TextStyle(verde),
                                 fontSize = 15.sp
                             )
                         }
@@ -621,7 +624,7 @@ fun ProdutoScreen(
                             .align(Alignment.CenterVertically),
                         enabled = produtoSelecionado.estoqueProduto > 0,
                         contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E20A))
+                        colors = ButtonDefaults.buttonColors(containerColor = verde)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_shopping_cart_24),

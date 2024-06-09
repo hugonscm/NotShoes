@@ -41,7 +41,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.data.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.produtoSelecionado
@@ -74,14 +74,14 @@ fun CardListaDesejos(
         shape = RoundedCornerShape(5.dp),
         colors = CardColors(containerColor = Color.White, Color.Black, Color.Black, Color.Black),
         modifier = Modifier
-            .padding(vertical = 6.dp)
+            .padding(vertical = 5.dp)
             .fillMaxWidth()
             .height(120.dp)
             .clickable(enabled = true, onClick = {
                 produtoSelecionado = produto
                 onClickProduto()
             }),
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
     ) {
         Row(
             Modifier.fillMaxSize(),

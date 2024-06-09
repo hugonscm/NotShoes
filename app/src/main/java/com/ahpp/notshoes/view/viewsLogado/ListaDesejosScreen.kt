@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -26,12 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.produto.ProdutoRepository
+import com.ahpp.notshoes.data.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardListaDesejos
 import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
 import com.ahpp.notshoes.util.funcoes.possuiConexao
@@ -92,19 +91,16 @@ fun ListaDeDesejoscreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .background(Color(0xFF029CCA))
-                    .padding(start = 10.dp),
+                    .background(azulEscuro),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     modifier = Modifier
-                        .width(270.dp),
-                    text = "Lista de desejos", fontSize = 20.sp, maxLines = 1,
+                        .padding(start = 10.dp),
+                    text = "Lista de desejos", fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    style = TextStyle(
-                        Color(0xFFFFFFFF)
-                    )
+                    color = Color.White
                 )
             }
             Box(
@@ -135,7 +131,7 @@ fun ListaDeDesejoscreen() {
                         Text(
                             text = "Sua lista de desejos está vazia.",
                             fontSize = 25.sp,
-                            color = Color(0xFF029CCA)
+                            color = azulEscuro
                         )
                     }
                 }

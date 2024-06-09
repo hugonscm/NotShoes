@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,6 +43,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.produtoSelecionado
 import java.text.NumberFormat
@@ -71,17 +73,17 @@ fun CardResultados(
     val state = painter.state
 
     Card(
-        shape = RoundedCornerShape(5.dp),
+        shape = RoundedCornerShape(6.dp),
         colors = CardColors(containerColor = Color.White, Color.Black, Color.Black, Color.Black),
         modifier = Modifier
-            .padding(vertical = 6.dp)
+            .padding(vertical = 5.dp)
             .fillMaxWidth()
             .height(120.dp)
             .clickable(enabled = true, onClick = {
                 produtoSelecionado = produto
                 onClickProduto()
             }),
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
     ) {
         Row(
             Modifier.fillMaxSize(),
@@ -130,7 +132,8 @@ fun CardResultados(
                     text = produto.nomeProduto,
                     fontSize = 15.sp,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
                 )
                 Text(
                     modifier = Modifier.padding(top = 5.dp),
@@ -142,17 +145,29 @@ fun CardResultados(
                 val valorComDesconto =
                     produto.preco.toDouble() - ((produto.preco.toDouble() * produto.desconto.toDouble()))
 
-                Text(
-                    text = numberFormat.format(valorComDesconto),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = numberFormat.format(valorComDesconto),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = if (produto.emOferta) verde else Color.Black
+                    )
+                    if (produto.emOferta) {
+                        Icon(
+                            painterResource(id = R.drawable.baseline_access_alarm_24),
+                            tint = verde,
+                            contentDescription = "Limpar filtro",
+                            modifier = Modifier.padding(start = 2.dp)
+                        )
+                    }
+                }
 
                 if (produto.estoqueProduto > 0) {
                     Text(
                         modifier = Modifier.padding(top = 5.dp),
                         text = "Em estoque. Envio imediato!",
-                        fontSize = 13.sp
+                        fontSize = 13.sp,
+                        color = Color.Black
                     )
                 } else {
                     Text(

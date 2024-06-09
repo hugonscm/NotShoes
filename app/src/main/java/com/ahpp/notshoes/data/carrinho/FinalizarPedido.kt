@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.bd.carrinho
+package com.ahpp.notshoes.data.carrinho
 
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Venda

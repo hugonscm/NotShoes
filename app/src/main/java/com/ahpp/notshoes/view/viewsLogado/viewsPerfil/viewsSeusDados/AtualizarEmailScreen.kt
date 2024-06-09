@@ -35,13 +35,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.cliente.AtualizarEmailCliente
-import com.ahpp.notshoes.bd.cliente.getCliente
+import com.ahpp.notshoes.data.cliente.AtualizarEmailCliente
+import com.ahpp.notshoes.data.cliente.getCliente
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
@@ -50,7 +52,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
-fun AlterarEmailScreen(onBackPressed: () -> Unit) {
+fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
 
     BackHandler {
         onBackPressed()
@@ -83,7 +85,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -92,7 +94,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -105,7 +107,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF029CCA)),
+                .background(azulEscuro),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.padding(top = 70.dp))
@@ -115,17 +117,16 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier.size(100.dp)
             )
             Text(
-                text = "Alterar e-mail", fontSize = 28.sp, maxLines = 1,
+                text = stringResource(id = R.string.atualizar_email),
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    Color(0xFFFFFFFF)
-                )
+                color = Color.White
             )
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
                 enabled = false,
-                placeholder = { Text(clienteLogado.email, color = Color(0xFF4A5255)) },
+                placeholder = { Text(clienteLogado.email, color = corPlaceholder) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
@@ -156,7 +157,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                         Text(text = "E-mail já cadastrado.")
                     }
                 },
-                placeholder = { Text(text = "Digite um novo e-mail", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Digite um novo e-mail", color = corPlaceholder) },
                 maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -222,7 +223,11 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                             })
                         } else {
                             Handler(Looper.getMainLooper()).post {
-                                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    ctx,
+                                    "Sem conexão com a internet.",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                         }
@@ -234,12 +239,9 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
-                    text = "ALTERAR E-MAIL",
+                    text = stringResource(id = R.string.botao_atualizar),
                     fontSize = 15.sp,
-                    //fontWeight = FontWeight.Bold,
-                    style = TextStyle(
-                        Color(0xFF046380)
-                    )
+                    color = azulEscuro
                 )
             }
             Spacer(Modifier.padding(top = 10.dp))
@@ -247,10 +249,7 @@ fun AlterarEmailScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier.clickable(true, onClick = onBackPressed),
                 text = "CANCELAR",
                 fontSize = 15.sp,
-                //fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    Color.White
-                )
+                color = Color.White
             )
         }
     }

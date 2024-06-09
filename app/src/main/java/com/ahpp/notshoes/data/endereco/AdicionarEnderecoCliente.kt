@@ -1,5 +1,6 @@
-package com.ahpp.notshoes.bd.endereco
+package com.ahpp.notshoes.data.endereco
 
+import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -8,7 +9,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.util.concurrent.Executors
 
-class EditarEnderecoCliente(
+class AdicionarEnderecoCliente(
     private val estado: String,
     private val cidade: String,
     private val cep: String,
@@ -16,9 +17,6 @@ class EditarEnderecoCliente(
     private val bairro: String,
     private val numero: String,
     private val complemento: String,
-    private val idClienteLogado: Int,
-    private val idEnderecoSelecionado: Int,
-    private val tornarEnderecoPrincipal: Boolean
 ) {
 
     interface Callback {
@@ -26,10 +24,10 @@ class EditarEnderecoCliente(
         fun onFailure(e: IOException)
     }
 
-    fun sendEditarEnderecoCliente(callback: Callback) {
+    fun sendAdicionarEnderecoCliente(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/atualizar_endereco_cliente"
+        val url = "http://10.0.2.2:5000/adicionar_endereco_cliente"
 
         val json = JsonObject().apply {
             addProperty("estado", estado)
@@ -39,9 +37,7 @@ class EditarEnderecoCliente(
             addProperty("bairro", bairro)
             addProperty("numero", numero)
             addProperty("complemento", complemento)
-            addProperty("idClienteLogado", idClienteLogado)
-            addProperty("idEnderecoSelecionado", idEnderecoSelecionado)
-            addProperty("tornarEnderecoPrincipal", tornarEnderecoPrincipal)
+            addProperty("idCliente", clienteLogado.idCliente)
         }
 
         val requestBody = json.toString().toRequestBody("application/json".toMediaType())

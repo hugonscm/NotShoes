@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.bd.endereco
+package com.ahpp.notshoes.data
 
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
@@ -8,42 +8,42 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.util.concurrent.Executors
 
-class RemoverEnderecoCliente(
-    private val idEndereco: Int,
-    private val idCliente: Int,
+class RegistroCliente(
+    private val nome: String,
+    private val email: String,
+    private val senha: String
 ) {
-
-    private val client = OkHttpClient()
 
     interface Callback {
         fun onSuccess(code: String)
         fun onFailure(e: IOException)
     }
 
-    fun sendRemoverEnderecoCliente(callback: Callback) {
+    fun sendRegistroData(callback: Callback) {
 
-        val url = "http://10.0.2.2:5000/remover_endereco_cliente"
+        val client = OkHttpClient()
+        val url = "http://10.0.2.2:5000/criar_login_cliente"
 
-        val jsonMessage = JsonObject().apply {
-            addProperty("idEndereco", idEndereco)
-            addProperty("idCliente", idCliente)
+        val json = JsonObject().apply {
+            addProperty("nome", nome)
+            addProperty("email", email)
+            addProperty("senha", senha)
         }
 
-        val requestBody = jsonMessage.toString().toRequestBody("application/json".toMediaType())
+        val requestBody = json.toString().toRequestBody("application/json".toMediaType())
         val request = Request.Builder()
             .url(url)
             .post(requestBody)
             .build()
 
         val executor = Executors.newSingleThreadExecutor()
+        //esse tipo de requisicao precisa ser rodado em um thread
+        //por isso o uso do executor
+
         executor.execute {
             try {
                 val response = client.newCall(request).execute()
-                val code = response.body?.string()
-
-                if (code != null) {
-                    callback.onSuccess(code)
-                }
+                callback.onSuccess(response.code.toString())
             } catch (e: IOException) {
                 callback.onFailure(e)
             } finally {

@@ -28,6 +28,7 @@ import coil.size.Size
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import java.text.NumberFormat
 
@@ -242,7 +243,7 @@ fun CardItemCarrinho(
                             String.format("%.0f", percentualDesconto)
                         Text(
                             text = "  (-$percentualDescontoFormated% OFF)  ",
-                            style = TextStyle(Color(0xFF00E20A)),
+                            color = verde,
                             fontSize = 12.sp
                         )
                         val valorComDesconto =

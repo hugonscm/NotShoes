@@ -1,6 +1,5 @@
-package com.ahpp.notshoes.bd.cliente
+package com.ahpp.notshoes.data
 
-import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -9,23 +8,24 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.util.concurrent.Executors
 
-class AtualizarSenhaCliente(
-    private val senhaNova: String,
+class LoginCliente(
+    private val email: String,
+    private val senha: String
 ) {
 
     interface Callback {
-        fun onSuccess(code: String)
+        fun onSuccess(idUsuarioRecebido: String)
         fun onFailure(e: IOException)
     }
 
-    fun sendAtualizarData(callback: Callback) {
+    fun sendLoginData(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/atualizar_senha_cliente"
+        val url = "http://10.0.2.2:5000/validar_login_cliente"
 
         val json = JsonObject().apply {
-            addProperty("senhaNova", senhaNova)
-            addProperty("idCliente", clienteLogado.idCliente)
+            addProperty("email", email)
+            addProperty("senha", senha)
         }
 
         val requestBody = json.toString().toRequestBody("application/json".toMediaType())
@@ -41,7 +41,11 @@ class AtualizarSenhaCliente(
         executor.execute {
             try {
                 val response = client.newCall(request).execute()
-                callback.onSuccess(response.code.toString())
+                val userId = response.body?.string()
+
+                if (userId != null) {
+                    callback.onSuccess(userId)
+                }
             } catch (e: IOException) {
                 callback.onFailure(e)
             } finally {

@@ -7,10 +7,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.branco
 
 @Composable
 fun RadioButtonButtonPersonalizado(text: String, isSelected: Boolean, onClick: () -> Unit) {
-    val backgroundColor = if (isSelected) Color(0xFF029CCA) else Color.White
+    val backgroundColor = if (isSelected) azulEscuro else branco
     val contentColor = if (isSelected) Color.White else Color.Black
 
     Row(

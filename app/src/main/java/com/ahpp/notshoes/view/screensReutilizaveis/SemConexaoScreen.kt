@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 @Composable
@@ -38,7 +39,7 @@ fun SemConexaoScreen(onBackPressed: () -> Unit) {
 
     val color = remember { Animatable(Color.Red) }
     LaunchedEffect(Unit) {
-        color.animateTo(Color(0xFF38C4E6), animationSpec = tween(1500))
+        color.animateTo(azulEscuro, animationSpec = tween(1500))
     }
 
     Box(
@@ -68,7 +69,7 @@ fun SemConexaoScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .width(100.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 onClick = {
                     if (!possuiConexao(ctx)) {
                         Toast.makeText(

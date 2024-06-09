@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.dataStore
+import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.ahpp.notshoes.view.viewsDeslogado.usuarioLogadoPreferences
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.SeusDadosScreen
@@ -77,7 +78,7 @@ fun PerfilScreen(navControllerLogin: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .background(Color(0xFF029CCA)).padding(start = 10.dp),
+                    .background(azulEscuro).padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -87,9 +88,7 @@ fun PerfilScreen(navControllerLogin: NavController) {
                     text = "Olá ${clienteLogado.nome} :)", fontSize = 20.sp, maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        Color(0xFFFFFFFF)
-                    )
+                    color = Color.White
                 )
                 Text(
                     modifier = Modifier
@@ -116,9 +115,7 @@ fun PerfilScreen(navControllerLogin: NavController) {
                     text = "Sair",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    style = TextStyle(
-                        Color(0xFFFFFFFF)
-                    )
+                    color = Color.White
                 )
             }
             Column(

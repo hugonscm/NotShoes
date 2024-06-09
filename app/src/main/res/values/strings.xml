@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">NotShoes</string>
     <string name="title_activity_produto_view">ProdutoView</string>
+    <string name="atualizar_email">Atualizar e-mail</string>
+    <string name="atualizar_senha">Atualizar senha</string>
+    <string name="atualizar_dados_pessoais">Atualizar dados pessoais</string>
+    <string name="botao_atualizar">ATUALIZAR</string>
 </resources>

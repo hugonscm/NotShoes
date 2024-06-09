@@ -30,11 +30,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.ui.theme.azulEscuro
 
 @Composable
 fun SeusDadosScreen(onBackPressed: () -> Unit) {
@@ -44,9 +45,9 @@ fun SeusDadosScreen(onBackPressed: () -> Unit) {
     var clickedAlterarSenha by remember { mutableStateOf(false) }
 
     if (clickedAlterarDadosPessoais) {
-        AlterarDadosPessoaisScreen(onBackPressed = { clickedAlterarDadosPessoais = false })
+        AtualizarDadosPessoaisScreen(onBackPressed = { clickedAlterarDadosPessoais = false })
     } else if (clickedAlterarEmail) {
-        AlterarEmailScreen(onBackPressed = { clickedAlterarEmail = false })
+        AtualizarEmailScreen(onBackPressed = { clickedAlterarEmail = false })
     } else if (clickedAlterarSenha) {
         AlterarSenhaScreen(onBackPressed = { clickedAlterarSenha = false })
     } else {
@@ -79,7 +80,7 @@ fun MenuSeusDados(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -88,7 +89,7 @@ fun MenuSeusDados(
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -99,12 +100,10 @@ fun MenuSeusDados(
             }
 
             Text(
-                modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                modifier = Modifier.padding(start = 10.dp),
                 text = "Seus dados",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
                 color = Color.White
             )
         }
@@ -129,7 +128,7 @@ fun MenuSeusDados(
                     Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Alterar dados pessoais",
+                        text = stringResource(id = R.string.atualizar_dados_pessoais),
                         fontSize = 18.sp
                     )
                     Image(
@@ -163,7 +162,7 @@ fun MenuSeusDados(
                     Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Alterar e-mail",
+                        text = stringResource(id = R.string.atualizar_email),
                         fontSize = 18.sp
                     )
                     Image(
@@ -197,7 +196,7 @@ fun MenuSeusDados(
                     Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Alterar senha",
+                        text = stringResource(id = R.string.atualizar_senha),
                         fontSize = 18.sp
                     )
                     Image(

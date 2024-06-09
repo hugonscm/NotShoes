@@ -54,10 +54,13 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.LoginCliente
-import com.ahpp.notshoes.bd.cliente.getCliente
+import com.ahpp.notshoes.data.LoginCliente
+import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.model.Cliente
+import com.ahpp.notshoes.ui.theme.azulClaro
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
@@ -116,7 +119,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         }
                     }
                 } else {
-                    Toast.makeText(ctx, "Verifique sua conexão com internet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, "Verifique sua conexão com internet", Toast.LENGTH_SHORT)
+                        .show()
                     (ctx as? Activity)?.finish()
                 }
             }
@@ -139,10 +143,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             focusedTextColor = Color.Black,
             unfocusedTextColor = Color.Black,
             unfocusedBorderColor = Color(0xFFEEF3F5),
-            focusedBorderColor = Color(0xFF029CCA),
+            focusedBorderColor = azulEscuro,
             focusedLabelColor = Color.Black,
             errorContainerColor = Color(0xFFEEF3F5),
-            cursorColor = Color(0xFF029CCA),
+            cursorColor = azulEscuro,
         )
 
         val shapeArredondado = RoundedCornerShape(10.dp)
@@ -171,13 +175,13 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFFFFFFFF),
-                            Color(0xFFFFFFFF),
-                            Color(0xFFFFFFFF),
-                            Color(0xFFFFFFFF),
-                            Color(0xFF86D0E2),
-                            Color(0xFF029CCA)
+                            Color.White,
+                            Color.White,
+                            Color.White,
+                            Color.White,
+                            Color.White,
+                            azulClaro,
+                            azulEscuro
                         )
                     )
                 )
@@ -194,7 +198,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     text = "Entre e aproveite as nossas ofertas!",
                     fontSize = 35.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF029CCA)
+                    color = azulEscuro
                 )
             }
 
@@ -215,7 +219,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         Text(text = "Dados incorretos.")
                     }
                 },
-                placeholder = { Text(text = "E-mail", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "E-mail", color = corPlaceholder) },
                 leadingIcon = {
                     Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
                 },
@@ -244,7 +248,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     senhaValida = ValidarCamposDados.validarSenha(senha)
                     dadosIncorretos = false
                 },
-                placeholder = { Text(text = "Senha", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Senha", color = corPlaceholder) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 leadingIcon = {
                     Icon(Icons.Filled.Lock, contentDescription = "Icone senha", tint = Color.Black)
@@ -286,9 +290,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         }),
                     text = "Esqueceu sua senha?",
                     fontSize = 16.sp,
-                    style = TextStyle(
-                        Color(0xFF029CCA)
-                    )
+                    color = azulEscuro
                 )
             }
 
@@ -352,7 +354,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA)),
+                    colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
                     shape = shapeArredondado,
                     elevation = elevationButton
                 ) {
@@ -390,9 +392,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     text = "Cadastre-se",
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
-                    style = TextStyle(
-                        Color(0xFF029CCA)
-                    )
+                    color = azulEscuro
                 )
             }
 

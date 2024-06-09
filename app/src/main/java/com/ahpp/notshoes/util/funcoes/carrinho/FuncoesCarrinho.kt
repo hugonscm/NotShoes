@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import com.ahpp.notshoes.bd.carrinho.CarrinhoRepository
+import com.ahpp.notshoes.data.carrinho.CarrinhoRepository
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado

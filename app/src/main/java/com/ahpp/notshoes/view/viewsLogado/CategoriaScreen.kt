@@ -35,6 +35,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosScreen
 
 @Composable
@@ -70,10 +72,10 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
     val tamanhoSpacer = 15.dp
     val tamanhoPaddingBotton = 10.dp
     val tamanhoFonte = 22.sp
-    val elevationCards = 2.dp
+    val elevationCards = 10.dp
     val tamanhoPaddingLinha = 5.dp
-    val corCards = Color(0xFFFFFFFF)
-    val corBackground = Color.White
+    val corCards = branco
+    val corBackground = branco
 
     Column(
         modifier = Modifier
@@ -90,7 +92,7 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -101,7 +103,7 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                 text = "Categorias", fontSize = 20.sp, maxLines = 1,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(
-                    Color(0xFFFFFFFF)
+                    branco
                 )
             )
         }

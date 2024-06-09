@@ -35,8 +35,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.cliente.getCliente
-import com.ahpp.notshoes.bd.endereco.RemoverEnderecoCliente
+import com.ahpp.notshoes.data.cliente.getCliente
+import com.ahpp.notshoes.data.endereco.RemoverEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation

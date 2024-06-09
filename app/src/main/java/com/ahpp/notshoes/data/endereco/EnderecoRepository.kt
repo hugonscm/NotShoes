@@ -1,7 +1,6 @@
-package com.ahpp.notshoes.bd.cliente
+package com.ahpp.notshoes.data.endereco
 
 import com.ahpp.notshoes.model.Endereco
-import com.ahpp.notshoes.model.Venda
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -12,18 +11,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
+suspend fun getEnderecos(idClienteLogado: Int): List<Endereco> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/get_pedidos_cliente"
+        val url = "http://10.0.2.2:5000/get_enderecos_cliente"
 
-        var vendasList: List<Venda> = emptyList()
-
-        val inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
+        var enderecosList: List<Endereco> = emptyList()
 
         val jsonMessage = JsonObject().apply {
             addProperty("idClienteLogado", idClienteLogado)
@@ -44,18 +38,18 @@ suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
 
                     if (jsonElement.isJsonArray) {
                         val jsonArray = jsonElement.asJsonArray
-                        vendasList = jsonArray.map { vendaJson ->
-                            val vendaArray = vendaJson.asJsonArray
-
-                            val dataPedido = LocalDate.parse(vendaArray[1].asString, inputFormatter)
-
-                            Venda(
-                                vendaArray[0]?.asInt,
-                                dataPedido,
-                                vendaArray[2].asString,
-                                vendaArray[3].asString,
-                                vendaArray[4].asString,
-                                vendaArray[5].asInt,
+                        enderecosList = jsonArray.map { enderecoJson ->
+                            val enderecoArray = enderecoJson.asJsonArray
+                            Endereco(
+                                enderecoArray[0].asInt,
+                                enderecoArray[1].asString,
+                                enderecoArray[2].asString,
+                                enderecoArray[3].asString,
+                                enderecoArray[4].asString,
+                                enderecoArray[5].asString,
+                                enderecoArray[6].asInt,
+                                enderecoArray[7].asString,
+                                enderecoArray[8].asInt,
                             )
                         }
                     }
@@ -65,6 +59,6 @@ suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
             e.printStackTrace()
         }
 
-        return@withContext vendasList
+        return@withContext enderecosList
     }
 }

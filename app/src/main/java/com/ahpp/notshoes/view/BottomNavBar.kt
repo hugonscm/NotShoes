@@ -27,6 +27,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.azulClaro
+import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
 import com.ahpp.notshoes.view.viewsLogado.CategoriaScreenController
 import com.ahpp.notshoes.view.viewsLogado.InicioScreenController
@@ -51,7 +53,7 @@ fun BottomNavBar(navControllerLogin: NavController) {
         bottomBar = {
             NavigationBar(
                 modifier = Modifier.height(50.dp),
-                containerColor = Color(0xFFD1E9F0),
+                containerColor = azulClaro,
                 tonalElevation = 3.dp,
             ) {
                 val navBackStackEntry by navBarController.currentBackStackEntryAsState()
@@ -59,9 +61,9 @@ fun BottomNavBar(navControllerLogin: NavController) {
                 items.forEach { screen ->
                     NavigationBarItem(
                         colors = NavigationBarItemDefaults.colors(
-                            Color.Black,
-                            Color.Black,
-                            Color(0xFF82D7F0)
+                            selectedIconColor = Color.White,
+                            unselectedIconColor = Color.White,
+                            indicatorColor = azulEscuro
                         ),
                         //label = { Text(screen.label, fontSize = 8.sp) },
                         alwaysShowLabel = false,

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -47,12 +48,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.cliente.getCliente
-import com.ahpp.notshoes.bd.endereco.EditarEnderecoCliente
+import com.ahpp.notshoes.data.cliente.getCliente
+import com.ahpp.notshoes.data.endereco.EditarEnderecoCliente
 import com.ahpp.notshoes.model.Endereco
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
@@ -152,7 +154,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -161,7 +163,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
@@ -172,12 +174,10 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
             }
 
             Text(
-                modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                modifier = Modifier.padding(start = 10.dp),
                 text = "Editar enredeço",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
                 color = Color.White
             )
         }
@@ -204,7 +204,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                         Text(text = "Digite um CEP.")
                     }
                 },
-                placeholder = { Text(text = "CEP", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "CEP", color = corPlaceholder) },
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -229,7 +229,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                         Text(text = "Digite um endereço válido.")
                     }
                 },
-                placeholder = { Text(text = "Endereço", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Endereço", color = corPlaceholder) },
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -258,7 +258,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     placeholder = {
                         Text(
                             text = "Número",
-                            color = Color(0xFF4A5255)
+                            color = corPlaceholder
                         )
                     },
                     modifier = Modifier
@@ -278,7 +278,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     placeholder = {
                         Text(
                             text = "Complemento",
-                            color = Color(0xFF4A5255)
+                            color = corPlaceholder
                         )
                     },
                     modifier = Modifier
@@ -305,7 +305,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                         Text(text = "Informe um bairro válido.")
                     }
                 },
-                placeholder = { Text(text = "Bairro", color = Color(0xFF4A5255)) },
+                placeholder = { Text(text = "Bairro", color = corPlaceholder) },
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -380,7 +380,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     placeholder = {
                         Text(
                             text = "Cidade",
-                            color = Color(0xFF4A5255)
+                            color = corPlaceholder
                         )
                     },
                     modifier = Modifier
@@ -399,7 +399,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     Checkbox(
                         checked = checkedTornarEnderecoPrincipal,
                         onCheckedChange = { checkedTornarEnderecoPrincipal = it },
-                        colors = CheckboxDefaults.colors(Color(0xFF029CCA))
+                        colors = CheckboxDefaults.colors(azulEscuro)
                     )
                     Text(
                         text = "Tornar esse endereço principal",
@@ -489,7 +489,8 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                     modifier = Modifier
                         .width(230.dp)
                         .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF029CCA))
+                    colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
+                    shape = RoundedCornerShape(5.dp)
                 ) {
                     Text(
                         text = "Atualizar endereço",

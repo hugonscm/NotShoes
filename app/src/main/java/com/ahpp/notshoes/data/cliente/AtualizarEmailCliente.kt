@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.bd.cliente
+package com.ahpp.notshoes.data.cliente
 
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.google.gson.JsonObject

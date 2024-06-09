@@ -1,6 +1,5 @@
 package com.ahpp.notshoes.view.viewsLogado.viewsCarrinho
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,17 +38,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.carrinho.getItensCarrinho
-import com.ahpp.notshoes.bd.carrinho.getProdutoCarrinho
+import com.ahpp.notshoes.data.carrinho.getItensCarrinho
+import com.ahpp.notshoes.data.carrinho.getProdutoCarrinho
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.barraValoresCarrinho
+import com.ahpp.notshoes.ui.theme.textoValorEconomizado
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.cards.CardItemCarrinho
 import com.ahpp.notshoes.util.funcoes.carrinho.adicionarUnidade
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoComDesconto
@@ -59,7 +61,7 @@ import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
-import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.AlterarDadosPessoaisScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.AtualizarDadosPessoaisScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -145,7 +147,7 @@ fun CarrinhoScreen() {
             onBackPressed = { clickedFinalizarPedido = false },
             clickFinalizarPedido = { atualizarLista() })
     } else if (clickedCompletarCadastro) {
-        AlterarDadosPessoaisScreen(onBackPressed = { clickedCompletarCadastro = false })
+        AtualizarDadosPessoaisScreen(onBackPressed = { clickedCompletarCadastro = false })
     } else if (internetCheker) {
 
         val openDialog = remember { mutableStateOf(false) }
@@ -206,19 +208,16 @@ fun CarrinhoScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .background(Color(0xFF029CCA))
+                    .background(azulEscuro)
                     .padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .width(270.dp),
-                    text = "Carrinho", fontSize = 20.sp, maxLines = 1,
+                    modifier = Modifier.padding( start = 10.dp),
+                    text = "Carrinho",
                     fontWeight = FontWeight.Bold,
-                    style = TextStyle(
-                        Color(0xFFFFFFFF)
-                    )
+                    fontSize = 20.sp,
+                    color = Color.White
                 )
             }
             Column(
@@ -265,7 +264,7 @@ fun CarrinhoScreen() {
                             Text(
                                 text = "Seu carrinho está vazio.",
                                 fontSize = 25.sp,
-                                color = Color(0xFF029CCA)
+                                color = azulEscuro
                             )
                         }
                     }
@@ -277,7 +276,7 @@ fun CarrinhoScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color(0xFFBFD570))
+                        .background(barraValoresCarrinho)
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -290,9 +289,8 @@ fun CarrinhoScreen() {
                             fontSize = 10.sp,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
-                            style = TextStyle(
-                                Color(0xFF000000)
-                            )
+                            fontWeight = FontWeight.Bold,
+                            color = Color.DarkGray
                         )
                         Text(
                             modifier = Modifier
@@ -302,9 +300,7 @@ fun CarrinhoScreen() {
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.Bold,
-                            style = TextStyle(
-                                Color(0xFF000000)
-                            )
+                            color = Color.DarkGray
                         )
                         Text(
                             modifier = Modifier
@@ -314,9 +310,7 @@ fun CarrinhoScreen() {
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.Bold,
-                            style = TextStyle(
-                                Color(0xFF009688)
-                            )
+                            color = textoValorEconomizado
                         )
                     }
                     ElevatedButton(
@@ -333,7 +327,7 @@ fun CarrinhoScreen() {
                             .height(50.dp),
                         shape = RoundedCornerShape(8.dp),
                         contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E20A))
+                        colors = ButtonDefaults.buttonColors(containerColor = verde)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -344,10 +338,10 @@ fun CarrinhoScreen() {
                                 text = "FINALIZAR",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
+                                color = Color.White.copy(alpha = 0.9f)
                             )
-                            Image(
-
+                            Icon(
+                                tint = Color.White.copy(alpha = 0.9f),
                                 painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
                                 contentDescription = "Finalizar compra",
                             )

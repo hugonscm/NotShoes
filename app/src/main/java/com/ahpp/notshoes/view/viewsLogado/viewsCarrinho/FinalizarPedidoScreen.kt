@@ -46,7 +46,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,11 +54,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.bd.carrinho.FinalizarPedido
-import com.ahpp.notshoes.bd.endereco.getEnderecos
+import com.ahpp.notshoes.data.carrinho.FinalizarPedido
+import com.ahpp.notshoes.data.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Venda
+import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.branco
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.cards.CardEnderecoCarrinho
 import com.ahpp.notshoes.util.funcoes.possuiConexao
@@ -127,9 +129,11 @@ fun FinalizarPedidoScreen(
         LaunchedEffect(Unit) {
             scope.launch(Dispatchers.IO) {
                 enderecosList = getEnderecos(clienteLogado.idCliente)
-                val enderecoPrincipal =
+
+                enderecoParaEntrega =
                     enderecosList.find { it.idEndereco == clienteLogado.idEnderecoPrincipal }
-                enderecoParaEntrega = enderecoPrincipal
+                        ?: enderecosList.firstOrNull()
+
                 isLoading = false
             }
         }
@@ -146,14 +150,7 @@ fun FinalizarPedidoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color(0xFFFFFFFF),
-                                Color(0xFF86D0E2),
-                                Color(0xFF86D0E2),
-                                Color(0xFFFFFFFF)
-                            )
-                        )
+                        branco
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -171,7 +168,7 @@ fun FinalizarPedidoScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .background(Color(0xFF029CCA))
+                        .background(azulEscuro)
                         .padding(start = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -180,7 +177,7 @@ fun FinalizarPedidoScreen(
                             .size(45.dp),
                         contentPadding = PaddingValues(0.dp),
                         onClick = { onBackPressed() },
-                        colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                        colors = ButtonDefaults.buttonColors(branco),
                         elevation = ButtonDefaults.buttonElevation(10.dp)
                     ) {
                         Image(
@@ -189,9 +186,8 @@ fun FinalizarPedidoScreen(
                             modifier = Modifier.size(30.dp)
                         )
                     }
-
                     Text(
-                        modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                        modifier = Modifier.padding(start = 10.dp),
                         text = "Finalizar pedido",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
@@ -253,9 +249,7 @@ fun FinalizarPedidoScreen(
                                         .height(40.dp),
                                     shape = RoundedCornerShape(5.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color(
-                                            0xFF029CCA
-                                        )
+                                        containerColor = azulEscuro
                                     )
                                 ) {
                                     Text(
@@ -306,9 +300,7 @@ fun FinalizarPedidoScreen(
                                         .height(40.dp),
                                     shape = RoundedCornerShape(5.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color(
-                                            0xFF029CCA
-                                        )
+                                        containerColor = azulEscuro
                                     )
                                 ) {
                                     Text(
@@ -332,9 +324,7 @@ fun FinalizarPedidoScreen(
                                     modifier = Modifier.padding(bottom = 10.dp),
                                     text = "Nenhum endereço cadastrado.",
                                     fontSize = 25.sp,
-                                    style = TextStyle(
-                                        Color(0xFFFF0000)
-                                    )
+                                    color = Color.Red
                                 )
 
                                 ElevatedButton(
@@ -346,9 +336,7 @@ fun FinalizarPedidoScreen(
                                         .height(40.dp),
                                     shape = RoundedCornerShape(5.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color(
-                                            0xFF029CCA
-                                        )
+                                        containerColor = azulEscuro
                                     )
                                 ) {
                                     Text(
@@ -569,12 +557,10 @@ fun FinalizarPedidoScreen(
                             .fillMaxWidth()
                             .height(60.dp)
                             .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(5.dp),
                         contentPadding = PaddingValues(0.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(
-                                0xFF00E20A
-                            )
+                            containerColor = verde
                         )
                     ) {
                         Row(
@@ -583,14 +569,10 @@ fun FinalizarPedidoScreen(
 
                             ) {
                             Text(
-                                text = "FINALIZAR",
+                                text = "FINALIZAR PEDIDO",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                            )
-                            Image(
-                                painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
-                                contentDescription = "Finalizar compra",
+                                color = Color.White.copy(alpha = 0.9f)
                             )
                         }
                     }

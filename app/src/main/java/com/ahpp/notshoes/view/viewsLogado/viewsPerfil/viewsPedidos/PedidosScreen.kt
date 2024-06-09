@@ -33,13 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahpp.notshoes.bd.cliente.getPedidos
+import com.ahpp.notshoes.data.cliente.getPedidos
 import com.ahpp.notshoes.model.Venda
+import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardPedidos
 import com.ahpp.notshoes.util.funcoes.possuiConexao
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
@@ -93,7 +92,7 @@ fun PedidosScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .background(Color(0xFF029CCA))
+                    .background(azulEscuro)
                     .padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -102,7 +101,7 @@ fun PedidosScreen(onBackPressed: () -> Unit) {
                         .size(45.dp),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { onBackPressed() },
-                    colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                    colors = ButtonDefaults.buttonColors(Color.White),
                     elevation = ButtonDefaults.buttonElevation(10.dp)
                 ) {
                     Image(
@@ -113,12 +112,10 @@ fun PedidosScreen(onBackPressed: () -> Unit) {
                 }
 
                 Text(
-                    modifier = Modifier.padding(top = 10.dp, start = 10.dp),
+                    modifier = Modifier.padding(start = 10.dp),
                     text = "Seus pedidos",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     color = Color.White
                 )
             }
@@ -140,9 +137,7 @@ fun PedidosScreen(onBackPressed: () -> Unit) {
                         Text(
                             text = "Nenhum pedido realizado.",
                             fontSize = 25.sp,
-                            style = TextStyle(
-                                Color(0xFF029CCA)
-                            )
+                            color = azulEscuro
                         )
                     }
                 }

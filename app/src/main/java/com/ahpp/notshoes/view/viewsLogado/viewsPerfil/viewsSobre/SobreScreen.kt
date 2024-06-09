@@ -46,11 +46,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.ui.theme.azulEscuro
 
 @Composable
 fun SobreScreen(onBackPressed: () -> Unit) {
 
-    val corPredominante = Color(0xFF029CCA)
+    val corPredominante = azulEscuro
 
     BackHandler {
         onBackPressed()
@@ -67,7 +68,7 @@ fun SobreScreen(onBackPressed: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(Color(0xFF029CCA))
+                .background(azulEscuro)
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -76,7 +77,7 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { onBackPressed() },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFFFFFF)),
+                colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
                 Image(
