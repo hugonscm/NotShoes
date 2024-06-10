@@ -61,7 +61,7 @@ import com.ahpp.notshoes.model.Cliente
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import kotlinx.coroutines.Dispatchers

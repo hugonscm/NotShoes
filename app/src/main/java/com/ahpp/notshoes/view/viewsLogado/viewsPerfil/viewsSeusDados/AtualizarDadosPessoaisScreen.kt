@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -48,7 +47,7 @@ import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CpfVisualTransformation
 import com.ahpp.notshoes.util.visualTransformation.PhoneVisualTransformation
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado

@@ -40,7 +40,7 @@ import com.ahpp.notshoes.data.cliente.getPedidos
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardPedidos
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 
 @Composable

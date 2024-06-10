@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsLogado
+package com.ahpp.notshoes.view.viewsLogado.viewsCategoria
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState

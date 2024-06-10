@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsLogado
+package com.ahpp.notshoes.view.viewsLogado.viewsListaDesejos
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +33,7 @@ import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardListaDesejos
 import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers

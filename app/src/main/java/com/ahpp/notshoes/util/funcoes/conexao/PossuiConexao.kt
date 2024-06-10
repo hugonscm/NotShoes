@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.util.funcoes
+package com.ahpp.notshoes.util.funcoes.conexao
 
 import android.content.Context
 import android.net.ConnectivityManager

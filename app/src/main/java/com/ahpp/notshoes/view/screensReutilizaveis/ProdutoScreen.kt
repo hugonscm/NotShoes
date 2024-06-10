@@ -56,10 +56,10 @@ import com.ahpp.notshoes.data.produto.ProdutoRepository
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.ui.theme.verde
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.funcoes.produto.adicionarProdutoCarrinho
-import com.ahpp.notshoes.view.produtoSelecionado
+import com.ahpp.notshoes.view.viewsLogado.produtoSelecionado
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import java.text.NumberFormat
 

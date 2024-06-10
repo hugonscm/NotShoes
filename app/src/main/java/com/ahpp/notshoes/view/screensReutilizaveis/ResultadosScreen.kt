@@ -61,9 +61,9 @@ import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.util.cards.CardResultados
 import com.ahpp.notshoes.util.filtros.filtrarProdutos
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
-import com.ahpp.notshoes.view.produtoSelecionado
+import com.ahpp.notshoes.view.viewsLogado.produtoSelecionado
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

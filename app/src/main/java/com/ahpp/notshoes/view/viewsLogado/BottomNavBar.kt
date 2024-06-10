@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view
+package com.ahpp.notshoes.view.viewsLogado
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,9 +30,9 @@ import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
-import com.ahpp.notshoes.view.viewsLogado.CategoriaScreenController
-import com.ahpp.notshoes.view.viewsLogado.InicioScreenController
-import com.ahpp.notshoes.view.viewsLogado.ListaDeDesejoscreen
+import com.ahpp.notshoes.view.viewsLogado.viewsCategoria.CategoriaScreenController
+import com.ahpp.notshoes.view.viewsLogado.viewsInicio.InicioScreenController
+import com.ahpp.notshoes.view.viewsLogado.viewsListaDesejos.ListaDeDesejoscreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreen
 
 lateinit var produtoSelecionado: Produto

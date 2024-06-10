@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.view.viewsLogado
+package com.ahpp.notshoes.view.viewsLogado.viewsInicio
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -73,11 +73,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.produto.ProdutoRepository
 import kotlinx.coroutines.delay
@@ -89,42 +84,12 @@ import com.ahpp.notshoes.ui.theme.backgroundBarraPesquisa
 import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.view.screensReutilizaveis.ProdutoScreen
-import com.ahpp.notshoes.util.funcoes.possuiConexao
-import com.ahpp.notshoes.view.produtoSelecionado
-import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosScreen
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
+import com.ahpp.notshoes.view.viewsLogado.produtoSelecionado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
-
-@Composable
-fun InicioScreenController(navBarController: NavHostController) {
-    val navControllerInicio = rememberNavController()
-    NavHost(navController = navControllerInicio, startDestination = "inicioScreen") {
-
-        composable(route = "inicioScreen") {
-            InicioScreen(navControllerInicio, navBarController)
-        }
-
-        composable(route = "resultadosScreen/{valorBusca}/{tipoBusca}/{fromScreen}",
-            arguments = listOf(
-                navArgument("valorBusca") { type = NavType.StringType },
-                navArgument("tipoBusca") { type = NavType.StringType },
-                navArgument("fromScreen") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val valorBusca = backStackEntry.arguments?.getString("valorBusca")
-            val tipoBusca = backStackEntry.arguments?.getString("tipoBusca")
-            val fromScreen = backStackEntry.arguments?.getString("fromScreen")
-            ResultadosScreen(
-                navControllerInicio,
-                valorBusca.toString(),
-                tipoBusca.toString(),
-                fromScreen.toString()
-            )
-        }
-    }
-}
 
 @Composable
 fun InicioScreen(navControllerInicio: NavHostController, navBarController: NavHostController) {

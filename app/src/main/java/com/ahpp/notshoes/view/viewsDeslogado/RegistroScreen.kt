@@ -33,6 +33,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,13 +57,15 @@ import com.ahpp.notshoes.data.RegistroCliente
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.canGoBack
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import java.io.IOException
 
 @Composable
 fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) {
 
+    val canGoBack by remember { derivedStateOf { navController.canGoBack } }
     var checkedTermos by remember { mutableStateOf(false) }
 
     var nome by remember { mutableStateOf("") }
@@ -79,15 +82,6 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
 
     //gerenciar visibilidade da senha
     var passwordVisibility by remember { mutableStateOf(false) }
-
-    //gerenciar click no texto de já registrado
-    val isAlreadyRegisteredClicked = remember { mutableStateOf(false) }
-
-    if (isAlreadyRegisteredClicked.value) {
-        // Save the state of the current destination (login screen)
-        navController.popBackStack(route = "login", inclusive = true, saveState = true)
-        isAlreadyRegisteredClicked.value = false // Reset the flag
-    }
 
     val icon = if (passwordVisibility)
         painterResource(id = R.drawable.baseline_visibility_24)
@@ -363,7 +357,11 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             Text(
                 modifier = Modifier.clickable(
                     enabled = true,
-                    onClick = { navController.popBackStack("login", false) }),
+                    onClick = {
+                        if(canGoBack){
+                            navController.popBackStack("login", false)
+                        }
+                    }),
                 text = "Entre",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,

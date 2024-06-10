@@ -12,7 +12,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ahpp.notshoes.view.BottomNavBar
+import com.ahpp.notshoes.view.viewsLogado.BottomNavBar
 import com.ahpp.notshoes.view.viewsDeslogado.LoginScreen
 import com.ahpp.notshoes.view.viewsDeslogado.RegistroScreen
 

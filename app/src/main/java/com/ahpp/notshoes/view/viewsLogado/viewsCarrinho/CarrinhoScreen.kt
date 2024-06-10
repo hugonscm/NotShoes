@@ -58,7 +58,7 @@ import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoComDesconto
 import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoTotal
 import com.ahpp.notshoes.util.funcoes.carrinho.removerProduto
 import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.AtualizarDadosPessoaisScreen

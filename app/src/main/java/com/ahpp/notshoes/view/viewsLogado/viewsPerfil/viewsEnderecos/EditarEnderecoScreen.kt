@@ -56,7 +56,7 @@ import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
-import com.ahpp.notshoes.util.funcoes.possuiConexao
+import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
