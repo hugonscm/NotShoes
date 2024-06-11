@@ -1,8 +1,5 @@
 package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsPedidos
 
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,109 +33,114 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.data.cliente.getPedidos
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardPedidos
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
+import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 
 @Composable
-fun PedidosScreen(onBackPressed: () -> Unit) {
+fun PedidosScreen(navControllerPerfil: NavController) {
 
     val ctx = LocalContext.current
+    var internetCheker by remember { mutableStateOf(possuiConexao(ctx)) }
 
     var pedidosList by remember { mutableStateOf(emptyList<Venda>()) }
     var isLoading by remember { mutableStateOf(true) }
 
-    LaunchedEffect(Unit) {
-        if (!possuiConexao(ctx)) {
-            Handler(Looper.getMainLooper()).post {
-                Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+    if (!internetCheker) {
+        SemConexaoScreen(onBackPressed = {
+            internetCheker = possuiConexao(ctx)
+        })
+    } else {
+        LaunchedEffect(Unit) {
+            pedidosList = getPedidos(clienteLogado.idCliente)
+            isLoading = false
+        }
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
         } else {
-            pedidosList = getPedidos(clienteLogado.idCliente)
-        }
-
-        isLoading = false
-    }
-
-    if (isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color.White
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color.White
-                )
-        ) {
-            Spacer(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.White)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .background(azulEscuro)
-                    .padding(start = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize()
+                    .background(
+                        Color.White
+                    )
             ) {
-                Button(
+                Spacer(
                     modifier = Modifier
-                        .size(45.dp),
-                    contentPadding = PaddingValues(0.dp),
-                    onClick = { onBackPressed() },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    elevation = ButtonDefaults.buttonElevation(10.dp)
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color.White)
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .background(azulEscuro)
+                        .padding(start = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Toque para voltar",
-                        modifier = Modifier.size(30.dp)
+                    Button(
+                        modifier = Modifier
+                            .size(45.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        onClick = {
+                            if (navControllerPerfil.canGoBack) {
+                                navControllerPerfil.popBackStack("perfilScreen", false)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        elevation = ButtonDefaults.buttonElevation(10.dp)
+                    ) {
+                        Image(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Toque para voltar",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+
+                    Text(
+                        modifier = Modifier.padding(start = 10.dp),
+                        text = "Seus pedidos",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White
                     )
                 }
 
-                Text(
-                    modifier = Modifier.padding(start = 10.dp),
-                    text = "Seus pedidos",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color.White
-                )
-            }
-
-            Box(modifier = Modifier.fillMaxWidth()) {
-                if (pedidosList.isNotEmpty()) {
-                    LazyColumn {
-                        items(items = pedidosList) { pedido ->
-                            CardPedidos(pedido)
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    if (pedidosList.isNotEmpty()) {
+                        LazyColumn {
+                            items(items = pedidosList) { pedido ->
+                                CardPedidos(pedido)
+                            }
                         }
-                    }
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 45.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Nenhum pedido realizado.",
-                            fontSize = 25.sp,
-                            color = azulEscuro
-                        )
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 45.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Nenhum pedido realizado.",
+                                fontSize = 25.sp,
+                                color = azulEscuro
+                            )
+                        }
                     }
                 }
             }

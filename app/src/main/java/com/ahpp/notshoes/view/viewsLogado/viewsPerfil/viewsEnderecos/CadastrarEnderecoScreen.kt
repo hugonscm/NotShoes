@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,10 +46,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.data.endereco.AdicionarEnderecoCliente
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
@@ -61,11 +62,7 @@ import java.io.IOException
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
-
-    BackHandler {
-        onBackPressed()
-    }
+fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
 
     val scope = rememberCoroutineScope()
     fun atualizarClienteLogado() {
@@ -76,6 +73,8 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
     }
 
     val ctx = LocalContext.current
+
+    var enabledButton by remember { mutableStateOf(true) }
 
     var cep by remember { mutableStateOf("") }
     var endereco by remember { mutableStateOf("") }
@@ -156,7 +155,11 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerEnderecos.canGoBack) {
+                        navControllerEnderecos.popBackStack()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -402,6 +405,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                         cidadeValido = ValidarCamposEndereco.validarCidade(cidade)
 
                         if (cepValido && enderecoValido && numeroValido && bairroValido && estadoValido && cidadeValido) {
+                            enabledButton = false
                             if (possuiConexao(ctx)) {
                                 val adicionarEnderecoCliente =
                                     AdicionarEnderecoCliente(
@@ -429,8 +433,8 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                                                     "Endereço adicionado com sucesso.",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
+                                                navControllerEnderecos.popBackStack()
                                             }
-                                            onBackPressed()
                                         }
 
                                     }
@@ -444,6 +448,7 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                                                 .show()
                                         }
                                         Log.e("Erro: ", e.message.toString())
+                                        enabledButton = true
                                     }
                                 })
                             } else {
@@ -455,12 +460,14 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                                     )
                                         .show()
                                 }
+                                enabledButton = true
                             }
                         }
                     },
                     modifier = Modifier
                         .width(230.dp)
                         .height(50.dp),
+                    enabled = enabledButton,
                     colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
                     shape = RoundedCornerShape(5.dp),
                 ) {
@@ -473,7 +480,11 @@ fun CadastrarEnderecoScreen(onBackPressed: () -> Unit) {
                 }
                 Spacer(Modifier.padding(top = 10.dp))
                 Text(
-                    modifier = Modifier.clickable(true, onClick = onBackPressed),
+                    modifier = Modifier.clickable(true) {
+                        if (navControllerEnderecos.canGoBack) {
+                            navControllerEnderecos.popBackStack()
+                        }
+                    },
                     text = "CANCELAR",
                     fontSize = 15.sp,
                     color = Color.Black

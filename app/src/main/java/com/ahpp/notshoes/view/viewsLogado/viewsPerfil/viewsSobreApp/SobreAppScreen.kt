@@ -1,6 +1,5 @@
-package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSobre
+package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSobreApp
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -45,17 +44,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.util.funcoes.canGoBack
 
 @Composable
-fun SobreScreen(onBackPressed: () -> Unit) {
+fun SobreAppScreen(navControllerPerfil: NavController) {
 
     val corPredominante = azulEscuro
 
-    BackHandler {
-        onBackPressed()
-    }
     Column {
 
         Spacer(
@@ -76,7 +74,11 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerPerfil.canGoBack) {
+                        navControllerPerfil.popBackStack("perfilScreen", false)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -120,7 +122,14 @@ fun SobreScreen(onBackPressed: () -> Unit) {
                     .fillMaxWidth()
                     .padding(top = 30.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(size = 10.dp),
-                gradient = Brush.linearGradient(listOf(Color.Yellow, Color.Magenta, Color.Cyan, Color.Blue)),
+                gradient = Brush.linearGradient(
+                    listOf(
+                        Color.Yellow,
+                        Color.Magenta,
+                        Color.Cyan,
+                        Color.Blue
+                    )
+                ),
                 borderWidth = 7.dp
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {

@@ -29,16 +29,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.ui.theme.verde
+import com.ahpp.notshoes.util.funcoes.canGoBack
 
 @Composable
-fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
+fun CompraFinalizadaScreen(navControllerCarrinho: NavController) {
 
     BackHandler {
-        onBackPressed()
+        navControllerCarrinho.popBackStack("carrinhoScreen", false)
     }
 
     val color = remember { Animatable(verde) }
@@ -65,7 +67,11 @@ fun CompraFinalizadaScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerCarrinho.canGoBack) {
+                        navControllerCarrinho.popBackStack("carrinhoScreen", false)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(branco),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {

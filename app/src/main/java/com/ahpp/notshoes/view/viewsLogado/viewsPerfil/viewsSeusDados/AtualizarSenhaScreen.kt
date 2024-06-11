@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,11 +44,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.cliente.AtualizarSenhaCliente
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
@@ -59,12 +60,7 @@ import java.io.IOException
 import java.security.MessageDigest
 
 @Composable
-fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
-
-    BackHandler {
-        onBackPressed()
-    }
-
+fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
     val scope = rememberCoroutineScope()
     fun atualizarClienteLogado() {
         scope.launch(Dispatchers.IO) {
@@ -74,6 +70,8 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
     }
 
     val ctx = LocalContext.current
+
+    var enabledButton by remember { mutableStateOf(true) }
 
     var senhaAtual by remember { mutableStateOf("") }
     var senhaNova by remember { mutableStateOf("") }
@@ -129,7 +127,11 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerSeusDados.canGoBack) {
+                        navControllerSeusDados.popBackStack("seusDadosScreen", false)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -255,6 +257,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                     senhaNovaValida = ValidarCamposDados.validarSenha(senhaNova)
 
                     if (senhaAtualCorreta && senhaAtualValida && senhaNovaValida) {
+                        enabledButton = false
                         if (possuiConexao(ctx)) {
                             val atualizarSenhaCliente = AtualizarSenhaCliente(senhaNova)
 
@@ -274,8 +277,11 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                                                 "Senha alterada com sucesso.",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            navControllerSeusDados.popBackStack(
+                                                "seusDadosScreen",
+                                                false
+                                            )
                                         }
-                                        onBackPressed()
                                     }
                                 }
 
@@ -288,6 +294,7 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                                             .show()
                                     }
                                     Log.e("Erro: ", e.message.toString())
+                                    enabledButton = true
                                 }
                             })
                         } else {
@@ -299,12 +306,14 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
                                 )
                                     .show()
                             }
+                            enabledButton = true
                         }
                     }
                 },
                 modifier = Modifier
                     .width(230.dp)
                     .height(50.dp),
+                enabled = enabledButton,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
@@ -315,7 +324,11 @@ fun AlterarSenhaScreen(onBackPressed: () -> Unit) {
             }
             Spacer(Modifier.padding(top = 10.dp))
             Text(
-                modifier = Modifier.clickable(true, onClick = onBackPressed),
+                modifier = Modifier.clickable(true) {
+                    if (navControllerSeusDados.canGoBack) {
+                        navControllerSeusDados.popBackStack("seusDadosScreen", false)
+                    }
+                },
                 text = "CANCELAR",
                 fontSize = 15.sp,
                 color = Color.White

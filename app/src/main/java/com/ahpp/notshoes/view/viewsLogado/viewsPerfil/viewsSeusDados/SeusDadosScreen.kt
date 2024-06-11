@@ -1,6 +1,5 @@
 package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,10 +21,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,41 +29,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.util.funcoes.canGoBack
 
 @Composable
-fun SeusDadosScreen(onBackPressed: () -> Unit) {
+fun SeusDadosScreen(navControllerPerfil: NavController, navControllerSeusDados: NavController) {
 
-    var clickedAlterarDadosPessoais by remember { mutableStateOf(false) }
-    var clickedAlterarEmail by remember { mutableStateOf(false) }
-    var clickedAlterarSenha by remember { mutableStateOf(false) }
-
-    if (clickedAlterarDadosPessoais) {
-        AtualizarDadosPessoaisScreen(onBackPressed = { clickedAlterarDadosPessoais = false })
-    } else if (clickedAlterarEmail) {
-        AtualizarEmailScreen(onBackPressed = { clickedAlterarEmail = false })
-    } else if (clickedAlterarSenha) {
-        AlterarSenhaScreen(onBackPressed = { clickedAlterarSenha = false })
-    } else {
-        MenuSeusDados(
-            onBackPressed = onBackPressed,
-            onClickAlterarDadosPessoais = { clickedAlterarDadosPessoais = true },
-            onClickAlterarEmail = { clickedAlterarEmail = true },
-            onclickAlterarSenha = { clickedAlterarSenha = true })
-    }
-}
-
-@Composable
-fun MenuSeusDados(
-    onBackPressed: () -> Unit,
-    onClickAlterarDadosPessoais: () -> Unit,
-    onClickAlterarEmail: () -> Unit,
-    onclickAlterarSenha: () -> Unit
-) {
-    BackHandler {
-        onBackPressed()
-    }
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(
             modifier = Modifier
@@ -88,7 +56,11 @@ fun MenuSeusDados(
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerPerfil.canGoBack) {
+                        navControllerPerfil.popBackStack("perfilScreen", false)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -116,7 +88,11 @@ fun MenuSeusDados(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .clickable(true, onClick = onClickAlterarDadosPessoais),
+                    .clickable(true) {
+                        navControllerSeusDados.navigate("atualizarDadosPessoaisScreen") {
+                            launchSingleTop = true
+                        }
+                    },
                 shape = RoundedCornerShape(0.dp),
             ) {
                 Row(
@@ -150,7 +126,11 @@ fun MenuSeusDados(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .clickable(true, onClick = onClickAlterarEmail),
+                    .clickable(true) {
+                        navControllerSeusDados.navigate("atualizarEmailScreen") {
+                            launchSingleTop = true
+                        }
+                    },
                 shape = RoundedCornerShape(0.dp),
             ) {
                 Row(
@@ -184,7 +164,11 @@ fun MenuSeusDados(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .clickable(true, onClick = onclickAlterarSenha),
+                    .clickable(true) {
+                        navControllerSeusDados.navigate("atualizarSenhaScreen") {
+                            launchSingleTop = true
+                        }
+                    },
                 shape = RoundedCornerShape(0.dp),
             ) {
                 Row(
@@ -216,4 +200,5 @@ fun MenuSeusDados(
             )
         }
     }
+
 }

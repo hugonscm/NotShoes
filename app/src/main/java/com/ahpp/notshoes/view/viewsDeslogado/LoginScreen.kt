@@ -81,6 +81,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     var internetCheker by remember { mutableStateOf(false) }
     val ctx = LocalContext.current
 
+    // ativar ou desativar o botao de login de acordo com o contexto
+    var enabledButton by remember { mutableStateOf(true) }
+
     val idUsuarioFlow = remember {
         ctx.dataStore.data
             .map { preferences ->
@@ -306,6 +309,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         senhaValida = ValidarCamposDados.validarSenha(senha)
 
                         if (emailValido && senhaValida) {
+                            enabledButton = false
                             if (possuiConexao(ctx)) {
                                 val loginCliente = LoginCliente(email, senha)
                                 loginCliente.sendLoginData(object : LoginCliente.Callback {
@@ -326,6 +330,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                             }
 
                                         } else {
+                                            enabledButton = true
                                             dadosIncorretos = true
                                         }
                                     }
@@ -339,6 +344,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                                 .show()
                                         }
                                         Log.e("Erro: ", e.message.toString())
+                                        enabledButton = true
                                     }
                                 })
                             } else {
@@ -348,12 +354,14 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
+                                enabledButton = true
                             }
                         }
                     },
                     modifier
                         .fillMaxWidth()
                         .height(50.dp),
+                    enabled = enabledButton,
                     colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
                     shape = shapeArredondado,
                     elevation = elevationButton

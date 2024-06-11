@@ -1,7 +1,6 @@
 package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos
 
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -41,10 +40,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.data.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.util.cards.CardEndereco
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
@@ -52,35 +53,14 @@ import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 lateinit var enderecoSelecionado: Endereco
 
 @Composable
-fun EnderecosScreen(
-    onBackPressed: () -> Unit,
-) {
+fun EnderecosScreen(navControllerPerfil: NavController, navControllerEnderecos: NavController) {
 
     val ctx = LocalContext.current
     var internetCheker by remember { mutableStateOf(possuiConexao(ctx)) }
 
-    BackHandler {
-        onBackPressed()
-    }
-
     Column(modifier = Modifier.fillMaxSize()) {
 
-        var clickedEditarEndereco by remember { mutableStateOf(false) }
-        var clickedAdicionarEndereco by remember { mutableStateOf(false) }
-
-        if (clickedEditarEndereco) {
-            EditarEnderecoScreen(
-                onBackPressed = {
-                    clickedEditarEndereco = false
-                    internetCheker = possuiConexao(ctx)
-                }, enderecoSelecionado
-            )
-        } else if (clickedAdicionarEndereco) {
-            CadastrarEnderecoScreen(onBackPressed = {
-                clickedAdicionarEndereco = false
-                internetCheker = possuiConexao(ctx)
-            })
-        } else if (!internetCheker) {
+        if (!internetCheker) {
             SemConexaoScreen(onBackPressed = {
                 internetCheker = possuiConexao(ctx)
             })
@@ -128,7 +108,11 @@ fun EnderecosScreen(
                             modifier = Modifier
                                 .size(45.dp),
                             contentPadding = PaddingValues(0.dp),
-                            onClick = { onBackPressed() },
+                            onClick = {
+                                if (navControllerPerfil.canGoBack) {
+                                    navControllerPerfil.popBackStack("perfilScreen", false)
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(Color.White),
                             elevation = ButtonDefaults.buttonElevation(10.dp)
                         ) {
@@ -171,7 +155,9 @@ fun EnderecosScreen(
                                 LazyColumn {
                                     items(items = listaEnderecosOrganizada) { endereco ->
                                         CardEndereco(onClickEditarEndereco = {
-                                            clickedEditarEndereco = true
+                                            navControllerEnderecos.navigate("editarEnderecoScreen") {
+                                                launchSingleTop = true
+                                            }
                                             enderecoSelecionado = endereco
                                         },
                                             endereco,
@@ -186,14 +172,18 @@ fun EnderecosScreen(
                                     }
                                 }
                                 FloatingActionButton(
-                                    onClick = { clickedAdicionarEndereco = true },
+                                    onClick = {
+                                        navControllerEnderecos.navigate("cadastrarEnderecoScreen") {
+                                            launchSingleTop = true
+                                        }
+                                    },
                                     modifier = Modifier
                                         .padding(bottom = 10.dp)
                                         .align(Alignment.BottomEnd),
                                     containerColor = azulEscuro,
                                     contentColor = Color.White
                                 ) {
-                                    Icon(Icons.Filled.Add, "Adicionar endereço")
+                                    Icon(Icons.Filled.Add, "Cadastrar endereço")
                                 }
                             }
                         } else {
@@ -213,7 +203,9 @@ fun EnderecosScreen(
 
                                 ElevatedButton(
                                     onClick = {
-                                        clickedAdicionarEndereco = true
+                                        navControllerEnderecos.navigate("cadastrarEnderecoScreen") {
+                                            launchSingleTop = true
+                                        }
                                     },
                                     modifier = Modifier
                                         .width(230.dp)

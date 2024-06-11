@@ -98,12 +98,9 @@ fun InicioScreen(navControllerInicio: NavHostController, navBarController: NavHo
 
     // monitorar click em produtos
     var clickedProduto by remember { mutableStateOf(false) }
-
     // manter a posicao do scroll ao voltar pra tela
     val scrollState = rememberScrollState()
-
     val ctx = LocalContext.current
-
     internetCheker = possuiConexao(ctx)
 
     //funcionalidade "toque novamente pra sair"

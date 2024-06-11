@@ -29,11 +29,11 @@ import androidx.navigation.compose.rememberNavController
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
-import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsCarrinho.CarrinhoScreenController
 import com.ahpp.notshoes.view.viewsLogado.viewsCategoria.CategoriaScreenController
 import com.ahpp.notshoes.view.viewsLogado.viewsInicio.InicioScreenController
 import com.ahpp.notshoes.view.viewsLogado.viewsListaDesejos.ListaDeDesejoscreen
-import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreen
+import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreenController
 
 lateinit var produtoSelecionado: Produto
 
@@ -92,9 +92,9 @@ fun BottomNavBar(navControllerLogin: NavController) {
         ) {
             composable(BottomNavItem.Inicio.route) { InicioScreenController(navBarController) }
             composable(BottomNavItem.Categorias.route) { CategoriaScreenController() }
-            composable(BottomNavItem.Carrinho.route) { CarrinhoScreen() }
+            composable(BottomNavItem.Carrinho.route) { CarrinhoScreenController() }
             composable(BottomNavItem.ListaDesejos.route) { ListaDeDesejoscreen() }
-            composable(BottomNavItem.Perfil.route) { PerfilScreen(navControllerLogin) }
+            composable(BottomNavItem.Perfil.route) { PerfilScreenController(navControllerLogin) }
         }
     }
 }

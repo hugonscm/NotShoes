@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,11 +49,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.data.endereco.EditarEnderecoCliente
-import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.validacao.ValidarCamposEndereco
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CepVisualTransformation
@@ -65,11 +65,7 @@ import java.io.IOException
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Endereco) {
-
-    BackHandler {
-        onBackPressed()
-    }
+fun EditarEnderecoScreen(navControllerEnderecos: NavController) {
 
     val scope = rememberCoroutineScope()
     fun atualizarClienteLogado() {
@@ -80,6 +76,8 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
     }
 
     val ctx = LocalContext.current
+
+    var enabledButton by remember { mutableStateOf(true) }
 
     var cep by remember { mutableStateOf(enderecoSelecionado.cep) }
     var endereco by remember { mutableStateOf(enderecoSelecionado.endereco) }
@@ -162,7 +160,11 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerEnderecos.canGoBack) {
+                        navControllerEnderecos.popBackStack("enderecosScreen", false)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -425,6 +427,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                         cidadeValido = ValidarCamposEndereco.validarCidade(cidade)
 
                         if (cepValido && enderecoValido && numeroValido && bairroValido && estadoValido && cidadeValido) {
+                            enabledButton = false
                             if (possuiConexao(ctx)) {
                                 val editarEnderecoCliente =
                                     EditarEnderecoCliente(
@@ -457,9 +460,11 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                                                     "Endereço atualizado com sucesso.",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
+                                                navControllerEnderecos.popBackStack(
+                                                    "enderecosScreen",
+                                                    false
+                                                )
                                             }
-                                            onBackPressed()
-
                                         }
                                     }
 
@@ -472,6 +477,7 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                                                 .show()
                                         }
                                         Log.e("Erro: ", e.message.toString())
+                                        enabledButton = true
                                     }
                                 })
                             } else {
@@ -483,12 +489,14 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                                     )
                                         .show()
                                 }
+                                enabledButton = true
                             }
                         }
                     },
                     modifier = Modifier
                         .width(230.dp)
                         .height(50.dp),
+                    enabled = enabledButton,
                     colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
                     shape = RoundedCornerShape(5.dp)
                 ) {
@@ -503,7 +511,11 @@ fun EditarEnderecoScreen(onBackPressed: () -> Unit, enderecoSelecionado: Enderec
                 }
                 Spacer(Modifier.padding(top = 10.dp))
                 Text(
-                    modifier = Modifier.clickable(true, onClick = onBackPressed),
+                    modifier = Modifier.clickable(true) {
+                        if (navControllerEnderecos.canGoBack) {
+                            navControllerEnderecos.popBackStack("enderecosScreen", false)
+                        }
+                    },
                     text = "CANCELAR",
                     fontSize = 15.sp,
                     style = TextStyle(

@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,11 +38,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.cliente.AtualizarEmailCliente
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
@@ -52,11 +53,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
-fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
-
-    BackHandler {
-        onBackPressed()
-    }
+fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
 
     val scope = rememberCoroutineScope()
     fun atualizarClienteLogado() {
@@ -68,8 +65,9 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
 
     val ctx = LocalContext.current
 
-    var emailNovo by remember { mutableStateOf("") }
+    var enabledButton by remember { mutableStateOf(true) }
 
+    var emailNovo by remember { mutableStateOf("") }
     var emailValido by remember { mutableStateOf(true) }
 
     var codigoStatusAlteracao by remember { mutableStateOf("201") }
@@ -93,7 +91,11 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerSeusDados.canGoBack) {
+                        navControllerSeusDados.popBackStack("seusDadosScreen", false)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -184,6 +186,7 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
                     emailValido = ValidarCamposDados.validarEmail(emailNovo)
 
                     if (emailValido) {
+                        enabledButton = false
                         if (possuiConexao(ctx)) {
                             val atualizarEmailCliente =
                                 AtualizarEmailCliente(emailNovo)
@@ -204,9 +207,13 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
                                                 "E-mail alterado com sucesso.",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            navControllerSeusDados.popBackStack(
+                                                "seusDadosScreen",
+                                                false
+                                            )
                                         }
-                                        onBackPressed()
-
+                                    } else if (code == "500") {
+                                        enabledButton = true
                                     }
                                 }
 
@@ -219,6 +226,7 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
                                             .show()
                                     }
                                     Log.e("Erro: ", e.message.toString())
+                                    enabledButton = true
                                 }
                             })
                         } else {
@@ -230,12 +238,14 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
                                 )
                                     .show()
                             }
+                            enabledButton = true
                         }
                     }
                 },
                 modifier = Modifier
                     .width(230.dp)
                     .height(50.dp),
+                enabled = enabledButton,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
@@ -246,7 +256,11 @@ fun AtualizarEmailScreen(onBackPressed: () -> Unit) {
             }
             Spacer(Modifier.padding(top = 10.dp))
             Text(
-                modifier = Modifier.clickable(true, onClick = onBackPressed),
+                modifier = Modifier.clickable(true) {
+                    if (navControllerSeusDados.canGoBack) {
+                        navControllerSeusDados.popBackStack("seusDadosScreen", false)
+                    }
+                },
                 text = "CANCELAR",
                 fontSize = 15.sp,
                 color = Color.White

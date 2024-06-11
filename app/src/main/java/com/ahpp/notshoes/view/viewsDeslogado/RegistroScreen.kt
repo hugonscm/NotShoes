@@ -33,7 +33,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,7 +64,6 @@ import java.io.IOException
 @Composable
 fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-    val canGoBack by remember { derivedStateOf { navController.canGoBack } }
     var checkedTermos by remember { mutableStateOf(false) }
 
     var nome by remember { mutableStateOf("") }
@@ -79,6 +77,8 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
     var codigoStatusRegistro by remember { mutableStateOf("201") }
 
     val ctx = LocalContext.current
+
+    var enabledButton by remember { mutableStateOf(true) }
 
     //gerenciar visibilidade da senha
     var passwordVisibility by remember { mutableStateOf(false) }
@@ -277,6 +277,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
 
                     if (checkedTermos) {
                         if (nomeValido && emailValido && senhaValida) {
+                            enabledButton = false
                             if (possuiConexao(ctx)) {
                                 val registroCliente = RegistroCliente(nome, email, senha)
 
@@ -296,6 +297,8 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                                                 ).show()
                                                 navController.navigate("login")
                                             }
+                                        } else if(code == "500"){
+                                            enabledButton = true
                                         }
                                     }
 
@@ -308,6 +311,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                                                 .show()
                                         }
                                         Log.e("Erro: ", e.message.toString())
+                                        enabledButton = true
                                     }
                                 })
                             } else {
@@ -317,6 +321,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
+                                enabledButton = true
                             }
                         }
                     } else {
@@ -326,6 +331,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 modifier
                     .fillMaxWidth()
                     .height(50.dp),
+                enabled = enabledButton,
                 colors = ButtonDefaults.buttonColors(containerColor = azulEscuro),
                 shape = shapeArredondado,
                 elevation = elevationButton
@@ -358,7 +364,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 modifier = Modifier.clickable(
                     enabled = true,
                     onClick = {
-                        if(canGoBack){
+                        if(navController.canGoBack){
                             navController.popBackStack("login", false)
                         }
                     }),

@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +37,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,21 +53,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.carrinho.FinalizarPedido
 import com.ahpp.notshoes.data.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
-import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.branco
 import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
 import com.ahpp.notshoes.util.cards.CardEnderecoCarrinho
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
+import com.ahpp.notshoes.util.viewModel.CarrinhoViewModel
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
-import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsEnderecos.CadastrarEnderecoScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -76,12 +77,15 @@ import java.time.LocalDate
 
 @Composable
 fun FinalizarPedidoScreen(
-    itensList: List<ItemCarrinho>,
-    detalhesPedido: String,
-    valorTotalPedido: Double,
-    onBackPressed: () -> Unit,
-    clickFinalizarPedido: () -> Unit
+    navControllerCarrinho: NavController,
+    carrinhoViewModel: CarrinhoViewModel
 ) {
+    var enabledButton by remember { mutableStateOf(true) }
+
+    val itemList by carrinhoViewModel.itemListSelecionada.collectAsState()
+    val detalhesPedido by carrinhoViewModel.detalhesPedidoSelecionado.collectAsState()
+    val valorTotalPedido by carrinhoViewModel.valorTotalComDescontoSelecionado.collectAsState()
+
     val ctx = LocalContext.current
     var internetCheker by remember { mutableStateOf(possuiConexao(ctx)) }
 
@@ -91,24 +95,7 @@ fun FinalizarPedidoScreen(
     // manter a posicao do scroll ao voltar pra tela
     val scrollState = rememberScrollState()
 
-    BackHandler {
-        onBackPressed()
-    }
-
-    var clickedCadastrarEndereco by remember { mutableStateOf(false) }
-    var clickedCompraFinalizada by remember { mutableStateOf(false) }
-
-    if (clickedCompraFinalizada) {
-        CompraFinalizadaScreen(onBackPressed = {
-            clickedCompraFinalizada = false
-            onBackPressed()
-        })
-    } else if (clickedCadastrarEndereco) {
-        CadastrarEnderecoScreen(onBackPressed = {
-            clickedCadastrarEndereco = false
-            internetCheker = possuiConexao(ctx)
-        })
-    } else if (!internetCheker) {
+    if (!internetCheker) {
         SemConexaoScreen(onBackPressed = {
             internetCheker = possuiConexao(ctx)
         })
@@ -176,7 +163,11 @@ fun FinalizarPedidoScreen(
                         modifier = Modifier
                             .size(45.dp),
                         contentPadding = PaddingValues(0.dp),
-                        onClick = { onBackPressed() },
+                        onClick = {
+                            if (navControllerCarrinho.canGoBack) {
+                                navControllerCarrinho.popBackStack("carrinhoScreen", false)
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(branco),
                         elevation = ButtonDefaults.buttonElevation(10.dp)
                     ) {
@@ -242,7 +233,9 @@ fun FinalizarPedidoScreen(
                             ) {
                                 ElevatedButton(
                                     onClick = {
-                                        clickedCadastrarEndereco = true
+                                        navControllerCarrinho.navigate("cadastrarEnderecoScreen") {
+                                            launchSingleTop = true
+                                        }
                                     },
                                     modifier = Modifier
                                         .width(270.dp)
@@ -329,7 +322,9 @@ fun FinalizarPedidoScreen(
 
                                 ElevatedButton(
                                     onClick = {
-                                        clickedCadastrarEndereco = true
+                                        navControllerCarrinho.navigate("cadastrarEnderecoScreen") {
+                                            launchSingleTop = true
+                                        }
                                     },
                                     modifier = Modifier
                                         .width(230.dp)
@@ -491,11 +486,11 @@ fun FinalizarPedidoScreen(
 
                     ElevatedButton(
                         onClick = {
-
                             internetCheker = possuiConexao(ctx)
-
                             if (enderecoParaEntrega != null) {
+                                //desativar o botao para evitar compra dupla
                                 if (internetCheker) {
+                                    enabledButton = false
                                     val resumoCompra =
                                         "$detalhesPedido\n\nForma de pagamento: $tipoPagamento\nTipo de entrega: $tipoEntrega\n\nValor Total: ${
                                             numberFormat.format(
@@ -512,7 +507,7 @@ fun FinalizarPedidoScreen(
                                             idCarrinho = clienteLogado.idCarrinho
                                         )
 
-                                    val finalizarPedido = FinalizarPedido(venda, itensList)
+                                    val finalizarPedido = FinalizarPedido(venda, itemList)
 
                                     finalizarPedido.sendFinalizarPedido(
                                         object : FinalizarPedido.Callback {
@@ -523,15 +518,15 @@ fun FinalizarPedidoScreen(
                                                 )
 
                                                 if (code == "1") {
-                                                    clickFinalizarPedido()
-                                                    clickedCompraFinalizada = true
+                                                    Handler(Looper.getMainLooper()).post {
+                                                        navControllerCarrinho.navigate("compraFinalizadaScreen") {
+                                                            launchSingleTop = true
+                                                        }
+                                                    }
                                                 }
                                             }
 
                                             override fun onFailure(e: IOException) {
-                                                // erro de rede
-                                                // não é possível mostrar um Toast de um Thread
-                                                // que não seja UI, então é feito dessa forma
                                                 Handler(Looper.getMainLooper()).post {
                                                     Toast.makeText(
                                                         ctx,
@@ -541,6 +536,7 @@ fun FinalizarPedidoScreen(
                                                         .show()
                                                 }
                                                 Log.e("Erro: ", e.message.toString())
+                                                enabledButton = true
                                             }
                                         }
                                     )
@@ -557,6 +553,7 @@ fun FinalizarPedidoScreen(
                             .fillMaxWidth()
                             .height(60.dp)
                             .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+                        enabled = enabledButton,
                         shape = RoundedCornerShape(5.dp),
                         contentPadding = PaddingValues(0.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -569,7 +566,7 @@ fun FinalizarPedidoScreen(
 
                             ) {
                             Text(
-                                text = "FINALIZAR PEDIDO",
+                                text = "CONFIRMAR PEDIDO",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White.copy(alpha = 0.9f)

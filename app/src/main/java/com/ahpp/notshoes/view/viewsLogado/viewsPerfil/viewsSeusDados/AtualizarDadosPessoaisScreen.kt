@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,11 +40,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.data.cliente.AtualizarDadosPessoaisCliente
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.RadioButtonButtonPersonalizado
+import com.ahpp.notshoes.util.funcoes.canGoBack
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.visualTransformation.CpfVisualTransformation
@@ -56,12 +57,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 @Composable
-fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
-
-    BackHandler {
-        onBackPressed()
-    }
-
+fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
     val scope = rememberCoroutineScope()
     fun atualizarClienteLogado() {
         scope.launch(Dispatchers.IO) {
@@ -71,6 +67,8 @@ fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
     }
 
     val ctx = LocalContext.current
+
+    var enabledButton by remember { mutableStateOf(true) }
 
     var nomeNovo by remember { mutableStateOf(clienteLogado.nome) }
     var cpfNovo by remember { mutableStateOf(clienteLogado.cpf) }
@@ -113,7 +111,11 @@ fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { onBackPressed() },
+                onClick = {
+                    if (navControllerSeusDados.canGoBack) {
+                        navControllerSeusDados.popBackStack()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color.White),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
             ) {
@@ -256,12 +258,12 @@ fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
             ) {
                 ElevatedButton(
                     onClick = {
-
                         nomeValido = ValidarCamposDados.validarNome(nomeNovo)
                         cpfValido = ValidarCamposDados.validarCpf(cpfNovo)
                         telefoneValido = ValidarCamposDados.validarTelefone(telefoneNovo)
 
                         if (nomeValido && cpfValido && telefoneValido) {
+                            enabledButton = false
                             if (possuiConexao(ctx)) {
                                 val atualizarDadosCliente =
                                     AtualizarDadosPessoaisCliente(
@@ -282,9 +284,8 @@ fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                                                 "Dados foram atualizados.",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            navControllerSeusDados.popBackStack()
                                         }
-                                        onBackPressed()
-
                                     }
 
                                     override fun onFailure(e: IOException) {
@@ -296,19 +297,26 @@ fun AtualizarDadosPessoaisScreen(onBackPressed: () -> Unit) {
                                                 .show()
                                         }
                                         Log.e("Erro: ", e.message.toString())
+                                        enabledButton = true
                                     }
                                 })
                             } else {
                                 Handler(Looper.getMainLooper()).post {
-                                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                                    Toast.makeText(
+                                        ctx,
+                                        "Sem conexão com a internet.",
+                                        Toast.LENGTH_SHORT
+                                    )
                                         .show()
                                 }
+                                enabledButton = true
                             }
                         }
                     },
                     modifier = Modifier
                         .width(230.dp)
                         .height(50.dp),
+                    enabled = enabledButton,
                     colors = ButtonDefaults.buttonColors(containerColor = azulEscuro)
                 ) {
                     Text(

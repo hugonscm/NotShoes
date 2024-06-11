@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.carrinho.getItensCarrinho
 import com.ahpp.notshoes.data.carrinho.getProdutoCarrinho
@@ -59,35 +60,34 @@ import com.ahpp.notshoes.util.funcoes.carrinho.calcularValorCarrinhoTotal
 import com.ahpp.notshoes.util.funcoes.carrinho.removerProduto
 import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
+import com.ahpp.notshoes.util.viewModel.CarrinhoViewModel
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
 import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
-import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados.AtualizarDadosPessoaisScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.NumberFormat
 
 @Composable
-fun CarrinhoScreen() {
+fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: CarrinhoViewModel) {
 
     var internetCheker by remember { mutableStateOf(false) }
 
     val localeBR = java.util.Locale("pt", "BR")
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
-    var clickedFinalizarPedido by remember { mutableStateOf(false) }
-    var clickedCompletarCadastro by remember { mutableStateOf(false) }
-
     // manter a posicao do scroll ao voltar pra tela
     val listState = rememberLazyListState()
 
-    var itensList by remember { mutableStateOf(emptyList<ItemCarrinho>()) }
+    var itemList by remember { mutableStateOf(emptyList<ItemCarrinho>()) }
     var produtosList by remember { mutableStateOf(emptyList<Produto>()) }
 
     var valorTotal by remember { mutableDoubleStateOf(0.0) }
     var valorTotalComDesconto by remember { mutableDoubleStateOf(0.0) }
 
-    // criei esse combinedList porque preciso da lista de produtos aqui tambem para calcular
+    var detalhesPedido by remember { mutableStateOf("") }
+
+    // criei esse combinedList porque preciso da lista de produtos aqui para calcular
     // os valores da compra total, e aproveitando isso passei o produto para o cardItemCarrinho
     // para ele nao precisar buscar o produto no banco la dentro tambem
     var combinedList by remember { mutableStateOf(emptyList<Pair<ItemCarrinho, Produto>>()) }
@@ -114,12 +114,26 @@ fun CarrinhoScreen() {
                 }
 
                 withContext(Dispatchers.Main) {
-                    itensList = itens
+                    itemList = itens
                     produtosList = produtos
                     combinedList = combined
-                    valorTotal = calcularValorCarrinhoTotal(itensList, produtosList)
+                    valorTotal = calcularValorCarrinhoTotal(itemList, produtosList)
                     valorTotalComDesconto =
-                        calcularValorCarrinhoComDesconto(itensList, produtosList)
+                        calcularValorCarrinhoComDesconto(itemList, produtosList)
+
+                    detalhesPedido = combinedList.joinToString(separator = "\n\n") { item ->
+                        val valorComDesconto =
+                            item.second.preco.toDouble() - (item.second.preco.toDouble() * item.second.desconto.toDouble())
+                        "(${item.first.quantidade}) ${item.second.nomeProduto} - R$ ${
+                            numberFormat.format(
+                                valorComDesconto * item.first.quantidade
+                            )
+                        }"
+                    }
+                    //salvar os dados no viewModel para recuperar na tela finalidarPedidoScreen
+                    carrinhoViewModel.selecionaritemList(itemList)
+                    carrinhoViewModel.selecionardetalhesPedido(detalhesPedido)
+                    carrinhoViewModel.selecionarvalorTotalComDesconto(valorTotalComDesconto)
                 }
             }
         }
@@ -129,37 +143,16 @@ fun CarrinhoScreen() {
         atualizarLista()
     }
 
-    if (clickedFinalizarPedido) {
-        // resumo do pedido
-        val detalhesPedido = combinedList.joinToString(separator = "\n\n") { item ->
-            val valorComDesconto =
-                item.second.preco.toDouble() - (item.second.preco.toDouble() * item.second.desconto.toDouble())
-            "(${item.first.quantidade}) ${item.second.nomeProduto} - R$ ${
-                numberFormat.format(
-                    valorComDesconto * item.first.quantidade
-                )
-            }"
-        }
-        FinalizarPedidoScreen(
-            itensList,
-            detalhesPedido,
-            valorTotalComDesconto,
-            onBackPressed = { clickedFinalizarPedido = false },
-            clickFinalizarPedido = { atualizarLista() })
-    } else if (clickedCompletarCadastro) {
-        AtualizarDadosPessoaisScreen(onBackPressed = { clickedCompletarCadastro = false })
-    } else if (internetCheker) {
-
+    if (!internetCheker) {
+        SemConexaoScreen(onBackPressed = {
+            atualizarLista()
+        })
+    } else {
         val openDialog = remember { mutableStateOf(false) }
-
         if (openDialog.value) {
             AlertDialog(
                 containerColor = Color.White,
-
                 onDismissRequest = {
-                    // Dismiss the dialog when the user clicks outside the dialog or on the back
-                    // button. If you want to disable that functionality, simply use an empty
-                    // onDismissRequest.
                     openDialog.value = false
                 },
                 icon = { Icon(Icons.Filled.Person, contentDescription = null) },
@@ -179,7 +172,9 @@ fun CarrinhoScreen() {
                     TextButton(
                         onClick = {
                             openDialog.value = false
-                            clickedCompletarCadastro = true
+                            navControllerCarrinho.navigate("atualizarDadosPessoaisScreen") {
+                                launchSingleTop = true
+                            }
                         }
                     ) {
                         Text("Confirmar", color = Color.Black)
@@ -213,7 +208,7 @@ fun CarrinhoScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.padding( start = 10.dp),
+                    modifier = Modifier.padding(start = 10.dp),
                     text = "Carrinho",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -271,7 +266,7 @@ fun CarrinhoScreen() {
                 }
             }
 
-            if (itensList.isNotEmpty()) {
+            if (itemList.isNotEmpty()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -315,9 +310,11 @@ fun CarrinhoScreen() {
                     }
                     ElevatedButton(
                         onClick = {
-                            if (itensList.isNotEmpty() && clienteLogado.cpf != "" && clienteLogado.telefoneContato != "") {
-                                clickedFinalizarPedido =
-                                    true
+                            if (itemList.isNotEmpty() && clienteLogado.cpf != "" && clienteLogado.telefoneContato != "") {
+                                atualizarLista()
+                                navControllerCarrinho.navigate("finalizarPedidoScreen") {
+                                    launchSingleTop = true
+                                }
                             } else {
                                 openDialog.value = true
                             }
@@ -350,9 +347,5 @@ fun CarrinhoScreen() {
                 }
             }
         }
-    } else {
-        SemConexaoScreen(onBackPressed = {
-            atualizarLista()
-        })
     }
 }
