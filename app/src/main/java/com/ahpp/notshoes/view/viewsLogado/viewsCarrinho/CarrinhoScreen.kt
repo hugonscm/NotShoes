@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -158,13 +159,13 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
                 icon = { Icon(Icons.Filled.Person, contentDescription = null) },
                 title = {
                     Text(
-                        text = "Dados incompletos",
+                        text = stringResource(R.string.dados_incompletos),
                         textAlign = TextAlign.Center
                     )
                 },
                 text = {
                     Text(
-                        "Complete seus dados para prosseguir.",
+                        stringResource(R.string.complete_seus_dados_para_prosseguir),
                         textAlign = TextAlign.Start
                     )
                 },
@@ -177,7 +178,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
                             }
                         }
                     ) {
-                        Text("Confirmar", color = Color.Black)
+                        Text(stringResource(R.string.confirmar), color = Color.Black)
                     }
                 },
                 dismissButton = {
@@ -186,7 +187,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
                             openDialog.value = false
                         }
                     ) {
-                        Text("Cancelar", color = Color.Black)
+                        Text(stringResource(R.string.cancelar), color = Color.Black)
                     }
                 }
             )
@@ -209,7 +210,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
             ) {
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = "Carrinho",
+                    text = stringResource(R.string.carrinho),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color.White
@@ -257,7 +258,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Seu carrinho está vazio.",
+                                text = stringResource(R.string.seu_carrinho_esta_vazio),
                                 fontSize = 25.sp,
                                 color = azulEscuro
                             )
@@ -332,7 +333,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
 
                             ) {
                             Text(
-                                text = "FINALIZAR",
+                                text = stringResource(R.string.finalizar),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White.copy(alpha = 0.9f)
@@ -340,7 +341,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
                             Icon(
                                 tint = Color.White.copy(alpha = 0.9f),
                                 painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
-                                contentDescription = "Finalizar compra",
+                                contentDescription = stringResource(R.string.finalizar_compra_description),
                             )
                         }
                     }

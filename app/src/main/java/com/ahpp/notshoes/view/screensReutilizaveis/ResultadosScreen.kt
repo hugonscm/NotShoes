@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -152,7 +153,7 @@ fun ResultadosScreen(
         "Maior preço",
         "Ofertas",
     )
-    var expandedtipoOrdenacao by remember { mutableStateOf(false) }
+    var expandedtipoOrdenacaoList by remember { mutableStateOf(false) }
     var tipoOrdenacao by remember { mutableStateOf(tipoOrdenacaoList[0]) }
 
     var expandedFiltro by remember { mutableStateOf(false) }
@@ -174,7 +175,8 @@ fun ResultadosScreen(
         scope.launch(Dispatchers.IO) {
             if (!possuiConexao(ctx)) {
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, R.string.verifique_conexao_internet, Toast.LENGTH_SHORT)
+                        .show()
                 }
             } else {
                 produtosList = when (tipoBusca) {
@@ -291,7 +293,7 @@ fun ResultadosScreen(
                     ) {
                         Image(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Toque para voltar",
+                            contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                             modifier = Modifier.size(30.dp)
                         )
                     }
@@ -329,7 +331,7 @@ fun ResultadosScreen(
                             ) {
                                 Image(
                                     painterResource(id = R.drawable.baseline_refresh_24),
-                                    contentDescription = "Limpar filtro",
+                                    contentDescription = stringResource(id = R.string.limpar_filtros_description),
                                     modifier = Modifier.size(30.dp)
                                 )
                             }
@@ -348,7 +350,7 @@ fun ResultadosScreen(
                         ) {
                             Image(
                                 painterResource(R.drawable.baseline_filter_list_24),
-                                contentDescription = "Exibir filtros",
+                                contentDescription = stringResource(id = R.string.exibir_filtros_description),
                                 modifier = Modifier.size(30.dp)
                             )
                         }
@@ -513,8 +515,8 @@ fun ResultadosScreen(
                                 modifier = Modifier
                                     .padding(top = 10.dp, start = 10.dp, end = 5.dp)
                                     .weight(1f),
-                                expanded = expandedtipoOrdenacao,
-                                onExpandedChange = { expandedtipoOrdenacao = it },
+                                expanded = expandedtipoOrdenacaoList,
+                                onExpandedChange = { expandedtipoOrdenacaoList = it },
                             ) {
 
                                 OutlinedTextField(
@@ -525,14 +527,14 @@ fun ResultadosScreen(
                                     singleLine = true,
                                     trailingIcon = {
                                         ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expandedtipoOrdenacao
+                                            expanded = expandedtipoOrdenacaoList
                                         )
                                     },
                                     colors = colorsTextField
                                 )
                                 ExposedDropdownMenu(
-                                    expanded = expandedtipoOrdenacao,
-                                    onDismissRequest = { expandedtipoOrdenacao = false },
+                                    expanded = expandedtipoOrdenacaoList,
+                                    onDismissRequest = { expandedtipoOrdenacaoList = false },
                                 ) {
                                     tipoOrdenacaoList.forEach { ordenacaoSelecionada ->
                                         DropdownMenuItem(
@@ -544,7 +546,7 @@ fun ResultadosScreen(
                                             },
                                             onClick = {
                                                 tipoOrdenacao = ordenacaoSelecionada
-                                                expandedtipoOrdenacao = false
+                                                expandedtipoOrdenacaoList = false
                                                 buscarProduto()
                                             },
                                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -589,12 +591,12 @@ fun ResultadosScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Nenhum produto encontrado.",
+                            text = stringResource(id = R.string.nenhum_produto_encontrado),
                             fontSize = 28.sp,
+                            color = azulEscuro
                         )
                     }
                 }
-
             }
 
         }

@@ -24,44 +24,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.branco
-import com.ahpp.notshoes.view.screensReutilizaveis.ResultadosScreen
-
-@Composable
-fun CategoriaScreenController() {
-    val navControllerCategoria = rememberNavController()
-    NavHost(navController = navControllerCategoria, startDestination = "categoriaScreen") {
-
-        composable(route = "categoriaScreen") {
-            CategoriaScreen(navControllerCategoria)
-        }
-
-        composable(route = "resultadosScreen/{valorBusca}/{tipoBusca}/{fromScreen}",
-            arguments = listOf(
-                navArgument("valorBusca") { type = NavType.StringType },
-                navArgument("tipoBusca") { type = NavType.StringType },
-                navArgument("fromScreen") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val valorBusca = backStackEntry.arguments?.getString("valorBusca")
-            val tipoBusca = backStackEntry.arguments?.getString("tipoBusca")
-            val fromScreen = backStackEntry.arguments?.getString("fromScreen")
-            ResultadosScreen(navControllerCategoria, valorBusca.toString(), tipoBusca.toString(), fromScreen.toString())
-        }
-    }
-}
 
 @Composable
 fun CategoriaScreen(navControllerCategoria: NavController) {
@@ -100,7 +71,7 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
             Text(
                 modifier = Modifier
                     .width(270.dp),
-                text = "Categorias", fontSize = 20.sp, maxLines = 1,
+                text = stringResource(R.string.categorias_titulo), fontSize = 20.sp, maxLines = 1,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(
                     branco
@@ -141,18 +112,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_regata),
-                            contentDescription = "Categoria Regata"
+                            contentDescription = stringResource(id = R.string.acessar_categoria_regata)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Regata",
+                            text = stringResource(R.string.regata),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Regata",
+                        contentDescription = stringResource(R.string.acessar_categoria_regata),
                     )
                 }
             }
@@ -185,18 +156,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_camisa_basica),
-                            contentDescription = "Categoria Camisa Básica"
+                            contentDescription = stringResource(id = R.string.acessar_categoria_camisa_basica)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Camisa Básica",
+                            text = stringResource(R.string.camisa_basica),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Camisa Básica"
+                        contentDescription = stringResource(R.string.acessar_categoria_camisa_basica)
                     )
                 }
             }
@@ -228,18 +199,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_calca),
-                            contentDescription = "Categoria Calça"
+                            contentDescription = stringResource(R.string.acessar_categoria_calca)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Calça",
+                            text = stringResource(R.string.calca),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Calça"
+                        contentDescription = stringResource(R.string.acessar_categoria_calca)
                     )
                 }
             }
@@ -271,18 +242,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_cueca),
-                            contentDescription = "Categoria Cueca"
+                            contentDescription = stringResource(R.string.acessar_categoria_cueca)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Cueca",
+                            text = stringResource(R.string.cueca),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Cueca"
+                        contentDescription = stringResource(R.string.acessar_categoria_cueca)
                     )
                 }
             }
@@ -314,18 +285,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_short),
-                            contentDescription = "Categoria Short"
+                            contentDescription = stringResource(R.string.acessar_categoria_short)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Short",
+                            text = stringResource(R.string.shortt),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Short"
+                        contentDescription = stringResource(R.string.acessar_categoria_short)
                     )
                 }
             }
@@ -357,18 +328,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_tenis),
-                            contentDescription = "Categoria Tênis"
+                            contentDescription = stringResource(R.string.acessar_categoria_tenis)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Tênis",
+                            text = stringResource(R.string.tenis),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Tênis"
+                        contentDescription = stringResource(R.string.acessar_categoria_tenis)
                     )
                 }
             }
@@ -400,18 +371,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_adidas),
-                            contentDescription = "Categoria Produtos Adidas"
+                            contentDescription = stringResource(R.string.acessar_categoria_produtos_adidas)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Produtos Adidas",
+                            text = stringResource(R.string.produtos_adidas),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Adidas"
+                        contentDescription = stringResource(R.string.acessar_categoria_produtos_adidas)
                     )
                 }
             }
@@ -443,18 +414,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_fila),
-                            contentDescription = "Categoria Produtos Fila"
+                            contentDescription = stringResource(R.string.acessar_categoria_produtos_fila)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Produtos Fila",
+                            text = stringResource(R.string.produtos_fila),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Fila"
+                        contentDescription = stringResource(R.string.acessar_categoria_produtos_fila)
                     )
                 }
             }
@@ -486,18 +457,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_mizuno),
-                            contentDescription = "Categoria Produtos Mizuno"
+                            contentDescription = stringResource(R.string.acessar_categoria_produtos_mizuno)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Produtos Mizuno",
+                            text = stringResource(R.string.produtos_mizuno),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Produtos Mizuno"
+                        contentDescription = stringResource(R.string.acessar_categoria_produtos_mizuno)
                     )
                 }
             }
@@ -529,18 +500,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_nike),
-                            contentDescription = "Categoria produtos Nike"
+                            contentDescription = stringResource(R.string.acessar_categoria_produtos_nike)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Produtos Nike",
+                            text = stringResource(R.string.produtos_nike),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Nike"
+                        contentDescription = stringResource(R.string.acessar_categoria_produtos_nike)
                     )
                 }
             }
@@ -572,18 +543,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_olympikus),
-                            contentDescription = "Categoria Produtos Olympikus"
+                            contentDescription = stringResource(R.string.acessar_categoria_produtos_olympikus)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Produtos Olympikus",
+                            text = stringResource(R.string.produtos_olympikus),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Olympikus"
+                        contentDescription = stringResource(R.string.acessar_categoria_produtos_olympikus)
                     )
                 }
             }
@@ -615,18 +586,18 @@ fun CategoriaScreen(navControllerCategoria: NavController) {
                                 .width(100.dp)
                                 .height(100.dp),
                             painter = painterResource(id = R.drawable.img_categoria_puma),
-                            contentDescription = "Categoria Produtos Puma"
+                            contentDescription = stringResource(R.string.acessar_categoria_produtos_puma)
                         )
                         Spacer(modifier = Modifier.width(tamanhoSpacer))
                         Text(
-                            text = "Produtos Puma",
+                            text = stringResource(R.string.produtos_puma),
                             fontWeight = FontWeight.Bold,
                             fontSize = tamanhoFonte
                         )
                     }
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                        contentDescription = "Acessar categoria Produtos Puma"
+                        contentDescription = stringResource(R.string.acessar_categoria_produtos_puma)
                     )
                 }
             }

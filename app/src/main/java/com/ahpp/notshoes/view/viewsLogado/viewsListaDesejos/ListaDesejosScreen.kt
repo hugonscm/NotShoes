@@ -25,9 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.ui.theme.azulEscuro
@@ -98,7 +100,7 @@ fun ListaDeDesejoscreen() {
                 Text(
                     modifier = Modifier
                         .padding(start = 10.dp),
-                    text = "Lista de desejos", fontSize = 20.sp,
+                    text = stringResource(R.string.lista_de_desejos), fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
@@ -129,7 +131,7 @@ fun ListaDeDesejoscreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Sua lista de desejos está vazia.",
+                            text = stringResource(R.string.sua_lista_de_desejos_esta_vazia),
                             fontSize = 25.sp,
                             color = azulEscuro
                         )

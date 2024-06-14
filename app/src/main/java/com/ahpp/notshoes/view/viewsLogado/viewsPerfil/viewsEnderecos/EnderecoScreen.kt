@@ -25,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,10 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.endereco.getEnderecos
 import com.ahpp.notshoes.model.Endereco
 import com.ahpp.notshoes.ui.theme.azulEscuro
@@ -118,14 +121,14 @@ fun EnderecosScreen(navControllerPerfil: NavController, navControllerEnderecos: 
                         ) {
                             Image(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Toque para voltar",
+                                contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                                 modifier = Modifier.size(30.dp)
                             )
                         }
 
                         Text(
                             modifier = Modifier.padding(start = 10.dp),
-                            text = "Seus endereços",
+                            text = stringResource(R.string.seus_enderecos),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             color = Color.White
@@ -181,9 +184,11 @@ fun EnderecosScreen(navControllerPerfil: NavController, navControllerEnderecos: 
                                         .padding(bottom = 10.dp)
                                         .align(Alignment.BottomEnd),
                                     containerColor = azulEscuro,
-                                    contentColor = Color.White
+                                    contentColor = Color.White,
+                                    shape = FloatingActionButtonDefaults.largeShape
                                 ) {
-                                    Icon(Icons.Filled.Add, "Cadastrar endereço")
+                                    Icon(Icons.Filled.Add,
+                                        stringResource(R.string.cadastrar_endereco))
                                 }
                             }
                         } else {
@@ -194,7 +199,7 @@ fun EnderecosScreen(navControllerPerfil: NavController, navControllerEnderecos: 
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Nenhum endereço cadastrado.",
+                                    text = stringResource(R.string.nenhum_endereco_cadastrado),
                                     fontSize = 25.sp,
                                     color = azulEscuro
                                 )
@@ -216,9 +221,10 @@ fun EnderecosScreen(navControllerPerfil: NavController, navControllerEnderecos: 
                                     shape = RoundedCornerShape(5.dp),
                                 ) {
                                     Text(
-                                        text = "ADICIONAR ENDEREÇO",
+                                        text = stringResource(R.string.cadastrar_endereco),
                                         fontSize = 15.sp,
-                                        color = Color.White
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
                             }

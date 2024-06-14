@@ -2,7 +2,6 @@ package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -58,6 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.security.MessageDigest
+import java.util.Locale
 
 @Composable
 fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
@@ -137,7 +137,7 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_close_24),
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -173,19 +173,24 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                 supportingText = {
                     if (!senhaAtualValida) {
                         Text(
-                            text = "Digite uma senha válida.",
+                            text = stringResource(id = R.string.digite_senha_valida),
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
                     } else if (!senhaAtualCorreta) {
                         Text(
-                            text = "Senha atual incorreta.",
+                            text = stringResource(R.string.senha_atual_incorreta),
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
                     }
                 },
-                placeholder = { Text(text = "Senha atual", color = corPlaceholder) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.senha_atual),
+                        color = corPlaceholder
+                    )
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
                     IconButton(onClick = {
@@ -193,7 +198,8 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                     }) {
                         Icon(
                             painter = iconVisibility1,
-                            contentDescription = "Visibility Icon", tint = Color.Black
+                            contentDescription = stringResource(id = R.string.alterar_visibilidade_senha),
+                            tint = Color.Black
                         )
                     }
                 },
@@ -217,13 +223,18 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                 supportingText = {
                     if (!senhaNovaValida) {
                         Text(
-                            text = "Digite uma senha válida.",
+                            text = stringResource(id = R.string.digite_senha_valida),
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
                     }
                 },
-                placeholder = { Text(text = "Nova senha", color = corPlaceholder) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.nova_senha),
+                        color = corPlaceholder
+                    )
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
                     IconButton(onClick = {
@@ -231,7 +242,8 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                     }) {
                         Icon(
                             painter = iconVisibility2,
-                            contentDescription = "Visibility Icon", tint = Color.Black
+                            contentDescription = stringResource(id = R.string.alterar_visibilidade_senha),
+                            tint = Color.Black
                         )
                     }
                 },
@@ -267,14 +279,14 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                                     //500 = erro
                                     //201 = senha alterada com sucesso
                                     codigoStatusAlteracao = code
-                                    Log.i("CODIGO RECEBIDO {ALTERAR SENHA}: ", code)
+                                    //Log.i("CODIGO RECEBIDO {ALTERAR SENHA}: ", code)
 
                                     if (code == "201") {
                                         atualizarClienteLogado()
                                         Handler(Looper.getMainLooper()).post {
                                             Toast.makeText(
                                                 ctx,
-                                                "Senha alterada com sucesso.",
+                                                R.string.senha_alterada_com_sucesso,
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             navControllerSeusDados.popBackStack(
@@ -290,10 +302,10 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                                     // não é possível mostrar um Toast de um Thread
                                     // que não seja UI, então é feito dessa forma
                                     Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                        Toast.makeText(ctx, R.string.erro_rede, Toast.LENGTH_SHORT)
                                             .show()
                                     }
-                                    Log.e("Erro: ", e.message.toString())
+                                    //Log.e("Erro: ", e.message.toString())
                                     enabledButton = true
                                 }
                             })
@@ -301,7 +313,7 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                             Handler(Looper.getMainLooper()).post {
                                 Toast.makeText(
                                     ctx,
-                                    "Sem conexão com a internet.",
+                                    R.string.erro_rede,
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
@@ -329,7 +341,7 @@ fun AtualizarSenhaScreen(navControllerSeusDados: NavController) {
                         navControllerSeusDados.popBackStack("seusDadosScreen", false)
                     }
                 },
-                text = "CANCELAR",
+                text = stringResource(id = R.string.cancelar).uppercase(Locale.ROOT),
                 fontSize = 15.sp,
                 color = Color.White
             )

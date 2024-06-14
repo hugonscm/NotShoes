@@ -2,7 +2,6 @@ package com.ahpp.notshoes.view.viewsDeslogado
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +42,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -130,7 +130,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .height(150.dp), verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Crie sua conta e aproveite nossas ofertas!",
+                text = stringResource(id = R.string.crie_conta_aproveite_ofertas),
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 color = azulEscuro
@@ -148,12 +148,17 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             isError = !nomeValido,
             supportingText = {
                 if (!nomeValido) {
-                    Text(text = "Digite um nome válido.")
+                    Text(text = stringResource(id = R.string.digite_nome_valido))
                 }
             },
-            placeholder = { Text(text = "Nome Completo", color = corPlaceholder) },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.nome),
+                    color = corPlaceholder
+                )
+            },
             leadingIcon = {
-                Icon(Icons.Filled.Person, contentDescription = "Icone pessoa", tint = Color.Black)
+                Icon(Icons.Filled.Person, contentDescription = null, tint = Color.Black)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -175,14 +180,19 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             isError = !emailValido || codigoStatusRegistro == "500",
             supportingText = {
                 if (!emailValido) {
-                    Text(text = "Digite um e-mail válido.")
+                    Text(text = stringResource(id = R.string.digite_email_valido))
                 } else if (codigoStatusRegistro == "500") {
-                    Text(text = "E-mail já cadastrado.")
+                    Text(text = stringResource(id = R.string.email_ja_cadastrado))
                 }
             },
-            placeholder = { Text(text = "E-mail", color = corPlaceholder) },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.email),
+                    color = corPlaceholder
+                )
+            },
             leadingIcon = {
-                Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
+                Icon(Icons.Filled.Email, contentDescription = null, tint = Color.Black)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -197,7 +207,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             isError = !senhaValida,
             supportingText = {
                 if (!senhaValida) {
-                    Text(text = "Digite uma senha válida.")
+                    Text(text = stringResource(id = R.string.digite_senha_valida))
                 }
             },
             onValueChange = {
@@ -206,10 +216,15 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 }
                 senhaValida = ValidarCamposDados.validarSenha(senha)
             },
-            placeholder = { Text(text = "Senha", color = corPlaceholder) },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.senha),
+                    color = corPlaceholder
+                )
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             leadingIcon = {
-                Icon(Icons.Filled.Lock, contentDescription = "Icone senha", tint = Color.Black)
+                Icon(Icons.Filled.Lock, contentDescription = null, tint = Color.Black)
             },
             trailingIcon = {
                 IconButton(onClick = {
@@ -217,7 +232,8 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 }) {
                     Icon(
                         painter = icon,
-                        contentDescription = "Visibility Icon", tint = Color.Black
+                        contentDescription = stringResource(id = R.string.alterar_visibilidade_senha),
+                        tint = Color.Black
                     )
                 }
             },
@@ -246,7 +262,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             )
             Row {
                 Text(
-                    text = "Eu li e concordo com os ",
+                    text = stringResource(id = R.string.li_concordo_com) + " ",
                     style = MaterialTheme.typography.bodyLarge,
                     fontSize = 15.sp
                 )
@@ -254,7 +270,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                     modifier = Modifier.clickable(
                         enabled = true,
                         onClick = { }),
-                    text = "termos de uso.",
+                    text = stringResource(id = R.string.termos_uso),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
@@ -286,18 +302,18 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                                         //500 = usuario ja existe
                                         //201 = usuario criado com sucesso
                                         codigoStatusRegistro = code
-                                        Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
+                                        //Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
 
                                         if (code == "201") {
                                             Handler(Looper.getMainLooper()).post {
                                                 Toast.makeText(
                                                     ctx,
-                                                    "Conta criada com sucesso.",
+                                                    R.string.conta_criada,
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                                 navController.navigate("login")
                                             }
-                                        } else if(code == "500"){
+                                        } else if (code == "500") {
                                             enabledButton = true
                                         }
                                     }
@@ -307,17 +323,21 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                                         // não é possível mostrar um Toast de um Thread
                                         // que não seja UI, então é feito dessa forma
                                         Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            Toast.makeText(
+                                                ctx,
+                                                R.string.erro_rede,
+                                                Toast.LENGTH_SHORT
+                                            )
                                                 .show()
                                         }
-                                        Log.e("Erro: ", e.message.toString())
+                                        //Log.e("Erro: ", e.message.toString())
                                         enabledButton = true
                                     }
                                 })
                             } else {
                                 Toast.makeText(
                                     ctx,
-                                    "Sem conexão com a internet.",
+                                    R.string.verifique_conexao_internet,
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
@@ -325,7 +345,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                             }
                         }
                     } else {
-                        Toast.makeText(ctx, "Aceite os termos de uso.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.aceite_termos_uso, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier
@@ -337,7 +357,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 elevation = elevationButton
             ) {
                 Text(
-                    text = "Criar conta",
+                    text = stringResource(id = R.string.criar_conta),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     style = TextStyle(
@@ -353,7 +373,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = "Já possui uma conta? ",
+                text = stringResource(id = R.string.ja_possui_conta) + " ",
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 color =
@@ -364,11 +384,11 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 modifier = Modifier.clickable(
                     enabled = true,
                     onClick = {
-                        if(navController.canGoBack){
+                        if (navController.canGoBack) {
                             navController.popBackStack("login", false)
                         }
                     }),
-                text = "Entre",
+                text = stringResource(id = R.string.entre),
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyLarge,

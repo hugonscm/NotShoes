@@ -1,6 +1,6 @@
 [versions]
 accompanistPager = "0.28.0"
-agp = "8.4.1"
+agp = "8.4.2"
 coilCompose = "2.5.0"
 coreSplashscreen = "1.0.1"
 datastoreCore = "1.1.1"

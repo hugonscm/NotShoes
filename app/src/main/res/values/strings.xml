@@ -1,8 +1,188 @@
 <resources>
+
     <string name="app_name">NotShoes</string>
-    <string name="title_activity_produto_view">ProdutoView</string>
+
+    <!-- LoginScreen.kt -->
+    <string name="entre_aproveite_ofertas">Entre e aproveite as nossas ofertas! 👋</string>
+    <string name="esqueceu_sua_senha">Esqueceu sua senha?</string>
+    <string name="entrar">Entrar</string>
+    <string name="nao_tem_conta">Não tem uma conta?</string>
+    <string name="cadastrese">Cadastre-se</string>
+
+    <!-- RegistroScreen.kt -->
+    <string name="crie_conta_aproveite_ofertas">Crie sua conta e aproveite nossas ofertas! 👇</string>
+    <string name="li_concordo_com">Eu li e concordo com os</string>
+    <string name="termos_uso">termos de uso.</string>
+    <string name="criar_conta">Criar conta</string>
+    <string name="ja_possui_conta">Já possui uma conta?</string>
+    <string name="entre">Entre</string>
+
+    <!-- InicioScreen.kt -->
+    <string name="ver_tudo">Ver tudo</string>
+    <string name="promocoes_ativas">PROMOÇÕES ATIVAS</string>
+    <string name="que_pena">Que pena!</string>
+    <string name="nenhuma_promocao_ativa">Nenhuma promoção ativa.</string>
+    <string name="navegue_por_marcas">NAVEGUE POR MARCAS</string>
+
+    <!-- CategoriaScreen.kt -->
+    <string name="categorias_titulo">Categorias</string>
+    <string name="acessar_categoria_regata">Ver produtos da categoria regata</string>
+    <string name="regata">Regata</string>
+    <string name="acessar_categoria_camisa_basica">Ver produtos da categoria camisa básica</string>
+    <string name="camisa_basica">Camisa básica</string>
+    <string name="acessar_categoria_calca">Ver produtos da categoria calça</string>
+    <string name="calca">Calça</string>
+    <string name="acessar_categoria_tenis">Ver produtos da categoria tênis</string>
+    <string name="tenis">Tênis</string>
+    <string name="acessar_categoria_cueca">Categoria Cueca</string>
+    <string name="cueca">Cueca</string>
+    <string name="acessar_categoria_short">Acessar categoria Short</string>
+    <string name="shortt">Short</string>
+    <string name="acessar_categoria_produtos_adidas">Acessar categoria Produtos Adidas</string>
+    <string name="produtos_adidas">Produtos Adidas</string>
+    <string name="acessar_categoria_produtos_fila">Acessar categoria Produtos Fila</string>
+    <string name="produtos_fila">Produtos Fila</string>
+    <string name="acessar_categoria_produtos_mizuno">Acessar categoria Produtos Mizuno</string>
+    <string name="produtos_mizuno">Produtos Mizuno</string>
+    <string name="acessar_categoria_produtos_nike">Acessar categoria Produtos Nike</string>
+    <string name="produtos_nike">Produtos Nike</string>
+    <string name="acessar_categoria_produtos_olympikus">Acessar categoria Produtos Olympikus</string>
+    <string name="produtos_olympikus">Produtos Olympikus</string>
+    <string name="acessar_categoria_produtos_puma">Acessar categoria Produtos Puma</string>
+    <string name="produtos_puma">Produtos Puma</string>
+
+    <!-- CarrinhoScreen.kt -->
+    <string name="dados_incompletos">Dados incompletos</string>
+    <string name="complete_seus_dados_para_prosseguir">Complete seus dados para prosseguir.</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="carrinho">Carrinho</string>
+    <string name="seu_carrinho_esta_vazio">Seu carrinho está vazio.</string>
+    <string name="finalizar">FINALIZAR</string>
+
+    <!-- FinalizarPedidoScreen.kt -->
+    <string name="finalizar_pedido">Finalizar pedido</string>
+    <string name="selecione_um_endereco">Selecione um endereço</string>
+    <string name="cadastrar_outro_endereco">CADASTRAR OUTRO ENDEREÇO</string>
+    <string name="usar_outro_endereco">USAR OUTRO ENDEREÇO</string>
+    <string name="nenhum_endereco_cadastrado">Nenhum endereço cadastrado.</string>
+    <string name="adicionar_endereco">ADICIONAR ENDEREÇO</string>
+    <string name="selecione_o_tipo_de_entrega">Selecione o tipo de entrega</string>
+    <string name="forma_de_pagamento">Forma de pagamento</string>
+    <string name="valor_total">Valor total</string>
+    <string name="frete">Frete:</string>
+    <string name="selecione_um_endere_o_para_entrega">Selecione um endereço para entrega</string>
+    <string name="confirmar_pedido">CONFIRMAR PEDIDO</string>
+
+    <!-- CompraFinalizadaScreen.kt -->
+    <string name="obrigado_por_comprar_conosco">Obrigado por comprar conosco 😘</string>
+    <string name="voc_pode_acompanhar_seus_pedidos_em_perfil_pedidos"><![CDATA[Você pode acompanhar seus pedidos em Perfil > Pedidos]]></string>
+
+    <!-- ListaDesejosScreen.kt -->
+    <string name="lista_de_desejos">Lista de desejos</string>
+    <string name="sua_lista_de_desejos_esta_vazia">Sua lista de desejos está vazia.</string>
+
+    <!-- ProdutoScreen.kt -->
+    <string name="produto_oferta_aproveite">Este produto está em oferta. Aproveite!</string>
+    <string name="enquanto_durar_estoque">Enquanto durar o estoque!</string>
+    <string name="a_vista">à vista</string>
+    <string name="em_estoque">Em estoque. Envio imediato!</string>
+    <string name="estoque_esgotado">Estoque esgotado :(</string>
+    <string name="detalhes_produto">Detalhes do produto</string>
+
+    <!-- PerfilScreen.kt -->
+    <string name="sair">Sair</string>
+    <string name="pedidos">Pedidos</string>
+    <string name="seus_dados">Seus dados</string>
+    <string name="enderecos">Endereços</string>
+    <string name="sobre_o_aplicativo">Sobre o aplicativo</string>
+
+    <string name="seus_pedidos">Seus pedidos</string>
+    <string name="nenhum_pedido_realizado">Nenhum pedido realizado.</string>
+
+    <string name="atualizar_dados_pessoais">Atualizar dados pessoais</string>
     <string name="atualizar_email">Atualizar e-mail</string>
     <string name="atualizar_senha">Atualizar senha</string>
-    <string name="atualizar_dados_pessoais">Atualizar dados pessoais</string>
     <string name="botao_atualizar">ATUALIZAR</string>
+    <string name="cpf">CPF</string>
+    <string name="digite_um_cpf_valido">Digite um CPF válido.</string>
+    <string name="digite_seu_cpf">Digite seu CPF</string>
+    <string name="telefone_de_contato">Telefone de contato</string>
+    <string name="digite_um_telefone_valido">Digite um telefone válido.</string>
+    <string name="digite_seu_telefone_de_contato">Digite seu telefone de contato</string>
+    <string name="genero">Gênero</string>
+    <string name="dados_foram_atualizados">Dados foram atualizados.</string>
+    <string name="digite_um_novo_e_mail">Digite um novo e-mail</string>
+    <string name="e_mail_alterado_com_sucesso">E-mail alterado com sucesso.</string>
+    <string name="senha_atual_incorreta">Senha atual incorreta.</string>
+    <string name="senha_atual">Senha atual</string>
+    <string name="nova_senha">Nova senha</string>
+    <string name="senha_alterada_com_sucesso">Senha alterada com sucesso.</string>
+
+    <string name="seus_enderecos">Seus endereços</string>
+    <string name="cadastrar_endereco">Cadastrar endereço</string>
+    <string name="digite_um_cep_valido">Digite um CEP válido.</string>
+    <string name="cep">CEP</string>
+    <string name="digite_um_endereco_valido">Digite um endereço válido.</string>
+    <string name="endereco">Endereço</string>
+    <string name="digite_um_numero_valido">Digite um número válido.</string>
+    <string name="numero">Número</string>
+    <string name="complemento">Complemento</string>
+    <string name="informe_um_bairro_valido">Informe um bairro válido.</string>
+    <string name="bairro">Bairro</string>
+    <string name="escolha_um_estado">Escolha um estado.</string>
+    <string name="informe_uma_cidade_valida">Informe uma cidade válida.</string>
+    <string name="cidade">Cidade</string>
+    <string name="salvar_endereco">Salvar endereço</string>
+    <string name="editar_enredeco">Editar enredeço</string>
+    <string name="tornar_esse_endereco_principal">Tornar esse endereço principal</string>
+    <string name="endereco_atualizado_com_sucesso">Endereço atualizado com sucesso.</string>
+
+    <string name="notshoes">NOTSHOES</string>
+    <string name="aplicativo_desenvolvido_para_disciplina_de_engenharia_de_software_ii">Aplicativo desenvolvido para disciplina de\nEngenharia de Software II.</string>
+    <string name="_2024_1_t01">2024.1 - T01</string>
+
+    <!-- ResultadosScreen.kt -->
+    <string name="nenhum_produto_encontrado">Nenhum produto encontrado.</string>
+
+    <!-- SemConexaoScreen.kt -->
+    <string name="verifique_conexao_tente_novamente">Verifique sua conexão com a internet e tente novamente.</string>
+
+    <!-- supportingText -->
+    <string name="digite_nome_valido">Digite um nome válido</string>
+    <string name="digite_email_valido">Digite um e-mail válido</string>
+    <string name="digite_senha_valida">Digite uma senha válida</string>
+    <string name="dados_incorretos">Dados incorretos</string>
+    <string name="email_ja_cadastrado">E-mail já cadastrado</string>
+
+    <!-- placeholder -->
+    <string name="nome">Nome</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="busque_um_produto">Busque um produto! :)</string>
+
+    <!-- Toasts -->
+    <string name="servidor_em_manutencao">Servidor em manutenção</string>
+    <string name="verifique_conexao_internet">Verifique sua conexão com a internet</string>
+    <string name="erro_rede">Erro de rede</string>
+    <string name="aceite_termos_uso">Aceite os termos de uso</string>
+    <string name="conta_criada">Conta criada com sucesso</string>
+    <string name="toque_em_voltar_sair">Toque em voltar mais uma vez para sair</string>
+    <string name="endereco_adicionado_com_sucesso">Endereço adicionado com sucesso</string>
+    <string name="erro_limpe_seu_carrinho_e_tente_novamente">Erro, limpe seu carrinho e tente novamente</string>
+
+    <!-- contentDescription -->
+    <string name="alterar_visibilidade_senha">Alterar visibilidade da senha</string>
+    <string name="toque_para_voltar_description">Toque para voltar</string>
+    <string name="adicionar_favoritos_description">Adicionar aos favoritos</string>
+    <string name="adicionar_carrinho_description">Adicionar ao carrinho</string>
+    <string name="limpar_filtros_description">Limpar filtros</string>
+    <string name="exibir_filtros_description">Exibir filtros</string>
+    <string name="tentar_novamente_description">Tentar novamente</string>
+    <string name="buscar_produtos_description">Buscar produtos</string>
+    <string name="ver_todas_categorias">Ir para tela de categorias</string>
+    <string name="finalizar_compra_description">Finalizar compra</string>
+
 </resources>
+
+

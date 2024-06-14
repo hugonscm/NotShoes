@@ -2,7 +2,6 @@ package com.ahpp.notshoes.view.viewsLogado.viewsCarrinho
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -173,13 +173,13 @@ fun FinalizarPedidoScreen(
                     ) {
                         Image(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Toque para voltar",
+                            contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                             modifier = Modifier.size(30.dp)
                         )
                     }
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
-                        text = "Finalizar pedido",
+                        text = stringResource(R.string.finalizar_pedido),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         color = Color.White
@@ -193,7 +193,10 @@ fun FinalizarPedidoScreen(
                             .padding(top = 10.dp, start = 10.dp),
 
                         ) {
-                        Text(text = "Selecione um endereço", fontSize = 20.sp)
+                        Text(
+                            text = stringResource(R.string.selecione_um_endereco),
+                            fontSize = 20.sp
+                        )
                     }
                     LazyColumn(
                         modifier = Modifier
@@ -246,7 +249,7 @@ fun FinalizarPedidoScreen(
                                     )
                                 ) {
                                     Text(
-                                        text = "CADASTRAR OUTRO ENDEREÇO",
+                                        text = stringResource(R.string.cadastrar_outro_endereco),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 15.sp,
                                         style = TextStyle(
@@ -297,7 +300,7 @@ fun FinalizarPedidoScreen(
                                     )
                                 ) {
                                     Text(
-                                        text = "USAR OUTRO ENDEREÇO",
+                                        text = stringResource(R.string.usar_outro_endereco),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 15.sp,
                                         style = TextStyle(
@@ -315,7 +318,7 @@ fun FinalizarPedidoScreen(
                             ) {
                                 Text(
                                     modifier = Modifier.padding(bottom = 10.dp),
-                                    text = "Nenhum endereço cadastrado.",
+                                    text = stringResource(R.string.nenhum_endereco_cadastrado),
                                     fontSize = 25.sp,
                                     color = Color.Red
                                 )
@@ -335,7 +338,7 @@ fun FinalizarPedidoScreen(
                                     )
                                 ) {
                                     Text(
-                                        text = "ADICIONAR ENDEREÇO",
+                                        text = stringResource(R.string.adicionar_endereco),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 15.sp,
                                         style = TextStyle(
@@ -356,7 +359,7 @@ fun FinalizarPedidoScreen(
                                 modifier = Modifier.size(30.dp)
                             )
                             Text(
-                                text = "  Selecione o tipo de entrega",
+                                text = "  " + stringResource(R.string.selecione_o_tipo_de_entrega),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -394,7 +397,7 @@ fun FinalizarPedidoScreen(
                                 modifier = Modifier.size(30.dp)
                             )
                             Text(
-                                text = "  Forma de pagamento",
+                                text = "  " + stringResource(R.string.forma_de_pagamento),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -426,7 +429,7 @@ fun FinalizarPedidoScreen(
                                 modifier = Modifier.size(30.dp)
                             )
                             Text(
-                                text = "  Valor total",
+                                text = "  " + stringResource(R.string.valor_total),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -456,7 +459,7 @@ fun FinalizarPedidoScreen(
                         horizontalArrangement = Arrangement.Start
                     ) {
                         Text(
-                            text = "Frete: ",
+                            text = stringResource(R.string.frete) + " ",
                             fontSize = 15.sp,
                         )
                         Text(
@@ -474,7 +477,7 @@ fun FinalizarPedidoScreen(
                         horizontalArrangement = Arrangement.Start
                     ) {
                         Text(
-                            text = "Valor total: ",
+                            text = stringResource(R.string.valor_total) + ": ",
                             fontSize = 15.sp,
                         )
                         Text(
@@ -488,8 +491,8 @@ fun FinalizarPedidoScreen(
                         onClick = {
                             internetCheker = possuiConexao(ctx)
                             if (enderecoParaEntrega != null) {
-                                //desativar o botao para evitar compra dupla
                                 if (internetCheker) {
+                                    //desativar o botao para evitar compra dupla
                                     enabledButton = false
                                     val resumoCompra =
                                         "$detalhesPedido\n\nForma de pagamento: $tipoPagamento\nTipo de entrega: $tipoEntrega\n\nValor Total: ${
@@ -512,16 +515,21 @@ fun FinalizarPedidoScreen(
                                     finalizarPedido.sendFinalizarPedido(
                                         object : FinalizarPedido.Callback {
                                             override fun onSuccess(code: String) {
-                                                Log.i(
-                                                    "CODIGO RECEBIDO (sucesso finalizar pedido): ",
-                                                    code
-                                                )
+                                                //Log.e("CODIGO RECEBIDO (sucesso finalizar pedido): ", code)
 
                                                 if (code == "1") {
                                                     Handler(Looper.getMainLooper()).post {
                                                         navControllerCarrinho.navigate("compraFinalizadaScreen") {
                                                             launchSingleTop = true
                                                         }
+                                                    }
+                                                } else {
+                                                    Handler(Looper.getMainLooper()).post {
+                                                        Toast.makeText(
+                                                            ctx,
+                                                            R.string.erro_limpe_seu_carrinho_e_tente_novamente,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
                                                     }
                                                 }
                                             }
@@ -530,12 +538,11 @@ fun FinalizarPedidoScreen(
                                                 Handler(Looper.getMainLooper()).post {
                                                     Toast.makeText(
                                                         ctx,
-                                                        "Erro de rede.",
+                                                        R.string.erro_rede,
                                                         Toast.LENGTH_SHORT
-                                                    )
-                                                        .show()
+                                                    ).show()
                                                 }
-                                                Log.e("Erro: ", e.message.toString())
+                                                //Log.e("Erro: ", e.message.toString())
                                                 enabledButton = true
                                             }
                                         }
@@ -544,7 +551,7 @@ fun FinalizarPedidoScreen(
                             } else {
                                 Toast.makeText(
                                     ctx,
-                                    "Selecione um endereço para entrega",
+                                    R.string.selecione_um_endere_o_para_entrega,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -566,7 +573,7 @@ fun FinalizarPedidoScreen(
 
                             ) {
                             Text(
-                                text = "CONFIRMAR PEDIDO",
+                                text = stringResource(R.string.confirmar_pedido),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White.copy(alpha = 0.9f)
@@ -576,6 +583,5 @@ fun FinalizarPedidoScreen(
                 }
             }
         }
-
     }
 }

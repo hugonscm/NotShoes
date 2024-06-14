@@ -3,7 +3,6 @@ package com.ahpp.notshoes.view.viewsDeslogado
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +42,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -112,17 +112,21 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         clienteLogado = getCliente(idUsuario.toInt())
                         if (clienteLogado.idCliente == -1) {
                             Handler(Looper.getMainLooper()).post {
-                                Toast.makeText(ctx, "Servidor em manutenção.", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    ctx,
+                                    R.string.servidor_em_manutencao,
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                             (ctx as? Activity)?.finish()
                         }
                         withContext(Dispatchers.Main) { // Switch back to main thread for UI update
-                            navController.navigate("homeController") { launchSingleTop = true }
+                            navController.navigate("bottomNavBar") { launchSingleTop = true }
                         }
                     }
                 } else {
-                    Toast.makeText(ctx, "Verifique sua conexão com internet", Toast.LENGTH_SHORT)
+                    Toast.makeText(ctx, R.string.verifique_conexao_internet, Toast.LENGTH_SHORT)
                         .show()
                     (ctx as? Activity)?.finish()
                 }
@@ -198,7 +202,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     .height(150.dp), verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Entre e aproveite as nossas ofertas!",
+                    text = stringResource(id = R.string.entre_aproveite_ofertas),
                     fontSize = 35.sp,
                     fontWeight = FontWeight.Bold,
                     color = azulEscuro
@@ -217,14 +221,19 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 isError = !emailValido || (dadosIncorretos),
                 supportingText = {
                     if (!emailValido) {
-                        Text(text = "Digite um e-mail válido.")
+                        Text(text = stringResource(id = R.string.digite_email_valido))
                     } else if (dadosIncorretos) {
-                        Text(text = "Dados incorretos.")
+                        Text(text = stringResource(id = R.string.dados_incorretos))
                     }
                 },
-                placeholder = { Text(text = "E-mail", color = corPlaceholder) },
+                placeholder = {
+                    Text(
+                        text = stringResource(id = R.string.email),
+                        color = corPlaceholder
+                    )
+                },
                 leadingIcon = {
-                    Icon(Icons.Filled.Email, contentDescription = "Icone email", tint = Color.Black)
+                    Icon(Icons.Filled.Email, contentDescription = null, tint = Color.Black)
                 },
                 maxLines = 1,
                 modifier = Modifier
@@ -239,9 +248,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 isError = !senhaValida || (dadosIncorretos),
                 supportingText = {
                     if (!senhaValida) {
-                        Text(text = "Digite uma senha válida.")
+                        Text(text = stringResource(id = R.string.digite_senha_valida))
                     } else if (dadosIncorretos) {
-                        Text(text = "Dados incorretos.")
+                        Text(text = stringResource(id = R.string.dados_incorretos))
                     }
                 },
                 onValueChange = {
@@ -251,10 +260,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     senhaValida = ValidarCamposDados.validarSenha(senha)
                     dadosIncorretos = false
                 },
-                placeholder = { Text(text = "Senha", color = corPlaceholder) },
+                placeholder = { Text(stringResource(id = R.string.senha), color = corPlaceholder) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 leadingIcon = {
-                    Icon(Icons.Filled.Lock, contentDescription = "Icone senha", tint = Color.Black)
+                    Icon(Icons.Filled.Lock, contentDescription = null, tint = Color.Black)
                 },
                 trailingIcon = {
                     IconButton(onClick = {
@@ -262,7 +271,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     }) {
                         Icon(
                             painter = icon,
-                            contentDescription = "Visibility Icon", tint = Color.Black
+                            contentDescription = stringResource(id = R.string.alterar_visibilidade_senha),
+                            tint = Color.Black
                         )
                     }
                 },
@@ -291,7 +301,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }),
-                    text = "Esqueceu sua senha?",
+                    text = stringResource(id = R.string.esqueceu_sua_senha),
                     fontSize = 16.sp,
                     color = azulEscuro
                 )
@@ -315,11 +325,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                 loginCliente.sendLoginData(object : LoginCliente.Callback {
                                     override fun onSuccess(idUsuarioRecebido: String) {
                                         // -1 usuario não existe
-                                        Log.i(
-                                            "ID USUARIO RECEBIDO (LOGIN SCREEN): ",
-                                            idUsuarioRecebido
-                                        )
-
                                         if (idUsuarioRecebido != "-1") {
                                             // salvar o id do usuário logado
                                             scope.launch {
@@ -336,21 +341,20 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                     }
 
                                     override fun onFailure(e: IOException) {
-                                        // erro de rede
-                                        // não é possível mostrar um Toast de um Thread
-                                        // que não seja UI, então é feito dessa forma
+                                        // erro de rede não é possível mostrar um Toast de
+                                        // um Thread que não seja UI, então é feito dessa forma
                                         Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            Toast.makeText(ctx, R.string.erro_rede, Toast.LENGTH_SHORT)
                                                 .show()
                                         }
-                                        Log.e("Erro: ", e.message.toString())
+                                        //Log.e("Erro: ", e.message.toString())
                                         enabledButton = true
                                     }
                                 })
                             } else {
                                 Toast.makeText(
                                     ctx,
-                                    "Sem conexão com a internet.",
+                                    R.string.verifique_conexao_internet,
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
@@ -367,7 +371,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     elevation = elevationButton
                 ) {
                     Text(
-                        text = "Entrar",
+                        text = stringResource(id = R.string.entrar),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         style = TextStyle(
@@ -383,7 +387,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     .align(Alignment.CenterHorizontally)
             ) {
                 Text(
-                    text = "Não tem uma conta? ",
+                    text = stringResource(id = R.string.nao_tem_conta) + " ",
                     fontSize = 15.sp,
                     style = TextStyle(
                         Color.Black
@@ -397,7 +401,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                                 launchSingleTop = true
                             }
                         }),
-                    text = "Cadastre-se",
+                    text = stringResource(id = R.string.cadastrese),
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
                     color = azulEscuro

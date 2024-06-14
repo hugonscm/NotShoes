@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = "registro") {
                     RegistroScreen(modifier = Modifier, navController)
                 }
-                composable(route = "homeController") {
+                composable(route = "bottomNavBar") {
                     BottomNavBar(navController)
                 }
             }

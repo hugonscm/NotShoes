@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -77,7 +78,7 @@ fun CompraFinalizadaScreen(navControllerCarrinho: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_close_24),
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -95,7 +96,7 @@ fun CompraFinalizadaScreen(navControllerCarrinho: NavController) {
                 modifier = Modifier.size(80.dp)
             )
             Text(
-                text = "Obrigado por comprar conosco :)", fontSize = 20.sp,
+                text = stringResource(R.string.obrigado_por_comprar_conosco), fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(
                     Color.White
@@ -104,8 +105,8 @@ fun CompraFinalizadaScreen(navControllerCarrinho: NavController) {
             Spacer(Modifier.padding(top = 20.dp))
             Text(
                 modifier = Modifier.padding(horizontal = 30.dp),
-                text = "Você pode acompanhar seus pedidos " +
-                        "em Perfil > Pedidos", fontSize = 20.sp,
+                text = stringResource(R.string.voc_pode_acompanhar_seus_pedidos_em_perfil_pedidos),
+                fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(

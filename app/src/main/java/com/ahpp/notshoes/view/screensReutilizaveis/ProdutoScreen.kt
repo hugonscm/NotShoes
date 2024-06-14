@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -132,7 +133,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
             ) {
                 Image(
                     Icons.Default.Close,
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -150,7 +151,11 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                         }
                     } else {
                         Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                ctx,
+                                R.string.verifique_conexao_internet,
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                     }
@@ -160,7 +165,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
             ) {
                 Image(
                     painter = painterResource(if (adicionadoListaDesejosCheck != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
-                    contentDescription = "Adicionar aos favoritos.",
+                    contentDescription = stringResource(id = R.string.adicionar_favoritos_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -244,12 +249,15 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = "Este produto está em oferta. Aproveite!",
+                                    text = stringResource(id = R.string.produto_oferta_aproveite),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     style = TextStyle(color = Color.Black)
                                 )
-                                Text(text = "Enquanto durar o estoque!", fontSize = 12.sp)
+                                Text(
+                                    text = stringResource(id = R.string.enquanto_durar_estoque),
+                                    fontSize = 12.sp
+                                )
                             }
                         }
                     }
@@ -290,7 +298,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                                 fontSize = 35.sp
                             )
                             Text(
-                                text = " à vista",
+                                text = " " + stringResource(id = R.string.a_vista),
                                 fontSize = 20.sp
                             )
                         }
@@ -298,7 +306,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                         if (produtoSelecionado.estoqueProduto > 0) {
                             Text(
                                 modifier = Modifier.padding(top = 5.dp),
-                                text = "Em estoque. Envio imediato!",
+                                text = stringResource(id = R.string.em_estoque),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 13.sp,
                                 color = Color.DarkGray
@@ -306,7 +314,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                         } else {
                             Text(
                                 modifier = Modifier.padding(top = 5.dp),
-                                text = "Estoque esgotado :(",
+                                text = stringResource(id = R.string.estoque_esgotado),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 13.sp,
                                 color = Color.Red
@@ -322,7 +330,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                                 Handler(Looper.getMainLooper()).post {
                                     Toast.makeText(
                                         ctx,
-                                        "Sem conexão com a internet.",
+                                        R.string.verifique_conexao_internet,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -338,7 +346,7 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_shopping_cart_24),
-                            contentDescription = "Adicionar ao carrinho",
+                            contentDescription = stringResource(id = R.string.adicionar_carrinho_description),
                             modifier = Modifier.size(35.dp)
                         )
                     }
@@ -369,8 +377,9 @@ fun ProdutoScreen(onBackPressed: () -> Unit) {
     }
 }
 
-// essa tela esta vinculada as telas de resultados de busca por nome e categoria
-// ela tem callback para atualizar o icone de favorito do produto na tela anterior
+// essa tela esta vinculada a telas de resultados de busca e tela de lista de desejos
+// ela tem callback para atualizar o icone de favorito do produto na tela anterior, ou atualizar
+// a lista de favoritos no caso da lista de desejos
 @SuppressLint("DefaultLocale")
 @Composable
 fun ProdutoScreen(
@@ -426,7 +435,7 @@ fun ProdutoScreen(
             ) {
                 Image(
                     Icons.Default.Close,
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -440,7 +449,7 @@ fun ProdutoScreen(
                         onFavoritoClick(favoritado)
                     } else {
                         Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(ctx, "Sem conexão com a internet.", Toast.LENGTH_SHORT)
+                            Toast.makeText(ctx, R.string.verifique_conexao_internet, Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }
@@ -450,7 +459,7 @@ fun ProdutoScreen(
             ) {
                 Image(
                     painter = painterResource(if (favoritado != "1") R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_filled_24),
-                    contentDescription = "Adicionar aos favoritos.",
+                    contentDescription = stringResource(id = R.string.adicionar_favoritos_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -534,12 +543,12 @@ fun ProdutoScreen(
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = "Este produto está em oferta. Aproveite!",
+                                    text = stringResource(id = R.string.produto_oferta_aproveite),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     style = TextStyle(color = Color.Black)
                                 )
-                                Text(text = "Enquanto durar o estoque!", fontSize = 12.sp)
+                                Text(text = stringResource(id = R.string.enquanto_durar_estoque), fontSize = 12.sp)
                             }
                         }
                     }
@@ -580,7 +589,7 @@ fun ProdutoScreen(
                                 fontSize = 35.sp
                             )
                             Text(
-                                text = " à vista",
+                                text = " " + stringResource(id = R.string.a_vista),
                                 fontSize = 20.sp
                             )
                         }
@@ -588,7 +597,7 @@ fun ProdutoScreen(
                         if (produtoSelecionado.estoqueProduto > 0) {
                             Text(
                                 modifier = Modifier.padding(top = 5.dp),
-                                text = "Em estoque. Envio imediato!",
+                                text = stringResource(id = R.string.em_estoque),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 13.sp,
                                 color = Color.DarkGray
@@ -596,7 +605,7 @@ fun ProdutoScreen(
                         } else {
                             Text(
                                 modifier = Modifier.padding(top = 5.dp),
-                                text = "Estoque esgotado :(",
+                                text = stringResource(id = R.string.estoque_esgotado),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 13.sp,
                                 color = Color.Red
@@ -612,7 +621,7 @@ fun ProdutoScreen(
                                 Handler(Looper.getMainLooper()).post {
                                     Toast.makeText(
                                         ctx,
-                                        "Sem conexão com a internet.",
+                                        R.string.verifique_conexao_internet,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -628,7 +637,7 @@ fun ProdutoScreen(
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_shopping_cart_24),
-                            contentDescription = "Adicionar ao carrinho",
+                            contentDescription = stringResource(id = R.string.adicionar_carrinho_description),
                             modifier = Modifier.size(35.dp)
                         )
                     }
@@ -636,7 +645,7 @@ fun ProdutoScreen(
 
                 Text(
                     modifier = Modifier.padding(top = 10.dp, start = 10.dp),
-                    text = "Detalhes do produto",
+                    text = stringResource(id = R.string.detalhes_produto),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color.DarkGray

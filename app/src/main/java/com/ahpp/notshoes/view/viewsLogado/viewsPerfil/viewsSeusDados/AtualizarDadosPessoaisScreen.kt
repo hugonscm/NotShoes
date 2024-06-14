@@ -2,7 +2,6 @@ package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,11 +35,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.cliente.AtualizarDadosPessoaisCliente
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.ui.theme.azulEscuro
@@ -121,14 +122,14 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
             ) {
                 Image(
                     Icons.Default.Close,
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
 
             Text(
                 modifier = Modifier.padding(start = 10.dp),
-                text = "Atualizar dados pessoais",
+                text = stringResource(R.string.atualizar_dados_pessoais),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = Color.White
@@ -140,7 +141,11 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                 .background(Color.White)
         ) {
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
-                Text(text = "Nome", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(R.string.nome),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
             OutlinedTextField(
                 value = nomeNovo,
@@ -153,10 +158,15 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                 isError = !nomeValido,
                 supportingText = {
                     if (!nomeValido) {
-                        Text(text = "Digite um nome válido.")
+                        Text(text = stringResource(R.string.digite_nome_valido))
                     }
                 },
-                placeholder = { Text(text = "Seu Nome", color = corPlaceholder) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.nome),
+                        color = corPlaceholder
+                    )
+                },
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -165,7 +175,11 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
             )
 
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
-                Text(text = "CPF", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(R.string.cpf),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             OutlinedTextField(
@@ -180,10 +194,15 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                 isError = !cpfValido,
                 supportingText = {
                     if (!cpfValido) {
-                        Text(text = "Digite um CPF válido.")
+                        Text(text = stringResource(R.string.digite_um_cpf_valido))
                     }
                 },
-                placeholder = { Text(text = "Digite seu CPF", color = corPlaceholder) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.digite_seu_cpf),
+                        color = corPlaceholder
+                    )
+                },
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -193,7 +212,11 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
             )
 
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
-                Text(text = "Telefone de contato", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(R.string.telefone_de_contato),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             OutlinedTextField(
@@ -208,12 +231,12 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                 isError = !telefoneValido,
                 supportingText = {
                     if (!telefoneValido) {
-                        Text(text = "Digite um telefone válido.")
+                        Text(text = stringResource(R.string.digite_um_telefone_valido))
                     }
                 },
                 placeholder = {
                     Text(
-                        text = "Digite seu telefone de contato",
+                        text = stringResource(R.string.digite_seu_telefone_de_contato),
                         color = corPlaceholder
                     )
                 },
@@ -226,7 +249,11 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
             )
 
             Row(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)) {
-                Text(text = "Gênero", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(R.string.genero),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Column(
@@ -276,12 +303,12 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                                 atualizarDadosCliente.sendAtualizarData(object :
                                     AtualizarDadosPessoaisCliente.Callback {
                                     override fun onSuccess(code: String) {
-                                        Log.i("CODIGO RECEBIDO{ALTERAR DADOS CLIENTE}: ", code)
+                                        //Log.i("CODIGO RECEBIDO{ALTERAR DADOS CLIENTE}: ", code)
                                         atualizarClienteLogado()
                                         Handler(Looper.getMainLooper()).post {
                                             Toast.makeText(
                                                 ctx,
-                                                "Dados foram atualizados.",
+                                                R.string.dados_foram_atualizados,
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             navControllerSeusDados.popBackStack()
@@ -293,10 +320,14 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                                         // não é possível mostrar um Toast de um Thread
                                         // que não seja UI, então é feito dessa forma
                                         Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            Toast.makeText(
+                                                ctx,
+                                                R.string.erro_rede,
+                                                Toast.LENGTH_SHORT
+                                            )
                                                 .show()
                                         }
-                                        Log.e("Erro: ", e.message.toString())
+                                        //Log.e("Erro: ", e.message.toString())
                                         enabledButton = true
                                     }
                                 })
@@ -304,7 +335,7 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                                 Handler(Looper.getMainLooper()).post {
                                     Toast.makeText(
                                         ctx,
-                                        "Sem conexão com a internet.",
+                                        R.string.erro_rede,
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
@@ -320,7 +351,7 @@ fun AtualizarDadosPessoaisScreen(navControllerSeusDados: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = azulEscuro)
                 ) {
                     Text(
-                        text = "ATUALIZAR",
+                        text = stringResource(R.string.botao_atualizar),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White

@@ -35,6 +35,7 @@ import com.ahpp.notshoes.view.viewsLogado.viewsInicio.InicioScreenController
 import com.ahpp.notshoes.view.viewsLogado.viewsListaDesejos.ListaDeDesejoscreen
 import com.ahpp.notshoes.view.viewsLogado.viewsPerfil.PerfilScreenController
 
+// nao pretendo trocar pra viewHolder porque vai ter que mudar mt coisa
 lateinit var produtoSelecionado: Produto
 
 @Composable

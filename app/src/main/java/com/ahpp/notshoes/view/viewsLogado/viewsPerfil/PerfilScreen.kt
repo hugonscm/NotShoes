@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -91,7 +92,7 @@ fun PerfilScreen(navControllerLogin: NavController, navControllerPerfil: NavHost
                             }
                         }
                     ),
-                text = "Sair",
+                text = stringResource(R.string.sair),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -129,7 +130,7 @@ fun PerfilScreen(navControllerLogin: NavController, navControllerPerfil: NavHost
                         contentDescription = null,
                     )
                     Text(
-                        text = "Pedidos",
+                        text = stringResource(R.string.pedidos),
                         fontSize = 18.sp
                     )
                 }
@@ -167,7 +168,7 @@ fun PerfilScreen(navControllerLogin: NavController, navControllerPerfil: NavHost
                         contentDescription = null,
                     )
                     Text(
-                        text = "Seus dados",
+                        text = stringResource(R.string.seus_dados),
                         fontSize = 18.sp
                     )
                 }
@@ -205,7 +206,7 @@ fun PerfilScreen(navControllerLogin: NavController, navControllerPerfil: NavHost
                         contentDescription = null,
                     )
                     Text(
-                        text = "Endereços",
+                        text = stringResource(R.string.enderecos),
                         fontSize = 18.sp
                     )
                 }
@@ -243,7 +244,7 @@ fun PerfilScreen(navControllerLogin: NavController, navControllerPerfil: NavHost
                         contentDescription = null,
                     )
                     Text(
-                        text = "Sobre o aplicativo",
+                        text = stringResource(R.string.sobre_o_aplicativo),
                         fontSize = 18.sp
                     )
                 }

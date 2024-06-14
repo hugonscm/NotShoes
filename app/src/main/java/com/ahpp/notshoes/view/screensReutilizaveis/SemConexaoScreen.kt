@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,7 @@ fun SemConexaoScreen(onBackPressed: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Verifique sua conexão com internet e tente novamente.",
+                stringResource(id = R.string.verifique_conexao_tente_novamente),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -74,7 +75,7 @@ fun SemConexaoScreen(onBackPressed: () -> Unit) {
                     if (!possuiConexao(ctx)) {
                         Toast.makeText(
                             ctx,
-                            "Sem conexão",
+                            R.string.verifique_conexao_internet,
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -84,7 +85,7 @@ fun SemConexaoScreen(onBackPressed: () -> Unit) {
             ) {
                 Image(
                     painterResource(id = R.drawable.baseline_refresh_no_internet),
-                    contentDescription = "Tentar novamente",
+                    contentDescription = stringResource(id = R.string.tentar_novamente_description),
                     modifier = Modifier.size(30.dp)
                 )
             }

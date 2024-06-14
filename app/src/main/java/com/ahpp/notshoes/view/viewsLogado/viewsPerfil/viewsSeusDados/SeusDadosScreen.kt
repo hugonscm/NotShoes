@@ -66,14 +66,14 @@ fun SeusDadosScreen(navControllerPerfil: NavController, navControllerSeusDados: 
             ) {
                 Image(
                     Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
 
             Text(
                 modifier = Modifier.padding(start = 10.dp),
-                text = "Seus dados",
+                text = stringResource(R.string.seus_dados),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = Color.White

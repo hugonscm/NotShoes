@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,12 +48,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.ui.theme.azulEscuro
+import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.funcoes.canGoBack
 
 @Composable
 fun SobreAppScreen(navControllerPerfil: NavController) {
 
-    val corPredominante = azulEscuro
+    val corPredominante = Color.DarkGray
 
     Column {
 
@@ -84,14 +86,14 @@ fun SobreAppScreen(navControllerPerfil: NavController) {
             ) {
                 Image(
                     Icons.Default.Close,
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
 
             Text(
                 modifier = Modifier.padding(top = 10.dp, start = 10.dp),
-                text = "Sobre o aplicativo",
+                text = stringResource(R.string.sobre_o_aplicativo),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 maxLines = 1,
@@ -109,7 +111,7 @@ fun SobreAppScreen(navControllerPerfil: NavController) {
             Spacer(modifier = Modifier.padding(top = 50.dp))
 
             Text(
-                text = "NOTSHOES",
+                text = stringResource(R.string.notshoes),
                 fontWeight = FontWeight.Bold,
                 fontSize = 40.sp,
                 textAlign = TextAlign.Center,
@@ -143,7 +145,7 @@ fun SobreAppScreen(navControllerPerfil: NavController) {
                     )
                     Text(
                         modifier = Modifier.width(250.dp),
-                        text = "Aplicativo desenvolvido para disciplina de\nEngenharia de Software II.",
+                        text = stringResource(R.string.aplicativo_desenvolvido_para_disciplina_de_engenharia_de_software_ii),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
@@ -152,7 +154,7 @@ fun SobreAppScreen(navControllerPerfil: NavController) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         modifier = Modifier.width(250.dp),
-                        text = "2024.1 - T01",
+                        text = stringResource(R.string._2024_1_t01),
                         fontWeight = FontWeight.Bold,
                         fontSize = 25.sp,
                         textAlign = TextAlign.Center,

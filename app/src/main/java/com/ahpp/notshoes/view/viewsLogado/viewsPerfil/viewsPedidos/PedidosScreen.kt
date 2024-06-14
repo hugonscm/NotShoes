@@ -30,10 +30,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.cliente.getPedidos
 import com.ahpp.notshoes.model.Venda
 import com.ahpp.notshoes.ui.theme.azulEscuro
@@ -107,14 +109,14 @@ fun PedidosScreen(navControllerPerfil: NavController) {
                     ) {
                         Image(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Toque para voltar",
+                            contentDescription = stringResource(R.string.toque_para_voltar_description),
                             modifier = Modifier.size(30.dp)
                         )
                     }
 
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
-                        text = "Seus pedidos",
+                        text = stringResource(R.string.seus_pedidos),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         color = Color.White
@@ -136,7 +138,7 @@ fun PedidosScreen(navControllerPerfil: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Nenhum pedido realizado.",
+                                text = stringResource(R.string.nenhum_pedido_realizado),
                                 fontSize = 25.sp,
                                 color = azulEscuro
                             )

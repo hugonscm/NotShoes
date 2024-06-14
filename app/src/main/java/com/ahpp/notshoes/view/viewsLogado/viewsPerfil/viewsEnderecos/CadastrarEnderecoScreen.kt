@@ -42,11 +42,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ahpp.notshoes.R
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.data.endereco.AdicionarEnderecoCliente
 import com.ahpp.notshoes.ui.theme.azulEscuro
@@ -59,6 +61,7 @@ import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -165,14 +168,14 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
             ) {
                 Image(
                     Icons.Default.Close,
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
 
             Text(
                 modifier = Modifier.padding(start = 10.dp),
-                text = "Cadastrar enredeço",
+                text = stringResource(R.string.cadastrar_endereco),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = Color.White
@@ -198,10 +201,10 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                 isError = !cepValido,
                 supportingText = {
                     if (!cepValido) {
-                        Text(text = "Digite um CEP válido.")
+                        Text(text = stringResource(R.string.digite_um_cep_valido))
                     }
                 },
-                placeholder = { Text(text = "CEP", color = corPlaceholder) },
+                placeholder = { Text(text = stringResource(R.string.cep), color = corPlaceholder) },
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -223,10 +226,10 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                 isError = !enderecoValido,
                 supportingText = {
                     if (!enderecoValido) {
-                        Text(text = "Digite um endereço válido.")
+                        Text(text = stringResource(R.string.digite_um_endereco_valido))
                     }
                 },
-                placeholder = { Text(text = "Endereço", color = corPlaceholder) },
+                placeholder = { Text(text = stringResource(R.string.endereco), color = corPlaceholder) },
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -249,12 +252,12 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                     isError = !numeroValido,
                     supportingText = {
                         if (!numeroValido) {
-                            Text(text = "Digite um número válido.")
+                            Text(text = stringResource(R.string.digite_um_numero_valido))
                         }
                     },
                     placeholder = {
                         Text(
-                            text = "Número",
+                            text = stringResource(R.string.numero),
                             color = corPlaceholder
                         )
                     },
@@ -274,7 +277,7 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                     },
                     placeholder = {
                         Text(
-                            text = "Complemento",
+                            text = stringResource(R.string.complemento),
                             color = corPlaceholder
                         )
                     },
@@ -299,10 +302,10 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                 isError = !bairroValido,
                 supportingText = {
                     if (!bairroValido) {
-                        Text(text = "Informe um bairro válido.")
+                        Text(text = stringResource(R.string.informe_um_bairro_valido))
                     }
                 },
-                placeholder = { Text(text = "Bairro", color = corPlaceholder) },
+                placeholder = { Text(text = stringResource(R.string.bairro), color = corPlaceholder) },
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
@@ -329,7 +332,7 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                         isError = !estadoValido,
                         supportingText = {
                             if (!estadoValido) {
-                                Text(text = "Escolha um estado.")
+                                Text(text = stringResource(R.string.escolha_um_estado))
                             }
                         },
                         readOnly = true,
@@ -371,12 +374,12 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                     isError = !cidadeValido,
                     supportingText = {
                         if (!cidadeValido) {
-                            Text(text = "Informe uma cidade válida.")
+                            Text(text = stringResource(R.string.informe_uma_cidade_valida))
                         }
                     },
                     placeholder = {
                         Text(
-                            text = "Cidade",
+                            text = stringResource(R.string.cidade),
                             color = corPlaceholder
                         )
                     },
@@ -421,16 +424,13 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                                 adicionarEnderecoCliente.sendAdicionarEnderecoCliente(object :
                                     AdicionarEnderecoCliente.Callback {
                                     override fun onSuccess(code: String) {
-                                        Log.i(
-                                            "CODIGO RECEBIDO (sucesso no cadastro de endereço): ",
-                                            code
-                                        )
+                                        //Log.i("CODIGO RECEBIDO (sucesso no cadastro de endereço): ", code)
                                         if (code == "1") {
                                             atualizarClienteLogado()
                                             Handler(Looper.getMainLooper()).post {
                                                 Toast.makeText(
                                                     ctx,
-                                                    "Endereço adicionado com sucesso.",
+                                                    R.string.endereco_adicionado_com_sucesso,
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                                 navControllerEnderecos.popBackStack()
@@ -444,7 +444,7 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                                         // não é possível mostrar um Toast de um Thread
                                         // que não seja UI, então é feito dessa forma
                                         Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                            Toast.makeText(ctx, R.string.erro_rede, Toast.LENGTH_SHORT)
                                                 .show()
                                         }
                                         Log.e("Erro: ", e.message.toString())
@@ -455,7 +455,7 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                                 Handler(Looper.getMainLooper()).post {
                                     Toast.makeText(
                                         ctx,
-                                        "Sem conexão com a internet.",
+                                        R.string.erro_rede,
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
@@ -472,7 +472,7 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                     shape = RoundedCornerShape(5.dp),
                 ) {
                     Text(
-                        text = "Salvar endereço",
+                        text = stringResource(R.string.salvar_endereco),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -485,7 +485,7 @@ fun CadastrarEnderecoScreen(navControllerEnderecos: NavController) {
                             navControllerEnderecos.popBackStack()
                         }
                     },
-                    text = "CANCELAR",
+                    text = stringResource(R.string.cancelar).uppercase(Locale.ROOT),
                     fontSize = 15.sp,
                     color = Color.Black
                 )

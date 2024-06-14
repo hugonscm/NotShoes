@@ -65,6 +65,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -117,7 +118,7 @@ fun InicioScreen(navControllerInicio: NavHostController, navBarController: NavHo
                     backPressedOnce = true
                     Toast.makeText(
                         ctx,
-                        "Toque em voltar mais uma vez para sair.",
+                        R.string.toque_em_voltar_sair,
                         Toast.LENGTH_SHORT
                     ).show()
                     Handler(Looper.getMainLooper()).postDelayed(
@@ -184,7 +185,12 @@ fun SearchBar(navControllerInicio: NavHostController) {
         },
         active = false,
         onActiveChange = { },
-        placeholder = { Text(text = "Busque um produto! :)", fontSize = 14.sp) },
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.busque_um_produto),
+                fontSize = 14.sp
+            )
+        },
         trailingIcon = {
             IconButton(
                 onClick = {
@@ -198,7 +204,7 @@ fun SearchBar(navControllerInicio: NavHostController) {
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Buscar produtos.",
+                    contentDescription = stringResource(id = R.string.buscar_produtos_description),
                 )
             }
         },
@@ -367,7 +373,10 @@ fun PagerFiltroValores(navControllerInicio: NavHostController) {
 }
 
 @Composable
-fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController: NavHostController) {
+fun FiltrosTelaInicial(
+    navControllerInicio: NavHostController,
+    navBarController: NavHostController
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -387,13 +396,13 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
             ) {
                 Image(
                     painter = painterResource(R.drawable.img_categoria_camisa_basica),
-                    contentDescription = "Icone ver produtos da categoria camisa básica.",
+                    contentDescription = stringResource(id = R.string.acessar_categoria_camisa_basica),
                     modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Camisa básica",
+                stringResource(id = R.string.camisa_basica),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.DarkGray,
@@ -412,13 +421,13 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
             ) {
                 Image(
                     painter = painterResource(R.drawable.img_categoria_regata),
-                    contentDescription = "Icone ver produtos da categoria regata.",
+                    contentDescription = stringResource(id = R.string.acessar_categoria_regata),
                     modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Regata",
+                stringResource(id = R.string.regata),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.DarkGray,
@@ -439,13 +448,13 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.img_categoria_calca),
-                    contentDescription = "Icone ver produtos da categoria calças.",
+                    contentDescription = stringResource(id = R.string.acessar_categoria_calca),
                     modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Calça",
+                stringResource(id = R.string.calca),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.DarkGray,
@@ -464,13 +473,13 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
             ) {
                 Image(
                     painter = painterResource(R.drawable.img_categoria_tenis),
-                    contentDescription = "Icone ver produtos da categoria tênis.",
+                    contentDescription = stringResource(id = R.string.acessar_categoria_tenis),
                     modifier = Modifier.size(50.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Tênis",
+                stringResource(id = R.string.tenis),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.DarkGray,
@@ -495,13 +504,13 @@ fun FiltrosTelaInicial(navControllerInicio: NavHostController, navBarController:
             ) {
                 Image(
                     Icons.AutoMirrored.Filled.List,
-                    contentDescription = "Icone ir para tela de categorias.",
+                    contentDescription = stringResource(id = R.string.ver_todas_categorias),
                     modifier = Modifier.size(40.dp)
                 )
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                "Ver Tudo",
+                stringResource(id = R.string.ver_tudo),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 fontSize = 10.sp,
                 color = Color.DarkGray,
@@ -554,12 +563,16 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "PROMOÇÕES ATIVAS",
+                        text = stringResource(id = R.string.promocoes_ativas),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Text(text = "Enquanto durar o estoque!", color = Color.Black, fontSize = 12.sp)
+                    Text(
+                        text = stringResource(id = R.string.enquanto_durar_estoque),
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
                 }
             }
         }
@@ -573,13 +586,13 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                 Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Que pena!",
+                    text = stringResource(id = R.string.que_pena),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     style = TextStyle(color = Color.Black)
                 )
                 Text(
-                    text = "Nenhuma promoção ativa.",
+                    text = stringResource(id = R.string.nenhuma_promocao_ativa),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     style = TextStyle(color = Color.Black)
@@ -698,7 +711,7 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                                     )
                                 } else {
                                     Text(
-                                        text = "Estoque esgotado :(",
+                                        text = stringResource(id = R.string.estoque_esgotado),
                                         fontSize = 10.sp,
                                         color = Color.Red
                                     )
@@ -723,7 +736,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
     Column(Modifier.padding(top = 20.dp)) {
         Text(
             modifier = Modifier.padding(start = 10.dp),
-            text = "NAVEGUE POR MARCAS",
+            text = stringResource(id = R.string.navegue_por_marcas),
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
             style = TextStyle(color = Color.Black)
@@ -737,7 +750,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_adidas),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.acessar_categoria_produtos_adidas),
                 modifier = Modifier
                     .width(dpWidthItens)
                     .height(dpHeightItens)
@@ -750,7 +763,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
             )
             Image(
                 painter = painterResource(id = R.drawable.logo_fila),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.acessar_categoria_produtos_fila),
                 modifier = Modifier
                     .width(dpWidthItens)
                     .height(dpHeightItens)
@@ -763,7 +776,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
             )
             Image(
                 painter = painterResource(id = R.drawable.logo_mizuno),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.acessar_categoria_produtos_mizuno),
                 modifier = Modifier
                     .width(dpWidthItens)
                     .height(dpHeightItens)
@@ -776,7 +789,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
             )
             Image(
                 painter = painterResource(id = R.drawable.logo_nike),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.acessar_categoria_produtos_nike),
                 modifier = Modifier
                     .width(dpWidthItens)
                     .height(dpHeightItens)
@@ -789,7 +802,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
             )
             Image(
                 painter = painterResource(id = R.drawable.logo_olympikus),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.acessar_categoria_produtos_olympikus),
                 modifier = Modifier
                     .width(dpWidthItens)
                     .height(dpHeightItens)
@@ -802,7 +815,7 @@ fun NavegarPorMarcas(navControllerInicio: NavHostController) {
             )
             Image(
                 painter = painterResource(id = R.drawable.logo_puma),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.acessar_categoria_produtos_puma),
                 modifier = Modifier
                     .width(dpWidthItens)
                     .height(dpHeightItens)

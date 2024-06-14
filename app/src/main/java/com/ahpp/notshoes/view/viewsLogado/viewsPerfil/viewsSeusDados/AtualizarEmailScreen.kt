@@ -2,7 +2,6 @@ package com.ahpp.notshoes.view.viewsLogado.viewsPerfil.viewsSeusDados
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,6 +50,7 @@ import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.util.Locale
 
 @Composable
 fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
@@ -101,7 +101,7 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_close_24),
-                    contentDescription = "Toque para voltar",
+                    contentDescription = stringResource(id = R.string.toque_para_voltar_description),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -115,7 +115,7 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
             Spacer(Modifier.padding(top = 70.dp))
             Image(
                 painter = painterResource(id = R.drawable.baseline_contact_mail_24),
-                contentDescription = "Toque para voltar",
+                contentDescription = null,
                 modifier = Modifier.size(100.dp)
             )
             Text(
@@ -151,15 +151,15 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
                 supportingText = {
                     if (!emailValido) {
                         Text(
-                            text = "Digite um e-mail válido.",
+                            text = stringResource(id = R.string.digite_email_valido),
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
                     } else if (codigoStatusAlteracao == "500") {
-                        Text(text = "E-mail já cadastrado.")
+                        Text(text = stringResource(id = R.string.email_ja_cadastrado))
                     }
                 },
-                placeholder = { Text(text = "Digite um novo e-mail", color = corPlaceholder) },
+                placeholder = { Text(text = stringResource(R.string.digite_um_novo_e_mail), color = corPlaceholder) },
                 maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -197,14 +197,14 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
                                     //500 = email ja existe
                                     //201 = email alterado com sucesso
                                     codigoStatusAlteracao = code
-                                    Log.i("CODIGO RECEBIDO {ALTERAR EMAIL}: ", code)
+                                    //Log.i("CODIGO RECEBIDO {ALTERAR EMAIL}: ", code)
 
                                     if (code == "201") {
                                         atualizarClienteLogado()
                                         Handler(Looper.getMainLooper()).post {
                                             Toast.makeText(
                                                 ctx,
-                                                "E-mail alterado com sucesso.",
+                                                R.string.e_mail_alterado_com_sucesso,
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             navControllerSeusDados.popBackStack(
@@ -222,10 +222,10 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
                                     // não é possível mostrar um Toast de um Thread
                                     // que não seja UI, então é feito dessa forma
                                     Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(ctx, "Erro de rede.", Toast.LENGTH_SHORT)
+                                        Toast.makeText(ctx, R.string.erro_rede, Toast.LENGTH_SHORT)
                                             .show()
                                     }
-                                    Log.e("Erro: ", e.message.toString())
+                                    //Log.e("Erro: ", e.message.toString())
                                     enabledButton = true
                                 }
                             })
@@ -233,7 +233,7 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
                             Handler(Looper.getMainLooper()).post {
                                 Toast.makeText(
                                     ctx,
-                                    "Sem conexão com a internet.",
+                                    R.string.erro_rede,
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
@@ -261,7 +261,7 @@ fun AtualizarEmailScreen(navControllerSeusDados: NavController) {
                         navControllerSeusDados.popBackStack("seusDadosScreen", false)
                     }
                 },
-                text = "CANCELAR",
+                text = stringResource(id = R.string.cancelar).uppercase(Locale.ROOT),
                 fontSize = 15.sp,
                 color = Color.White
             )
