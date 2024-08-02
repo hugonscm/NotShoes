@@ -41,11 +41,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.constantes.clienteLogado
 import com.ahpp.notshoes.data.produto.ProdutoRepository
 import com.ahpp.notshoes.model.Produto
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.view.viewsLogado.produtoSelecionado
-import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
 import java.text.NumberFormat
 
 @Composable

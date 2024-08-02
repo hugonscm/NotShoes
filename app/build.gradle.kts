@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3.android)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,17 +67,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //dependencias para navegaçao compose
     implementation (libs.androidx.navigation.compose)
+
+    //dependencias para pager utlizado no projeto
     implementation (libs.accompanist.pager)
     implementation (libs.accompanist.pager.indicators)
 
+    //dependencias para requisicoes http para a api
     implementation (libs.gson)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp3.okhttp)
     implementation(libs.coil.compose)
 
+    //dependencia para datastore utilizado para salvar o id do usuario logado
     implementation(libs.androidx.datastore.preferences)
 
+    //dependencia para splashscreen da tela quando abre o app
     implementation(libs.androidx.core.splashscreen)
+
+    //koin injeçao de dependencias
+    implementation(libs.koin.androidx.compose)
+    implementation (libs.koin.android)
 
 }

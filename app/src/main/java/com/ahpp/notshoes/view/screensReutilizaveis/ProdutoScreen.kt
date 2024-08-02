@@ -61,7 +61,7 @@ import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.funcoes.produto.adicionarListaDesejos
 import com.ahpp.notshoes.util.funcoes.produto.adicionarProdutoCarrinho
 import com.ahpp.notshoes.view.viewsLogado.produtoSelecionado
-import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
+import com.ahpp.notshoes.constantes.clienteLogado
 import java.text.NumberFormat
 
 // essa tela esta vinculada aos produtos que estao em promoçao na tela de inicio

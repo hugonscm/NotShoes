@@ -29,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
+import com.ahpp.notshoes.constantes.CustomTextFieldColors
 import com.ahpp.notshoes.data.RegistroCliente
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
@@ -87,18 +87,6 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         painterResource(id = R.drawable.baseline_visibility_24)
     else
         painterResource(id = R.drawable.baseline_visibility_off_24)
-
-    val colorsTextFields = OutlinedTextFieldDefaults.colors(
-        unfocusedContainerColor = Color(0xFFEEF3F5),
-        focusedContainerColor = Color(0xFFEEF3F5),
-        focusedTextColor = Color.Black,
-        unfocusedTextColor = Color.Black,
-        unfocusedBorderColor = Color(0xFFEEF3F5),
-        focusedBorderColor = azulEscuro,
-        focusedLabelColor = Color.Black,
-        errorContainerColor = Color(0xFFEEF3F5),
-        cursorColor = azulEscuro,
-    )
 
     val shapeArredondado = RoundedCornerShape(10.dp)
 
@@ -164,7 +152,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .fillMaxWidth()
                 .padding(top = 20.dp),
             maxLines = 1,
-            colors = colorsTextFields,
+            colors = CustomTextFieldColors.colorsTextFields(),
             shape = shapeArredondado
         )
 
@@ -198,7 +186,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .fillMaxWidth()
                 .padding(top = 5.dp),
             maxLines = 1,
-            colors = colorsTextFields,
+            colors = CustomTextFieldColors.colorsTextFields(),
             shape = shapeArredondado
         )
 
@@ -244,7 +232,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
                 .fillMaxWidth()
                 .padding(top = 5.dp),
             maxLines = 1,
-            colors = colorsTextFields,
+            colors = CustomTextFieldColors.colorsTextFields(),
             shape = shapeArredondado
         )
 

@@ -63,7 +63,7 @@ import com.ahpp.notshoes.util.funcoes.carrinho.removerUnidade
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.viewModel.CarrinhoViewModel
 import com.ahpp.notshoes.view.screensReutilizaveis.SemConexaoScreen
-import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
+import com.ahpp.notshoes.constantes.clienteLogado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

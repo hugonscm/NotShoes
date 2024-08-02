@@ -35,8 +35,8 @@ import androidx.navigation.NavHostController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.ui.theme.azulEscuro
-import com.ahpp.notshoes.view.viewsDeslogado.clienteLogado
-import com.ahpp.notshoes.view.viewsDeslogado.usuarioLogadoPreferences
+import com.ahpp.notshoes.constantes.clienteLogado
+import com.ahpp.notshoes.constantes.usuarioLogadoPreferences
 import kotlinx.coroutines.launch
 
 @Composable
