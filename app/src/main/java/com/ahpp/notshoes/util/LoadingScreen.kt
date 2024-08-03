@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.ahpp.notshoes.ui.theme.azulEscuro
 
 @Composable
 fun LoadingScreen() {
@@ -19,6 +20,6 @@ fun LoadingScreen() {
             ),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(color = Color.Blue)
+        CircularProgressIndicator(color = azulEscuro)
     }
 }

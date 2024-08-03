@@ -1,7 +1,5 @@
 package com.ahpp.notshoes.view.viewsDeslogado
 
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +29,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,38 +49,63 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.constantes.CustomTextFieldColors
-import com.ahpp.notshoes.data.RegistroCliente
+import com.ahpp.notshoes.states.deslogado.RegistroScreenState
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.funcoes.canGoBack
-import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
-import com.ahpp.notshoes.util.validacao.ValidarCamposDados
-import java.io.IOException
+import com.ahpp.notshoes.viewModel.deslogado.RegistroScreenViewModel
 
 @Composable
-fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun RegistroScreen(
+    navController: NavController,
+    registroScreenViewModel: RegistroScreenViewModel = viewModel()
+) {
+    LaunchedEffect(Unit) {
+        registroScreenViewModel.resetRegistroScreenState()
+    }
 
-    var checkedTermos by remember { mutableStateOf(false) }
+    val uiRegistroScreenState by registroScreenViewModel.registroScreenState.collectAsState()
 
-    var nome by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var senha by remember { mutableStateOf("") }
+    RegistroContent(uiRegistroScreenState, registroScreenViewModel, navController)
+}
 
-    var nomeValido by remember { mutableStateOf(true) }
-    var emailValido by remember { mutableStateOf(true) }
-    var senhaValida by remember { mutableStateOf(true) }
-
-    var codigoStatusRegistro by remember { mutableStateOf("201") }
-
+@Composable
+fun RegistroContent(
+    uiRegistroScreenState: RegistroScreenState,
+    registroScreenViewModel: RegistroScreenViewModel,
+    navController: NavController
+) {
     val ctx = LocalContext.current
 
-    var enabledButton by remember { mutableStateOf(true) }
+    val codigoStatusRegistro = uiRegistroScreenState.codigoStatusRegistro
 
-    //gerenciar visibilidade da senha
+    if (codigoStatusRegistro == "201") {
+        registroScreenViewModel.resetCodigoStatusRegistro()
+        Toast.makeText(
+            ctx,
+            R.string.conta_criada,
+            Toast.LENGTH_SHORT
+        ).show()
+        navController.popBackStack("login", false)
+    }
+
+    val nome = uiRegistroScreenState.nome
+    val nomeValido = uiRegistroScreenState.nomeValido
+
+    val email = uiRegistroScreenState.email
+    val emailValido = uiRegistroScreenState.emailValido
+
+    val senha = uiRegistroScreenState.senha
+    val senhaValida = uiRegistroScreenState.senhaValida
+
+    val enabledButton = uiRegistroScreenState.enabledButton
+
+    var checkedTermos by remember { mutableStateOf(false) }
     var passwordVisibility by remember { mutableStateOf(false) }
 
     val icon = if (passwordVisibility)
@@ -89,11 +114,10 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         painterResource(id = R.drawable.baseline_visibility_off_24)
 
     val shapeArredondado = RoundedCornerShape(10.dp)
-
     val elevationButton = ButtonDefaults.buttonElevation(5.dp)
 
     Column(
-        modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
@@ -112,7 +136,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
     ) {
 
         Row(
-            modifier
+            modifier = Modifier
                 .padding(top = 20.dp)
                 .fillMaxWidth()
                 .height(150.dp), verticalAlignment = Alignment.CenterVertically
@@ -129,9 +153,8 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             value = nome,
             onValueChange = {
                 if (it.length <= 255) {
-                    nome = it
+                    registroScreenViewModel.setNome(it)
                 }
-                nomeValido = ValidarCamposDados.validarNome(nome)
             },
             isError = !nomeValido,
             supportingText = {
@@ -160,10 +183,9 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             value = email,
             onValueChange = {
                 if (it.length <= 255) {
-                    email = it
+                    registroScreenViewModel.setEmail(it)
+                    registroScreenViewModel.setCodigoStatusRegistro()
                 }
-                emailValido = ValidarCamposDados.validarEmail(email)
-                codigoStatusRegistro = "201"
             },
             isError = !emailValido || codigoStatusRegistro == "500",
             supportingText = {
@@ -200,9 +222,8 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
             },
             onValueChange = {
                 if (it.length <= 255) {
-                    senha = it
+                    registroScreenViewModel.setSenha(it)
                 }
-                senhaValida = ValidarCamposDados.validarSenha(senha)
             },
             placeholder = {
                 Text(
@@ -237,7 +258,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         )
 
         Row(
-            modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(30.dp),
             horizontalArrangement = Arrangement.Start,
@@ -268,75 +289,20 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         }
 
         Row(
-            modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             FilledTonalButton(
                 onClick = {
-                    nomeValido = ValidarCamposDados.validarNome(nome)
-                    emailValido = ValidarCamposDados.validarEmail(email)
-                    senhaValida = ValidarCamposDados.validarSenha(senha)
-
                     if (checkedTermos) {
-                        if (nomeValido && emailValido && senhaValida) {
-                            enabledButton = false
-                            if (possuiConexao(ctx)) {
-                                val registroCliente = RegistroCliente(nome, email, senha)
-
-                                registroCliente.sendRegistroData(object : RegistroCliente.Callback {
-                                    override fun onSuccess(code: String) {
-                                        //500 = usuario ja existe
-                                        //201 = usuario criado com sucesso
-                                        codigoStatusRegistro = code
-                                        //Log.i("CÓDIGO RECEBIDO {CRIAR CONTA}: ", code)
-
-                                        if (code == "201") {
-                                            Handler(Looper.getMainLooper()).post {
-                                                Toast.makeText(
-                                                    ctx,
-                                                    R.string.conta_criada,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                navController.navigate("login")
-                                            }
-                                        } else if (code == "500") {
-                                            enabledButton = true
-                                        }
-                                    }
-
-                                    override fun onFailure(e: IOException) {
-                                        // erro de rede
-                                        // não é possível mostrar um Toast de um Thread
-                                        // que não seja UI, então é feito dessa forma
-                                        Handler(Looper.getMainLooper()).post {
-                                            Toast.makeText(
-                                                ctx,
-                                                R.string.erro_rede,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-                                        //Log.e("Erro: ", e.message.toString())
-                                        enabledButton = true
-                                    }
-                                })
-                            } else {
-                                Toast.makeText(
-                                    ctx,
-                                    R.string.verifique_conexao_internet,
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                enabledButton = true
-                            }
-                        }
+                        registroScreenViewModel.sendRegistro(ctx)
                     } else {
                         Toast.makeText(ctx, R.string.aceite_termos_uso, Toast.LENGTH_SHORT).show()
                     }
                 },
-                modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 enabled = enabledButton,
@@ -356,7 +322,7 @@ fun RegistroScreen(modifier: Modifier = Modifier, navController: NavController) 
         }
 
         Row(
-            modifier
+            modifier = Modifier
                 .padding(top = 25.dp)
                 .align(Alignment.CenterHorizontally)
         ) {

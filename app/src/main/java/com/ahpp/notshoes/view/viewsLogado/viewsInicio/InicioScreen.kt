@@ -537,43 +537,37 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
     val numberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
     Column {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(70.dp)
                 .padding(top = 15.dp, bottom = 10.dp)
-                .height(50.dp)
-                .background(verde)
+                .background(verde),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
+            Image(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(end = 5.dp, start = 10.dp)
+                    .size(35.dp),
+                painter = painterResource(id = R.drawable.baseline_access_alarm_24),
+                contentDescription = null,
+            )
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
             ) {
-                Image(
-                    modifier = Modifier
-                        .padding(end = 5.dp)
-                        .size(35.dp),
-                    painter = painterResource(id = R.drawable.baseline_access_alarm_24),
-                    contentDescription = null,
+                Text(
+                    text = stringResource(id = R.string.promocoes_ativas),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.promocoes_ativas),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = stringResource(id = R.string.enquanto_durar_estoque),
-                        color = Color.Black,
-                        fontSize = 12.sp
-                    )
-                }
+                Text(
+                    text = stringResource(id = R.string.enquanto_durar_estoque),
+                    color = Color.Black,
+                    fontSize = 12.sp
+                )
             }
         }
 
@@ -629,7 +623,6 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                             shape = RoundedCornerShape(5.dp),
                             colors = cardColors,
                             modifier = Modifier
-                                //.height(185.dp)
                                 .padding(horizontal = 5.dp)
                                 .clickable(enabled = true, onClick = {
                                     produtoSelecionado = produtoEmPromocao
@@ -639,15 +632,18 @@ fun Promocoes(onPromocaoClicked: () -> Unit) {
                         ) {
                             Column(
                                 Modifier
+                                    .height(195.dp)
                                     .width(130.dp)
                                     .padding(5.dp)
                             ) {
                                 when (state) {
                                     is AsyncImagePainter.State.Loading -> {
                                         CircularProgressIndicator(
-                                            modifier = Modifier.align(
-                                                Alignment.CenterHorizontally
-                                            )
+                                            modifier = Modifier
+                                                .height(100.dp)
+                                                .align(
+                                                    Alignment.CenterHorizontally
+                                                )
                                         )
                                     }
 

@@ -2,6 +2,7 @@ package com.ahpp.notshoes.view.viewsDeslogado
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,13 +51,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.constantes.CustomTextFieldColors
-import com.ahpp.notshoes.states.LoginScreenState
+import com.ahpp.notshoes.states.deslogado.LoginScreenState
 import com.ahpp.notshoes.ui.theme.azulClaro
 import com.ahpp.notshoes.ui.theme.azulEscuro
 import com.ahpp.notshoes.ui.theme.corPlaceholder
 import com.ahpp.notshoes.util.LoadingScreen
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
-import com.ahpp.notshoes.viewModel.LoginScreenViewModel
+import com.ahpp.notshoes.viewModel.deslogado.LoginScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,7 +68,6 @@ fun LoginScreen(
     navController: NavController,
     loginScreenViewModel: LoginScreenViewModel = koinViewModel<LoginScreenViewModel>()
 ) {
-
     // resetar o estado da tela quando o usuario fazer logout
     LaunchedEffect(Unit) {
         loginScreenViewModel.resetLoginScreenState()
@@ -81,6 +81,7 @@ fun LoginScreen(
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(idUsuario) {
+        Log.e("login", "idUsuario: $idUsuario")
         when (idUsuario) {
             // nao tem usuario logado
             "-1" -> {

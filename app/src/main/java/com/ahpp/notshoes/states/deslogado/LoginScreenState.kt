@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.states
+package com.ahpp.notshoes.states.deslogado
 
 data class LoginScreenState (
     val email: String = "",

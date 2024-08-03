@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.viewModel
+package com.ahpp.notshoes.viewModel.deslogado
 
 import android.app.Activity
 import android.content.Context
@@ -14,8 +14,10 @@ import com.ahpp.notshoes.constantes.usuarioLogadoPreferences
 import com.ahpp.notshoes.data.LoginCliente
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.dataStore
-import com.ahpp.notshoes.states.LoginScreenState
+import com.ahpp.notshoes.states.deslogado.LoginScreenState
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados.validarEmail
+import com.ahpp.notshoes.util.validacao.ValidarCamposDados.validarSenha
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,19 +37,9 @@ class LoginScreenViewModel(ctx: Context) : ViewModel() {
         viewModelScope.launch {
             // Inicialize o idUsuario verificando se já há um usuário logado
             ctx.dataStore.data.collect { preferences ->
-                _idUsuario.value = preferences[usuarioLogadoPreferences] ?: "-2"
+                _idUsuario.value = preferences[usuarioLogadoPreferences] ?: "-1"
             }
         }
-    }
-
-    private fun validarEmail(email: String): Boolean {
-        return if (email.isNotEmpty()) {
-            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        } else false
-    }
-
-    private fun validarSenha(senha: String): Boolean {
-        return senha.isNotEmpty()
     }
 
     fun setEmail(email: String) {

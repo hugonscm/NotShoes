@@ -94,7 +94,7 @@ fun CardResultados(
                     CircularProgressIndicator(
                         modifier = Modifier
                             .height(100.dp)
-                            .width(100.dp)
+                            .width(90.dp)
                     )
                 }
 
@@ -104,7 +104,7 @@ fun CardResultados(
                         contentDescription = null,
                         modifier = Modifier
                             .height(100.dp)
-                            .width(100.dp)
+                            .width(90.dp)
                             .clip(RoundedCornerShape(3.dp))
                     )
                 }

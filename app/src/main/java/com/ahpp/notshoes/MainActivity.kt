@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -12,9 +11,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ahpp.notshoes.view.viewsLogado.BottomNavBar
 import com.ahpp.notshoes.view.viewsDeslogado.LoginScreen
 import com.ahpp.notshoes.view.viewsDeslogado.RegistroScreen
+import com.ahpp.notshoes.view.viewsLogado.BottomNavBar
 
 //usado para salvar o id do usuario logado, precisa ser definido no level mais alto do projeto
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_id_logado")
@@ -30,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     LoginScreen(navController)
                 }
                 composable(route = "registro") {
-                    RegistroScreen(modifier = Modifier, navController)
+                    RegistroScreen(navController)
                 }
                 composable(route = "bottomNavBar") {
                     BottomNavBar(navController)
