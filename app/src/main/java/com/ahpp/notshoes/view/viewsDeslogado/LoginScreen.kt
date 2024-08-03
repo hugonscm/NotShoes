@@ -2,7 +2,6 @@ package com.ahpp.notshoes.view.viewsDeslogado
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -81,7 +80,6 @@ fun LoginScreen(
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(idUsuario) {
-        Log.e("login", "idUsuario: $idUsuario")
         when (idUsuario) {
             // nao tem usuario logado
             "-1" -> {

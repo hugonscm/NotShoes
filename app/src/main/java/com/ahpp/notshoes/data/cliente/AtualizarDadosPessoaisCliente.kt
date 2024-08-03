@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.cliente
 
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.constantes.clienteLogado
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
@@ -24,7 +25,7 @@ class AtualizarDadosPessoaisCliente(
     fun sendAtualizarData(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/atualizar_dados_cliente"
+        val url = "$apiUrl/atualizar_dados_cliente"
 
         val json = JsonObject().apply {
             addProperty("nome", nomeNovo)

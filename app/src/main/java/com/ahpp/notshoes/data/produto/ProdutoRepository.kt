@@ -1,6 +1,7 @@
 package com.ahpp.notshoes.data.produto
 
 import android.util.Log
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.Produto
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -22,7 +23,7 @@ class ProdutoRepository {
     suspend fun getPromocoes(): List<Produto> {
         return withContext(Dispatchers.IO) {
 
-            val url = "http://10.0.2.2:5000/get_promocoes"
+            val url = "$apiUrl/get_promocoes"
 
             val request = Request.Builder().url(url).build()
 
@@ -63,7 +64,7 @@ class ProdutoRepository {
     suspend fun getProdutosFiltroIntervalo(intervaloValor: String): List<Produto> {
         return withContext(Dispatchers.IO) {
 
-            val url = "http://10.0.2.2:5000/get_produtos_filtro_intervalo"
+            val url = "$apiUrl/get_produtos_filtro_intervalo"
 
             val jsonMessage = JsonObject().apply {
                 addProperty("intervaloValor", intervaloValor)
@@ -113,7 +114,7 @@ class ProdutoRepository {
     suspend fun filtrarProdutoCategoria(categoria: String): List<Produto> {
         return withContext(Dispatchers.IO) {
 
-            val url = "http://10.0.2.2:5000/filtrar_produto_categoria/$categoria"
+            val url = "$apiUrl/filtrar_produto_categoria/$categoria"
 
             val request = Request.Builder().url(url).build()
 
@@ -154,7 +155,7 @@ class ProdutoRepository {
     suspend fun buscarProdutoNome(nome: String): List<Produto> {
         return withContext(Dispatchers.IO) {
 
-            val url = "http://10.0.2.2:5000/busca_produto/$nome"
+            val url = "$apiUrl/busca_produto/$nome"
 
             val request = Request.Builder().url(url).build()
 
@@ -195,7 +196,7 @@ class ProdutoRepository {
     // ok nao mexa mais, faça igual, nos outros se possivel
     suspend fun getProdutosListaDesejos(idListaDesejos: Int): List<Produto> {
         return withContext(Dispatchers.IO) {
-            val url = "http://10.0.2.2:5000/get_lista_desejos"
+            val url = "$apiUrl/get_lista_desejos"
 
             val jsonMessage = JsonObject().apply {
                 addProperty("idListaDesejos", idListaDesejos)
@@ -244,7 +245,7 @@ class ProdutoRepository {
 
     fun removerProdutoListaDesejos(idProduto: Int, idCliente: Int) {
 
-        val url = "http://10.0.2.2:5000/remover_lista_desejos"
+        val url = "$apiUrl/remover_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)
@@ -273,7 +274,7 @@ class ProdutoRepository {
 
     fun adicionarProdutoListaDesejos(idProduto: Int, idCliente: Int) {
 
-        val url = "http://10.0.2.2:5000/adicionar_lista_desejos"
+        val url = "$apiUrl/adicionar_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)
@@ -306,7 +307,7 @@ class ProdutoRepository {
         callback: (String) -> Unit
     ) {
 
-        val url = "http://10.0.2.2:5000/verificar_produto_lista_desejos"
+        val url = "$apiUrl/verificar_produto_lista_desejos"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)

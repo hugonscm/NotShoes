@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.endereco
 
+import com.ahpp.notshoes.api.apiUrl
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -22,7 +23,7 @@ class RemoverEnderecoCliente(
 
     fun sendRemoverEnderecoCliente(callback: Callback) {
 
-        val url = "http://10.0.2.2:5000/remover_endereco_cliente"
+        val url = "$apiUrl/remover_endereco_cliente"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idEndereco", idEndereco)

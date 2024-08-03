@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.endereco
 
+import com.ahpp.notshoes.api.apiUrl
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -29,7 +30,7 @@ class EditarEnderecoCliente(
     fun sendEditarEnderecoCliente(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/atualizar_endereco_cliente"
+        val url = "$apiUrl/atualizar_endereco_cliente"
 
         val json = JsonObject().apply {
             addProperty("estado", estado)

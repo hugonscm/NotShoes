@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.cliente
 
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.Cliente
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -29,7 +30,7 @@ suspend fun getCliente(idClienteLogado: Int): Cliente {
         )
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/get_cliente"
+        val url = "$apiUrl/get_cliente"
 
         val jsonObj = JsonObject().apply {
             addProperty("idClienteLogado", idClienteLogado)

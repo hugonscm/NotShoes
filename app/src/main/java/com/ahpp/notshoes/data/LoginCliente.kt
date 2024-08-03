@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data
 
+import com.ahpp.notshoes.api.apiUrl
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -21,7 +22,7 @@ class LoginCliente(
     fun sendLoginData(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/validar_login_cliente"
+        val url = "$apiUrl/validar_login_cliente"
 
         val json = JsonObject().apply {
             addProperty("email", email)

@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.carrinho
 
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Venda
 import com.google.gson.JsonArray
@@ -24,7 +25,7 @@ class FinalizarPedido(
     fun sendFinalizarPedido(callback: Callback) {
 
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/cadastrar_venda"
+        val url = "$apiUrl/cadastrar_venda"
 
         val json = JsonObject().apply {
             addProperty("dataPedido", venda.dataPedido.toString())

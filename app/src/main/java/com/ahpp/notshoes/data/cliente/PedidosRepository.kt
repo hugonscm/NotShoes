@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.cliente
 
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.Venda
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -17,7 +18,7 @@ import java.time.format.DateTimeFormatter
 suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/get_pedidos_cliente"
+        val url = "$apiUrl/get_pedidos_cliente"
 
         var vendasList: List<Venda> = emptyList()
 

@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.carrinho
 
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.ItemCarrinho
 import com.ahpp.notshoes.model.Produto
 import com.google.gson.Gson
@@ -28,7 +29,7 @@ class CarrinhoRepository(
 
     fun adicionarItemCarrinho(callback: Callback) {
 
-        val url = "http://10.0.2.2:5000/adicionar_item_carrinho"
+        val url = "$apiUrl/adicionar_item_carrinho"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)
@@ -60,7 +61,7 @@ class CarrinhoRepository(
 
     fun removerItemCarrinho(callback: Callback) {
 
-        val url = "http://10.0.2.2:5000/remover_item_carrinho"
+        val url = "$apiUrl/remover_item_carrinho"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)
@@ -92,7 +93,7 @@ class CarrinhoRepository(
 
     fun removerProdutoCarrinho(callback: Callback) {
 
-        val url = "http://10.0.2.2:5000/remover_produto_carrinho"
+        val url = "$apiUrl/remover_produto_carrinho"
 
         val jsonMessage = JsonObject().apply {
             addProperty("idProduto", idProduto)
@@ -128,7 +129,7 @@ class CarrinhoRepository(
 suspend fun getItensCarrinho(idCarrinho: Int): List<ItemCarrinho> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/get_itens_carrinho_cliente"
+        val url = "$apiUrl/get_itens_carrinho_cliente"
 
         var itensList: List<ItemCarrinho> = emptyList()
 
@@ -175,7 +176,7 @@ suspend fun getItensCarrinho(idCarrinho: Int): List<ItemCarrinho> {
 suspend fun getProdutoCarrinho(idCarrinho: Int): List<Produto> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/get_produtos_carrinho_cliente"
+        val url = "$apiUrl/get_produtos_carrinho_cliente"
 
         var produtosList: List<Produto> = emptyList()
 

@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.endereco
 
+import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.Endereco
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -15,7 +16,7 @@ import java.io.IOException
 suspend fun getEnderecos(idClienteLogado: Int): List<Endereco> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
-        val url = "http://10.0.2.2:5000/get_enderecos_cliente"
+        val url = "$apiUrl/get_enderecos_cliente"
 
         var enderecosList: List<Endereco> = emptyList()
 
