@@ -67,6 +67,12 @@ fun LoginScreen(
     navController: NavController,
     loginScreenViewModel: LoginScreenViewModel = koinViewModel<LoginScreenViewModel>()
 ) {
+
+    // resetar o estado da tela quando o usuario fazer logout
+    LaunchedEffect(Unit) {
+        loginScreenViewModel.resetLoginScreenState()
+    }
+
     val uiLoginScreenState by loginScreenViewModel.loginScreenState.collectAsState()
     val idUsuario by loginScreenViewModel.idUsuario.collectAsState()
 
@@ -116,7 +122,6 @@ fun LoginContent(
     ctx: Context,
     navController: NavController
 ) {
-
     val email = uiLoginScreenState.email
     val emailValido = uiLoginScreenState.emailValido
 

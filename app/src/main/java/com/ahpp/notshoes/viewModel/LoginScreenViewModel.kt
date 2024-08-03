@@ -158,4 +158,8 @@ class LoginScreenViewModel(ctx: Context) : ViewModel() {
             }
         }
     }
+
+    fun resetLoginScreenState() {
+        _loginScreenState.value = LoginScreenState()
+    }
 }
