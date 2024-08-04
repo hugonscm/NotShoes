@@ -125,7 +125,6 @@ class CarrinhoRepository(
     }
 }
 
-// ok nao mexa mais, faça igual, nos outros se possivel
 suspend fun getItensCarrinho(idCarrinho: Int): List<ItemCarrinho> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
@@ -172,7 +171,6 @@ suspend fun getItensCarrinho(idCarrinho: Int): List<ItemCarrinho> {
     }
 }
 
-// ok nao mexa mais, faça igual, nos outros se possivel
 suspend fun getProdutoCarrinho(idCarrinho: Int): List<Produto> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()

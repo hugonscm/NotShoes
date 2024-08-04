@@ -321,7 +321,6 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
                             }
                         },
                         modifier = Modifier
-                            .width(110.dp)
                             .height(50.dp),
                         shape = RoundedCornerShape(8.dp),
                         contentPadding = PaddingValues(0.dp),
@@ -333,6 +332,7 @@ fun CarrinhoScreen(navControllerCarrinho: NavController, carrinhoViewModel: Carr
 
                             ) {
                             Text(
+                                modifier = Modifier.padding(start = 5.dp),
                                 text = stringResource(R.string.finalizar),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,

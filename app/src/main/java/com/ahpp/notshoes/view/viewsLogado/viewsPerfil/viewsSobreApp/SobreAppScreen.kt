@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.ui.theme.azulEscuro
-import com.ahpp.notshoes.ui.theme.verde
 import com.ahpp.notshoes.util.funcoes.canGoBack
 
 @Composable
@@ -120,7 +119,6 @@ fun SobreAppScreen(navControllerPerfil: NavController) {
 
             AnimatedBorderCard(
                 modifier = Modifier
-                    .height(370.dp)
                     .fillMaxWidth()
                     .padding(top = 30.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(size = 10.dp),
@@ -134,7 +132,10 @@ fun SobreAppScreen(navControllerPerfil: NavController) {
                 ),
                 borderWidth = 7.dp
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.padding(bottom = 30.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Icon(
                         tint = corPredominante,
                         painter = painterResource(id = R.drawable.baseline_school_24),

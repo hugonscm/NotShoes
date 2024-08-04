@@ -241,7 +241,7 @@ fun FinalizarPedidoScreen(
                                         }
                                     },
                                     modifier = Modifier
-                                        .width(270.dp)
+                                        .fillMaxWidth(0.8f)
                                         .height(40.dp),
                                     shape = RoundedCornerShape(5.dp),
                                     colors = ButtonDefaults.buttonColors(
@@ -292,7 +292,7 @@ fun FinalizarPedidoScreen(
                                         expandedEnderecos = true
                                     },
                                     modifier = Modifier
-                                        .width(230.dp)
+                                        .fillMaxWidth(0.7f)
                                         .height(40.dp),
                                     shape = RoundedCornerShape(5.dp),
                                     colors = ButtonDefaults.buttonColors(

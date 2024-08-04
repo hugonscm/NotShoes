@@ -110,7 +110,6 @@ class ProdutoRepository {
         }
     }
 
-
     suspend fun filtrarProdutoCategoria(categoria: String): List<Produto> {
         return withContext(Dispatchers.IO) {
 
@@ -193,7 +192,6 @@ class ProdutoRepository {
         }
     }
 
-    // ok nao mexa mais, faça igual, nos outros se possivel
     suspend fun getProdutosListaDesejos(idListaDesejos: Int): List<Produto> {
         return withContext(Dispatchers.IO) {
             val url = "$apiUrl/get_lista_desejos"

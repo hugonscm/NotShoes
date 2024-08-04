@@ -1,4 +1,4 @@
-package com.ahpp.notshoes.data
+package com.ahpp.notshoes.data.cliente
 
 import com.ahpp.notshoes.api.apiUrl
 import com.google.gson.JsonObject

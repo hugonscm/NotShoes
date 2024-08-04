@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.ahpp.notshoes.R
 import com.ahpp.notshoes.constantes.clienteLogado
 import com.ahpp.notshoes.constantes.usuarioLogadoPreferences
-import com.ahpp.notshoes.data.LoginCliente
+import com.ahpp.notshoes.data.cliente.LoginCliente
 import com.ahpp.notshoes.data.cliente.getCliente
 import com.ahpp.notshoes.dataStore
 import com.ahpp.notshoes.states.deslogado.LoginScreenState

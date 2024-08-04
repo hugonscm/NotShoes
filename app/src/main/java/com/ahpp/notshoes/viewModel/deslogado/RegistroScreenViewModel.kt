@@ -6,7 +6,7 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.ahpp.notshoes.R
-import com.ahpp.notshoes.data.RegistroCliente
+import com.ahpp.notshoes.data.cliente.RegistroCliente
 import com.ahpp.notshoes.states.deslogado.RegistroScreenState
 import com.ahpp.notshoes.util.funcoes.conexao.possuiConexao
 import com.ahpp.notshoes.util.validacao.ValidarCamposDados.validarEmail

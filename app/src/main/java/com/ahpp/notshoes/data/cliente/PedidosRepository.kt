@@ -1,5 +1,6 @@
 package com.ahpp.notshoes.data.cliente
 
+import android.util.Log
 import com.ahpp.notshoes.api.apiUrl
 import com.ahpp.notshoes.model.Venda
 import com.google.gson.Gson
@@ -14,6 +15,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
     return withContext(Dispatchers.IO) {
@@ -22,7 +24,7 @@ suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
 
         var vendasList: List<Venda> = emptyList()
 
-        val inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
+        val inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH)
 
         val jsonMessage = JsonObject().apply {
             addProperty("idClienteLogado", idClienteLogado)
@@ -45,6 +47,8 @@ suspend fun getPedidos(idClienteLogado: Int): List<Venda> {
                         val jsonArray = jsonElement.asJsonArray
                         vendasList = jsonArray.map { vendaJson ->
                             val vendaArray = vendaJson.asJsonArray
+
+                            Log.e("PedidosRepo", vendaArray.toString())
 
                             val dataPedido = LocalDate.parse(vendaArray[1].asString, inputFormatter)
 
