@@ -8,8 +8,8 @@ Projeto para a disciplina de ENGENHARIA DE SOFTWARE II.
 - Framework Jetpack Compose
 - Android Nativo
 - Kotlin
-- API REST Python
-- Banco de dados Postgresql
+- API REST (Flask + Python)
+- Banco de dados relacional PostgreSQL
 
 ## Prévias
 <img src="https://raw.githubusercontent.com/hugonscm/api-notshoes/main/pr%C3%A9vias.png" alt="prévias" min-width="800px" max-width="800px" width="800px" >
